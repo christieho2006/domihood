@@ -153,23 +153,13 @@ async function loadStats() {
           >
             <h1
   style={{
-    fontSize: mobile
-      ? "clamp(24px,8vw,36px)"
-      : "clamp(48px,8vw,96px)",
-
-    fontWeight: 900,
-    color: "#fff",
+    fontSize: mobile ? "13vw" : "96px",
+    maxWidth: "100%",
+    overflowWrap: "anywhere",
+    wordBreak: "break-all",
     lineHeight: 1,
-
     margin: 0,
-
-    width: "100%",
-
-    overflow: "hidden",
-
-    textOverflow: "ellipsis",
-
-    whiteSpace: "nowrap",
+    fontWeight: 900,
   }}
 >
   DOMIHOOD

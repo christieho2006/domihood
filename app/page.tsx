@@ -114,25 +114,23 @@ async function loadStats() {
   }
 
   return (
-  <main
-    style={{
-      paddingTop: "100px",
-    }}
-  >
+    <main
+      style={{
+        paddingTop: mobile ? 90 : 110,
+        width: "100%",
+        overflowX: "hidden",
+      }}
+    >
       <Navbar />
 
       <main
-  style={{
-    minHeight: "100vh",
-    background: "#FFF7EE",
-    padding: mobile
-      ? "16px"
-      : "24px",
-    paddingBottom: mobile
-      ? "120px"
-      : "24px",
-  }}
->
+        style={{
+          minHeight: "100vh",
+          background: "#FFF7EE",
+          padding: mobile ? "16px" : "24px",
+          paddingBottom: mobile ? "120px" : "24px",
+        }}
+      >
         <div
           style={{
             maxWidth: "1200px",
@@ -142,32 +140,28 @@ async function loadStats() {
           {/* Hero Banner */}
           <section
             style={{
-              background:
-                "linear-gradient(135deg,#FF8A00,#FFB347)",
-              padding: mobile
-              ? "24px 18px"
-              : "60px 40px",
+              width: "100%",
+              overflow: "hidden",
+              background: "linear-gradient(135deg,#FF8A00,#FFB347)",
+              padding: mobile ? "24px 18px" : "60px 40px",
               borderRadius: mobile ? 24 : 32,
               color: "white",
-              boxShadow:
-                "0 20px 50px rgba(255,138,0,.25)",
+              boxShadow: "0 20px 50px rgba(255,138,0,.25)",
             }}
           >
-
-
-
             <h1
-             style={{
-             fontSize: mobile ? "12vw" : 96,
-             fontWeight: 900,
-             color: "#fff",
-             lineHeight: 1,
-             margin:0,
-             maxWidth:"100%",
-             overflow: "hidden",
-             }}
+              style={{
+                fontSize: mobile ? "12vw" : 96,
+                fontWeight: 900,
+                color: "#fff",
+                lineHeight: 1,
+                margin: 0,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
             >
-            DOMIHOOD
+              DOMIHOOD
             </h1>
 
             <p
@@ -194,21 +188,18 @@ async function loadStats() {
             <div
               style={{
                 marginTop: 28,
-                background:
-                  "rgba(255,255,255,.12)",
+                background: "rgba(255,255,255,.12)",
                 backdropFilter: "blur(20px)",
                 borderRadius: 28,
                 padding: 28,
-                border:
-                  "1px solid rgba(255,255,255,.15)",
+                border: "1px solid rgba(255,255,255,.15)",
               }}
             >
               {user ? (
                 <div
                   style={{
                     display: "flex",
-                    justifyContent:
-                      "space-between",
+                    justifyContent: "space-between",
                     alignItems: "center",
                     flexWrap: "wrap",
                     gap: 20,
@@ -220,8 +211,7 @@ async function loadStats() {
                         fontSize: 14,
                         opacity: 0.85,
                         letterSpacing: 2,
-                        textTransform:
-                          "uppercase",
+                        textTransform: "uppercase",
                       }}
                     >
                       DOMIHOOD MEMBER
@@ -258,22 +248,18 @@ async function loadStats() {
                     <a
                       href="/profile"
                       style={{
-                        textDecoration:
-                          "none",
+                        textDecoration: "none",
                       }}
                     >
                       <button
                         style={{
                           border: "none",
                           borderRadius: 16,
-                          padding:
-                            "14px 22px",
+                          padding: "14px 22px",
                           cursor: "pointer",
                           fontWeight: 700,
-                          background:
-                            "#fff",
-                          color:
-                            "#FF8A00",
+                          background: "#fff",
+                          color: "#FF8A00",
                         }}
                       >
                         个人中心
@@ -285,14 +271,11 @@ async function loadStats() {
                       style={{
                         border: "none",
                         borderRadius: 16,
-                        padding:
-                          "14px 22px",
+                        padding: "14px 22px",
                         cursor: "pointer",
                         fontWeight: 700,
-                        background:
-                          "#FFF3E0",
-                        color:
-                          "#FF8A00",
+                        background: "#FFF3E0",
+                        color: "#FF8A00",
                       }}
                     >
                       退出登录
@@ -306,34 +289,26 @@ async function loadStats() {
                     color: "#fff",
                   }}
                 >
-                  <h3>
-                    欢迎来到 DOMIHOOD
-                  </h3>
+                  <h3>欢迎来到 DOMIHOOD</h3>
 
-                  <p>
-                    登录后参与签到、任务与社区互动
-                  </p>
+                  <p>登录后参与签到、任务与社区互动</p>
 
                   <a
                     href="/login"
                     style={{
-                      textDecoration:
-                        "none",
+                      textDecoration: "none",
                     }}
                   >
                     <button
                       style={{
                         marginTop: 12,
-                        padding:
-                          "14px 26px",
+                        padding: "14px 26px",
                         border: "none",
                         borderRadius: 16,
                         fontWeight: 700,
                         cursor: "pointer",
-                        background:
-                          "#fff",
-                        color:
-                          "#FF8A00",
+                        background: "#fff",
+                        color: "#FF8A00",
                       }}
                     >
                       立即登录
@@ -344,275 +319,182 @@ async function loadStats() {
             </div>
           </section>
 
-{/* 数据统计 */}
-<div
-  style={{
-    marginTop: 24,
-    display: "grid",
-    gridTemplateColumns:
-      "repeat(auto-fit,minmax(120px,1fr))",
-    gap: 16,
-  }}
->
-  <StatCard
-  icon=""
-  title="注册粉丝"
-  value={stats.fans}
-/>
-
-<StatCard
-  icon=""
-  title="签到天数"
-  value={stats.checkins}
-/>
-
-<StatCard
-  icon=""
-  title="DOMI积分"
-  value={stats.points}
-/>
-</div>
-
-{/* 功能区 */}
-
-<div
-  style={{
-    marginTop: 24,
-    background:
-      "rgba(255,255,255,.95)",
-    borderRadius: 24,
-    padding: 16,
-    boxShadow:
-      "0 10px 30px rgba(0,0,0,.08)",
-  }}
->
-  <div
-    style={{
-      display: "flex",
-      justifyContent:
-        "space-between",
-      alignItems: "center",
-      marginBottom: 20,
-    }}
-  >
-    <h3
-      style={{
-        margin: 0,
-        color: "#FF8A00",
-      }}
-    >
-      🏆 粉丝排行榜
-    </h3>
-
-    <a
-      href="/ranking"
-      style={{
-        color: "#FF8A00",
-        textDecoration:
-          "none",
-        fontWeight: 700,
-      }}
-    >
-      全部 →
-    </a>
-  </div>
-
-  {ranking.length === 0 ? (
-    <p style={{ color: "#666" }}>
-      暂无数据
-    </p>
-  ) : (
-    ranking.map(
-      (item, index) => (
-        <div
-          key={item.id}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent:
-              "space-between",
-            padding:
-              "12px 16px",
-            marginBottom: 10,
-            borderRadius: 16,
-
-            background:
-              index === 0
-                ? "linear-gradient(135deg,#FFD700,#FFB800)"
-                : index === 1
-                ? "linear-gradient(135deg,#EAEAEA,#D7D7D7)"
-                : index === 2
-                ? "linear-gradient(135deg,#D68C5A,#B56A3E)"
-                : "#F7F7F7",
-
-            color:
-              index < 3
-                ? "#fff"
-                : "#333",
-          }}
-        >
+          {/* 数据统计 */}
           <div
             style={{
-              display: "flex",
-              gap: 12,
-              alignItems:
-                "center",
+              marginTop: 24,
+              marginBottom: 24,
+              display: "grid",
+              gridTemplateColumns: mobile ? "1fr" : "repeat(3,1fr)",
+              gap: 16,
+            }}
+          >
+            <StatCard icon="" title="注册粉丝" value={stats.fans} />
+            <StatCard icon="" title="签到天数" value={stats.checkins} />
+            <StatCard icon="" title="DOMI积分" value={stats.points} />
+          </div>
+
+          {/* 功能区 */}
+          <div
+            style={{
+              marginTop: 20,
+              background: "rgba(255,255,255,.95)",
+              borderRadius: 24,
+              padding: 16,
+              boxShadow: "0 10px 30px rgba(0,0,0,.08)",
             }}
           >
             <div
               style={{
-                fontSize: 18,
-                fontWeight: 900,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 20,
               }}
             >
-              {index === 0
-                ? "🥇"
-                : index === 1
-                ? "🥈"
-                : index === 2
-                ? "🥉"
-                : `#${index + 1}`}
+              <h3 style={{ margin: 0, color: "#FF8A00" }}>🏆 粉丝排行榜</h3>
+
+              <a
+                href="/ranking"
+                style={{
+                  color: "#FF8A00",
+                  textDecoration: "none",
+                  fontWeight: 700,
+                }}
+              >
+                全部 →
+              </a>
             </div>
 
-            <div>
-              {item.nickname}
-            </div>
-          </div>
+            {ranking.length === 0 ? (
+              <p style={{ color: "#666" }}>暂无数据</p>
+            ) : (
+              ranking.map((item, index) => (
+                <div
+                  key={item.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "12px 16px",
+                    marginBottom: 10,
+                    borderRadius: 16,
+                    background:
+                      index === 0
+                        ? "linear-gradient(135deg,#FFD700,#FFB800)"
+                        : index === 1
+                          ? "linear-gradient(135deg,#EAEAEA,#D7D7D7)"
+                          : index === 2
+                            ? "linear-gradient(135deg,#D68C5A,#B56A3E)"
+                            : "#F7F7F7",
+                    color: index < 3 ? "#fff" : "#333",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 12,
+                      alignItems: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: 18,
+                        fontWeight: 900,
+                      }}
+                    >
+                      {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `#${index + 1}`}
+                    </div>
 
-          <div
-            style={{
-              fontWeight: 900,
-            }}
-          >
-            {item.points}分
+                    <div>{item.nickname}</div>
+                  </div>
+
+                  <div style={{ fontWeight: 900 }}>{item.points}分</div>
+                </div>
+              ))
+            )}
           </div>
-        </div>
-      )
-    )
-  )}
-</div>
 
           <div
             style={{
               display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit,minmax(240px,1fr))",
+              gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))",
               gap: "20px",
               marginTop: "24px",
             }}
           >
             <div
-  style={{
-    background:
-      "rgba(255,255,255,.9)",
-    backdropFilter: "blur(20px)",
-    borderRadius: "24px",
-    padding: "16px",
-    paddingBottom: "120px",
-    boxShadow:
-      "0 10px 30px rgba(0,0,0,.08)",
-  }}
->
-  <h3>📢 最新动态</h3>
+              style={{
+                background: "rgba(255,255,255,.9)",
+                backdropFilter: "blur(20px)",
+                borderRadius: "24px",
+                padding: "16px",
+                paddingBottom: "120px",
+                boxShadow: "0 10px 30px rgba(0,0,0,.08)",
+              }}
+            >
+              <h3>📢 最新动态</h3>
 
-  {announcements.length === 0 ? (
-    <p style={{ color: "#666" }}>
-      暂无公告
-    </p >
-  ) : (
-    announcements
-      .slice(0, 3)
-      .map((item) => (
-        <div
-          key={item.id}
-          style={{
-            marginTop: 16,
-            paddingTop: 12,
-            borderTop:
-              "1px solid #eee",
-          }}
-        >
-          <div
-            style={{
-              fontWeight: 700,
-            }}
-          >
-            {item.title}
-          </div>
+              {announcements.length === 0 ? (
+                <p style={{ color: "#666" }}>暂无公告</p>
+              ) : (
+                announcements.slice(0, 3).map((item) => (
+                  <div
+                    key={item.id}
+                    style={{
+                      marginTop: 16,
+                      paddingTop: 12,
+                      borderTop: "1px solid #eee",
+                    }}
+                  >
+                    <div style={{ fontWeight: 700 }}>{item.title}</div>
 
-          <p
-            style={{
-              color: "#666",
-              marginTop: 8,
-            }}
-          >
-            {item.content}
-          </p >
+                    <p
+                      style={{
+                        color: "#666",
+                        marginTop: 8,
+                      }}
+                    >
+                      {item.content}
+                    </p>
 
-          <div
-            style={{
-              fontSize: 12,
-              color: "#999",
-            }}
-          >
-            {new Date(
-              item.created_at
-            ).toLocaleDateString()}
-          </div>
-        </div>
-      ))
-  )}
-</div>
+                    <div style={{ fontSize: 12, color: "#999" }}>
+                      {new Date(item.created_at).toLocaleDateString()}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
 
-            <Card
-              title="✅ 今日任务"
-              desc="完成每日应援任务"
-            />
+            <Card title="✅ 今日任务" desc="完成每日应援任务" />
 
-            <a
-  href="/gallery"
-  style={{
-    textDecoration: "none",
-    color: "inherit",
-  }}
->
-  <Card
-    title="📁 素材库"
-    desc="舞台 / 机场 / 官方物料"
-  />
-</a>
+            <a href="/gallery" style={{ textDecoration: "none", color: "inherit" }}>
+              <Card title="📁 素材库" desc="舞台 / 机场 / 官方物料" />
+            </a>
 
             <div
-  style={{
-    background:
-      "rgba(255,255,255,.9)",
-    borderRadius: 24,
-    padding: 16,
-    boxShadow:
-      "0 10px 30px rgba(0,0,0,.08)",
-  }}
->
-  <h3>💌 留言墙</h3>
+              style={{
+                background: "rgba(255,255,255,.9)",
+                borderRadius: 24,
+                padding: 16,
+                boxShadow: "0 10px 30px rgba(0,0,0,.08)",
+              }}
+            >
+              <h3>💌 留言墙</h3>
 
-  <p
-    style={{
-      color: "#666",
-    }}
-  >
-    来自粉丝们的留言
-  </p>
+              <p style={{ color: "#666" }}>来自粉丝们的留言</p>
 
-  <a
-    href="/messages"
-    style={{
-      color: "#FF8A00",
-      textDecoration: "none",
-      fontWeight: 700,
-    }}
-  >
-    查看全部留言 →
-  </a>
-</div>
+              <a
+                href="/messages"
+                style={{
+                  color: "#FF8A00",
+                  textDecoration: "none",
+                  fontWeight: 700,
+                }}
+              >
+                查看全部留言 →
+              </a>
+            </div>
           </div>
         </div>
       </main>

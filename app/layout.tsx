@@ -33,18 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   }}
 >
   <Navbar />
-
-  <main
-    style={{
-      width: "100%",
-      maxWidth: "1200px",
-      margin: "0 auto",
-      padding: "16px",
-      boxSizing: "border-box",
-    }}
-  >
-    {children}
-  </main>
+  {children}
 </body>
     </html>
   );

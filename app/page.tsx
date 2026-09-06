@@ -121,7 +121,7 @@ async function loadStats() {
         overflowX: "hidden",
       }}
     >
-      <Navbar />
+      
 
       <main
         style={{
@@ -153,20 +153,18 @@ async function loadStats() {
           >
             <h1
   style={{
-  fontSize: mobile ? "16vw" : "96px",
-  fontWeight: 900,
-  color: "#fff",
-  lineHeight: 1,
-  margin: 0,
-
-  width: "100%",
-
-  whiteSpace: "normal",
-
-  wordBreak: "break-word",
-
-  overflowWrap: "break-word",
-}}
+    fontSize: "clamp(42px,12vw,96px)",
+    fontWeight: 900,
+    color: "#fff",
+    lineHeight: 0.9,
+    margin: 0,
+    width: "100%",
+    maxWidth: "100%",
+    overflow: "hidden",
+    textOverflow: "clip",
+    wordBreak: "break-word",
+    overflowWrap: "anywhere",
+  }}
 >
   DOMIHOOD
 </h1>

@@ -114,16 +114,25 @@ async function loadStats() {
   }
 
   return (
-    <>
+  <main
+    style={{
+      paddingTop: "100px",
+    }}
+  >
       <Navbar />
 
       <main
-        style={{
-          minHeight: "100vh",
-          background: "#FFF7EE",
-          padding: "24px",
-        }}
-      >
+  style={{
+    minHeight: "100vh",
+    background: "#FFF7EE",
+    padding: mobile
+      ? "16px"
+      : "24px",
+    paddingBottom: mobile
+      ? "120px"
+      : "24px",
+  }}
+>
         <div
           style={{
             maxWidth: "1200px",
@@ -135,12 +144,10 @@ async function loadStats() {
             style={{
               background:
                 "linear-gradient(135deg,#FF8A00,#FFB347)",
-              borderRadius: "32px",
-              padding:
-              typeof window !== "undefined" &&
-              window.innerWidth < 768
-              ? "32px 20px"
+              padding: mobile
+              ? "24px 18px"
               : "60px 40px",
+              borderRadius: mobile ? 24 : 32,
               color: "white",
               boxShadow:
                 "0 20px 50px rgba(255,138,0,.25)",
@@ -150,13 +157,17 @@ async function loadStats() {
 
 
             <h1
-              style={{
-                fontSize: "clamp(36px,8vw,64px)",
-                fontWeight: 900,
-                margin: 0,
-              }}
+             style={{
+             fontSize: mobile ? "12vw" : 96,
+             fontWeight: 900,
+             color: "#fff",
+             lineHeight: 1,
+             margin:0,
+             maxWidth:"100%",
+             overflow: "hidden",
+             }}
             >
-              DOMIHOOD
+            DOMIHOOD
             </h1>
 
             <p
@@ -366,6 +377,7 @@ async function loadStats() {
 
 <div
   style={{
+    marginTop: 24,
     background:
       "rgba(255,255,255,.95)",
     borderRadius: 24,
@@ -606,7 +618,7 @@ async function loadStats() {
       </main>
 
       <BottomNav />
-    </>
+    </main>
   );
 }
 
@@ -716,7 +728,7 @@ function StatCard({
 
         padding: 18,
 
-        minHeight: 120,
+        minHeight : 100,
 
         display: "flex",
 

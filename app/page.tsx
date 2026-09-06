@@ -132,11 +132,12 @@ async function loadStats() {
         }}
       >
         <div
-          style={{
-            maxWidth: "1200px",
-            margin: "0 auto",
-          }}
-        >
+         style={{
+          maxWidth: "1200px",
+           width: "100%",
+           margin: "0 auto",
+         }}
+>
           {/* Hero Banner */}
           <section
             style={{
@@ -151,14 +152,13 @@ async function loadStats() {
           >
             <h1
               style={{
-                fontSize: mobile ? "12vw" : 96,
+                fontSize: "clamp(36px,10vw,96px)",
+                wordBreak: "break-word",
                 fontWeight: 900,
                 color: "#fff",
                 lineHeight: 1,
                 margin: 0,
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
+                
               }}
             >
               DOMIHOOD
@@ -323,7 +323,7 @@ async function loadStats() {
           <div
             style={{
               marginTop: 24,
-              marginBottom: 24,
+              marginBottom: 32,
               display: "grid",
               gridTemplateColumns: mobile ? "1fr" : "repeat(3,1fr)",
               gap: 16,

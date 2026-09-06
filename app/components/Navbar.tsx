@@ -76,6 +76,7 @@ export default function Navbar() {
   ];
 
   return (
+    <>
     <header
       style={{
         position: "sticky",
@@ -89,7 +90,7 @@ export default function Navbar() {
           maxWidth: 1300,
           margin: "0 auto",
 
-          height: mobile ? 60 : 72,
+          height: "clamp(60px,8vw,72px)",
 
           display: "flex",
 
@@ -135,8 +136,8 @@ export default function Navbar() {
           >
             <div
               style={{
-                width: mobile ? 36 : 44,
-                height: mobile ? 36 : 44,
+                width: "clamp(36px,6vw,44px)",
+                height: "clamp(36px,6vw,44px)",
 
                 borderRadius:
                   "50%",
@@ -168,7 +169,7 @@ export default function Navbar() {
 
                   fontWeight: 900,
 
-                  fontSize: mobile ? 18:22,
+                  fontSize: "clamp(16px,4vw,22px)",
                 }}
               >
                 DOMIHOOD
@@ -327,5 +328,6 @@ mobile && (
   </div>
 )}
     </header>
+    </>
   );
 }

@@ -89,7 +89,7 @@ export default function Navbar() {
           maxWidth: 1300,
           margin: "0 auto",
 
-          height: 72,
+          height: mobile ? 60 : 72,
 
           display: "flex",
 
@@ -99,8 +99,7 @@ export default function Navbar() {
           alignItems:
             "center",
 
-          padding:
-            "0 20px",
+          padding: mobile ? "0 12px" : "0 20px",
 
           borderRadius: 999,
 
@@ -136,8 +135,8 @@ export default function Navbar() {
           >
             <div
               style={{
-                width: 44,
-                height: 44,
+                width: mobile ? 36 : 44,
+                height: mobile ? 36 : 44,
 
                 borderRadius:
                   "50%",
@@ -169,7 +168,7 @@ export default function Navbar() {
 
                   fontWeight: 900,
 
-                  fontSize: 22,
+                  fontSize: mobile ? 18:22,
                 }}
               >
                 DOMIHOOD
@@ -291,6 +290,42 @@ export default function Navbar() {
           </div>
         </Link>
       </div>
+    {
+mobile && (
+  <div
+    style={{
+      position: "fixed",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: 64,
+      background: "#fff",
+      borderTop: "1px solid #eee",
+      display: "flex",
+      justifyContent: "space-around",
+      alignItems: "center",
+      zIndex: 99999,
+    }}
+  >
+    {navs.map((item) => (
+      <Link
+        key={item.href}
+        href={item.href}
+        style={{
+          textDecoration: "none",
+          color:
+            pathname === item.href
+              ? "#FF8A00"
+              : "#999",
+          fontSize: 13,
+          fontWeight: 600,
+        }}
+      >
+        {item.name}
+      </Link>
+    ))}
+  </div>
+)}
     </header>
   );
 }

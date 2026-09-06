@@ -14,6 +14,27 @@ export default function Home() {
   useState<any[]>([]);
   const [ranking, setRanking] =
   useState<any[]>([]);
+  const [mobile, setMobile] =
+  useState(false);
+
+useEffect(() => {
+  const check = () => {
+    setMobile(window.innerWidth < 768);
+  };
+
+  check();
+
+  window.addEventListener(
+    "resize",
+    check
+  );
+
+  return () =>
+    window.removeEventListener(
+      "resize",
+      check
+    );
+}, []);
   const [stats, setStats] =
   useState({
     fans: 0,
@@ -42,9 +63,15 @@ async function loadAnnouncements() {
 
     const data = await res.json();
 
-    setAnnouncements(data);
+    if (Array.isArray(data)) {
+      setAnnouncements(data);
+    } else {
+      console.error(data);
+      setAnnouncements([]);
+    }
   } catch (err) {
     console.error(err);
+    setAnnouncements([]);
   }
 }
 async function loadRanking() {
@@ -55,9 +82,15 @@ async function loadRanking() {
 
     const data = await res.json();
 
-    setRanking(data);
+    if (Array.isArray(data)) {
+      setRanking(data);
+    } else {
+      console.error(data);
+      setRanking([]);
+    }
   } catch (err) {
     console.error(err);
+    setRanking([]);
   }
 }
 async function loadStats() {
@@ -103,7 +136,11 @@ async function loadStats() {
               background:
                 "linear-gradient(135deg,#FF8A00,#FFB347)",
               borderRadius: "32px",
-              padding: "60px 40px",
+              padding:
+              typeof window !== "undefined" &&
+              window.innerWidth < 768
+              ? "32px 20px"
+              : "60px 40px",
               color: "white",
               boxShadow:
                 "0 20px 50px rgba(255,138,0,.25)",
@@ -114,7 +151,7 @@ async function loadStats() {
 
             <h1
               style={{
-                fontSize: "64px",
+                fontSize: "clamp(36px,8vw,64px)",
                 fontWeight: 900,
                 margin: 0,
               }}
@@ -124,12 +161,12 @@ async function loadStats() {
 
             <p
               style={{
-                fontSize: "20px",
+                fontSize: "clamp(14px,4vw,20px)",
                 marginTop: "12px",
                 opacity: 0.95,
               }}
             >
-              张奕然粉丝社区
+              然屯大家庭
             </p>
 
             <p
@@ -197,7 +234,7 @@ async function loadStats() {
                         color: "#fff",
                       }}
                     >
-                      欢迎回家 ✦ 张奕然粉丝社区
+                      欢迎回家 ✦ 然屯
                     </p>
                   </div>
 
@@ -302,7 +339,7 @@ async function loadStats() {
     marginTop: 24,
     display: "grid",
     gridTemplateColumns:
-      "repeat(auto-fit,minmax(180px,1fr))",
+      "repeat(auto-fit,minmax(120px,1fr))",
     gap: 16,
   }}
 >
@@ -332,7 +369,7 @@ async function loadStats() {
     background:
       "rgba(255,255,255,.95)",
     borderRadius: 24,
-    padding: 24,
+    padding: 16,
     boxShadow:
       "0 10px 30px rgba(0,0,0,.08)",
   }}
@@ -412,7 +449,7 @@ async function loadStats() {
           >
             <div
               style={{
-                fontSize: 22,
+                fontSize: 18,
                 fontWeight: 900,
               }}
             >
@@ -447,7 +484,7 @@ async function loadStats() {
             style={{
               display: "grid",
               gridTemplateColumns:
-                "repeat(auto-fit,minmax(280px,1fr))",
+                "repeat(auto-fit,minmax(240px,1fr))",
               gap: "20px",
               marginTop: "24px",
             }}
@@ -458,7 +495,8 @@ async function loadStats() {
       "rgba(255,255,255,.9)",
     backdropFilter: "blur(20px)",
     borderRadius: "24px",
-    padding: "24px",
+    padding: "16px",
+    paddingBottom: "120px",
     boxShadow:
       "0 10px 30px rgba(0,0,0,.08)",
   }}
@@ -537,7 +575,7 @@ async function loadStats() {
     background:
       "rgba(255,255,255,.9)",
     borderRadius: 24,
-    padding: 24,
+    padding: 16,
     boxShadow:
       "0 10px 30px rgba(0,0,0,.08)",
   }}
@@ -717,7 +755,7 @@ function StatCard({
 
         <div
           style={{
-            fontSize: 32,
+            fontSize: "clamp(22px,5vw,32px)",
             fontWeight: 900,
             color: "#FF8A00",
           }}

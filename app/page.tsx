@@ -142,6 +142,7 @@ async function loadStats() {
           <section
             style={{
               width: "100%",
+              boxSizing: "border-box",
               overflow: "hidden",
               background: "linear-gradient(135deg,#FF8A00,#FFB347)",
               padding: mobile ? "24px 18px" : "60px 40px",
@@ -151,16 +152,22 @@ async function loadStats() {
             }}
           >
             <h1
-              style={{
-                fontSize: "clamp(36px,10vw,96px)",
-                wordBreak: "break-word",
-                fontWeight: 900,
-                color: "#fff",
-                lineHeight: 1,
-                margin: 0,
-                
-              }}
-            >
+             style={{
+               fontSize: "clamp(28px,9vw,96px)",
+               fontWeight: 900,
+               color: "#fff",
+               lineHeight: 1,
+               margin: 0,
+
+               width: "100%",
+               maxWidth: "100%",
+
+               overflowWrap: "break-word",
+               wordBreak: "break-word",
+
+               whiteSpace: "normal",
+             }}
+           >
               DOMIHOOD
             </h1>
 

@@ -73,7 +73,7 @@ export default function IslandersDirectory({ onClose }: { onClose: () => void })
                 <div className={`islander-room-preview room-${selectedLayout.theme}`}>
                   <CottageRoom3D theme={selectedLayout.theme} furniture={selectedFurniture} positions={positions}
                     selected={selectedFurniture[0] ?? "sofa"} onSelect={() => {}} onMove={() => {}} />
-                  <div className="islander-room-caption"><span>✦</span> ${themeNames[selectedLayout.theme]} <i /> 屋主的私人小宇宙</div>
+                  <div className="islander-room-caption"><span>✦</span> {themeNames[selectedLayout.theme]} <i /> 屋主的私人小宇宙</div>
                 </div>
                 <section className="islander-furniture-list">
                   <div className="islander-section-heading"><h3>屋主的布置</h3><span>ROOM DETAILS</span></div>

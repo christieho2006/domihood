@@ -9,7 +9,7 @@ type Place = "square" | "cafe" | "cottage";
 const places: Record<Place, { title: string; subtitle: string; icon: string; description: string }> = {
   square: { title: "粉丝广场", subtitle: "THE GATHERING GARDEN", icon: "✿", description: "和朋友们在岛屿中央相遇，留下今天的小小心情。广场留言、岛民动态将陆续开放。" },
   cafe: { title: "回忆咖啡馆", subtitle: "MEMORY CAFE", icon: "☕", description: "把珍贵的片段收藏成一杯温暖的回忆。未来可以在这里整理照片、纪念日与共同故事。" },
-  cottage: { title: "私人小屋", subtitle: "MY LITTLE COTTAGE", icon: "⌂", description: "一间属于你的岛上小屋。小屋装修、家具摆放、拍照机与访客留言将作为后续独立模块逐步加入。" },
+  cottage: { title: "私人小屋", subtitle: "MY LITTLE COTTAGE", icon: "⌂", description: "一间属于你的岛上小屋。现在就可以搭配房间主题、摆放立体家具并保存布置；拍照机与访客留言会继续慢慢开放。" },
 };
 
 export default function Home() {

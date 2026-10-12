@@ -16,7 +16,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "密码长度需要为 8–72 个字符。" }, { status: 400 });
     }
 
-    assertAuthConfigured();\n    const db = getAdminDb();
+    assertAuthConfigured();
+    const db = getAdminDb();
     const password_hash = await bcrypt.hash(password, 12);
     const { data, error } = await db.from("domi_accounts")
       .insert({ nickname, nickname_normalized: normalizeNickname(nickname), password_hash })

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { createSession, getAdminDb, isAuthConfigurationError, isValidNickname, normalizeNickname } from "@/lib/server-auth";
+import { assertAuthConfigured, createSession, getAdminDb, isAuthConfigurationError, isValidNickname, normalizeNickname } from "@/lib/server-auth";
 
 export const runtime = "nodejs";
 
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "昵称或密码不正确。" }, { status: 401 });
     }
 
-    const db = getAdminDb();
+    assertAuthConfigured();\n    const db = getAdminDb();
     const { data, error } = await db.from("domi_accounts")
       .select("id,nickname,password_hash")
       .eq("nickname_normalized", normalizeNickname(nickname))

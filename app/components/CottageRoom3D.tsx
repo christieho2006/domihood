@@ -21,11 +21,12 @@ export default function CottageRoom3D({ theme, furniture, positions, selected, o
   let dead = false; let frame = 0; let renderer: any; let cleanup = () => {};
   async function start() {
    const canvas = canvasRef.current; if (!canvas) return;
+   const canvasElement = canvas as HTMLCanvasElement;
    try {
     const T = await import("three"); if (dead) return;
     const p = palette[theme], scene = new T.Scene(); scene.background = new T.Color(p.wall);
     const camera = new T.PerspectiveCamera(38, 1, 0.1, 100); camera.position.set(4.8, 4.5, 6.6); camera.lookAt(0, 0.65, 0);
-    renderer = new T.WebGLRenderer({ canvas, antialias: true, powerPreference: "low-power" });
+    renderer = new T.WebGLRenderer({ canvas: canvasElement, antialias: true, powerPreference: "low-power" });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5)); renderer.outputColorSpace = T.SRGBColorSpace; renderer.shadowMap.enabled = true;
     scene.add(new T.HemisphereLight(0xfff8ed, 0x8c7d83, 2));
     const sun = new T.DirectionalLight(0xffefd4, 2.8); sun.position.set(-3, 7, 5); sun.castShadow = true; sun.shadow.mapSize.set(1024, 1024); scene.add(sun);
@@ -66,16 +67,16 @@ export default function CottageRoom3D({ theme, furniture, positions, selected, o
     Object.keys(objects).forEach(id=>{const c=state.current.positions[id as Furniture]||{col:1,row:1};position(id,c.col,c.row);});
     function highlight(){Object.entries(objects).forEach(([id,g]:any)=>{g.scale.setScalar(id===state.current.selected?1.035:1);g.traverse((o:any)=>{if(o.isMesh)o.material.emissiveIntensity=0;});});}
     highlight();
-    function resize(){const r=canvas.getBoundingClientRect();renderer.setSize(Math.max(1,r.width),Math.max(1,r.height),false);camera.aspect=r.width/Math.max(1,r.height);camera.updateProjectionMatrix();}
-    function setRay(e:PointerEvent){const r=canvas.getBoundingClientRect();pointer.x=(e.clientX-r.left)/r.width*2-1;pointer.y=-(e.clientY-r.top)/r.height*2+1;ray.setFromCamera(pointer,camera);}
+    function resize(){const r=canvasElement.getBoundingClientRect();renderer.setSize(Math.max(1,r.width),Math.max(1,r.height),false);camera.aspect=r.width/Math.max(1,r.height);camera.updateProjectionMatrix();}
+    function setRay(e:PointerEvent){const r=canvasElement.getBoundingClientRect();pointer.x=(e.clientX-r.left)/r.width*2-1;pointer.y=-(e.clientY-r.top)/r.height*2+1;ray.setFromCamera(pointer,camera);}
     function findGroup(o:any):any{while(o&&o!==room&&!o.userData.furnitureId)o=o.parent;return o&&o!==room?o:null;}
-    function down(e:PointerEvent){setRay(e);const hit=ray.intersectObjects(Object.values(objects).flatMap((g:any)=>g.children),true)[0];if(!hit)return;const g=findGroup(hit.object);if(!g)return;dragging=g.userData.furnitureId;callbacks.current.onSelect(dragging as Furniture);canvas.setPointerCapture(e.pointerId);e.preventDefault();}
+    function down(e:PointerEvent){setRay(e);const hit=ray.intersectObjects(Object.values(objects).flatMap((g:any)=>g.children),true)[0];if(!hit)return;const g=findGroup(hit.object);if(!g)return;dragging=g.userData.furnitureId;callbacks.current.onSelect(dragging as Furniture);canvasElement.setPointerCapture(e.pointerId);e.preventDefault();}
     function move(e:PointerEvent){if(!dragging)return;setRay(e);const v=new T.Vector3();if(!ray.ray.intersectPlane(plane,v))return;const col=Math.max(0,Math.min(2,Math.round(v.x/1.05+1))),row=Math.max(0,Math.min(2,Math.round(1-v.z/1.05)));position(dragging,col,row,.06);}
     function up(e:PointerEvent){if(!dragging)return;setRay(e);const v=new T.Vector3();if(ray.ray.intersectPlane(plane,v)){const col=Math.max(0,Math.min(2,Math.round(v.x/1.05+1))),row=Math.max(0,Math.min(2,Math.round(1-v.z/1.05)));const occupied=state.current.furniture.some((id)=>id!==dragging&&state.current.positions[id]?.col===col&&state.current.positions[id]?.row===row);if(occupied){const old=state.current.positions[dragging as Furniture]||{col:1,row:1};position(dragging,old.col,old.row);}else callbacks.current.onMove(dragging as Furniture,col,row);}dragging=null;}
-    canvas.addEventListener("pointerdown",down);canvas.addEventListener("pointermove",move);canvas.addEventListener("pointerup",up);canvas.addEventListener("pointercancel",up);
+    canvasElement.addEventListener("pointerdown",down);canvasElement.addEventListener("pointermove",move);canvasElement.addEventListener("pointerup",up);canvasElement.addEventListener("pointercancel",up);
     const resizeHandler=()=>resize();window.addEventListener("resize",resizeHandler);resize();
     const tick=()=>{if(dead)return;frame=requestAnimationFrame(tick);renderer.render(scene,camera);};frame=requestAnimationFrame(tick);
-    cleanup=()=>{window.removeEventListener("resize",resizeHandler);canvas.removeEventListener("pointerdown",down);canvas.removeEventListener("pointermove",move);canvas.removeEventListener("pointerup",up);canvas.removeEventListener("pointercancel",up);};
+    cleanup=()=>{window.removeEventListener("resize",resizeHandler);canvasElement.removeEventListener("pointerdown",down);canvasElement.removeEventListener("pointermove",move);canvasElement.removeEventListener("pointerup",up);canvasElement.removeEventListener("pointercancel",up);};
     viewRef.current={objects,position,highlight};
    } catch(e){console.error("Could not build 3D cottage room",e);}
   }

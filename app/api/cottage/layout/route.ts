@@ -51,14 +51,15 @@ export async function PUT(request: Request) {
   const user = await readSession();
   if (!user) return NextResponse.json({ error: "请先登录岛民账号。" }, { status: 401 });
   const body = await request.json().catch(() => null);
-  if (!validLayout(body?.layout)) {
+  const inputLayout = body?.layout;
+  if (!validLayout(inputLayout)) {
     return NextResponse.json({ error: "小屋布局数据无效，请检查家具位置后重试。" }, { status: 400 });
   }
   try {
     const layout = {
-      theme: body.layout.theme,
-      furniture: body.layout.furniture,
-      positions: Object.fromEntries(body.layout.furniture.map(id => [id, body.layout.positions[id]])),
+      theme: inputLayout.theme,
+      furniture: inputLayout.furniture,
+      positions: Object.fromEntries(inputLayout.furniture.map((id: string) => [id, inputLayout.positions[id]])),
     };
     const { error } = await getAdminDb().from("domi_cottage_layouts").upsert({
       user_id: user.id,

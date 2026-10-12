@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { createSession, getAdminDb, isAuthConfigurationError, isValidNickname, normalizeNickname } from "@/lib/server-auth";
+import { assertAuthConfigured, createSession, getAdminDb, isAuthConfigurationError, isValidNickname, normalizeNickname } from "@/lib/server-auth";
 
 export const runtime = "nodejs";
 
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "密码长度需要为 8–72 个字符。" }, { status: 400 });
     }
 
-    const db = getAdminDb();
+    assertAuthConfigured();\n    const db = getAdminDb();
     const password_hash = await bcrypt.hash(password, 12);
     const { data, error } = await db.from("domi_accounts")
       .insert({ nickname, nickname_normalized: normalizeNickname(nickname), password_hash })

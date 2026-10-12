@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Island3D from "./components/Island3D";
+import IslandExplore from "./components/IslandExplore";
 import CottageStudio from "./components/CottageStudio";
 import MemoryCafe from "./components/MemoryCafe";
 import FanSquare from "./components/FanSquare";
@@ -19,6 +20,7 @@ export default function Home() {
   const [angle, setAngle] = useState(-8);
   const [zoom, setZoom] = useState(1);
   const [active, setActive] = useState<Place | null>(null);
+  const [islandExploreOpen, setIslandExploreOpen] = useState(false);
   const [islandersOpen, setIslandersOpen] = useState(false);
   const [exploredPlaces, setExploredPlaces] = useState<Place[]>([]);
   const [nickname, setNickname] = useState("");
@@ -166,7 +168,7 @@ export default function Home() {
           <div className="cloud cloud-two"><i /><i /><i /></div>
           <div className="sparkle sparkle-one">✦</div><div className="sparkle sparkle-two">✧</div><div className="sparkle sparkle-three">·</div><div className="sparkle sparkle-four">✦</div>
           <div className="island-scene" style={{ transform: `translateY(8px) scale(${zoom}) rotateY(${angle}deg)` }}>
-            <Island3D angle={angle} zoom={zoom} />
+            <Island3D angle={angle} zoom={zoom} onEnter={() => setIslandExploreOpen(true)} />
             <button className="place-pin pin-square" onClick={() => visitPlace("square")}><span>✿</span><b>粉丝广场</b></button>
             <button className="place-pin pin-cafe" onClick={() => visitPlace("cafe")}><span>☕</span><b>回忆咖啡馆</b></button>
             <button className="place-pin pin-cottage" onClick={() => visitPlace("cottage")}><span>⌂</span><b>私人小屋</b></button>
@@ -194,6 +196,7 @@ export default function Home() {
       </section>
       <footer><span>DOMIHOOD ISLAND</span><span>Made of little moments <b>♡</b></span><span>VERSION 0.1 · THE BEGINNING</span></footer>
 
+      {islandExploreOpen && <IslandExplore onClose={() => setIslandExploreOpen(false)} onVisit={visitPlace} />}
       {active === "cottage" && <CottageStudio onClose={() => setActive(null)} nickname={savedName || "岛屿访客"} />}
       {active === "cafe" && <MemoryCafe onClose={() => setActive(null)} />}
       {active === "square" && <FanSquare onClose={() => setActive(null)} />}

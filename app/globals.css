@@ -226,3 +226,5 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
 .discovery-stamp.unlocked small{color:#8fa28a}
 .discovery-note{font-size:9px;color:#a6afa0;margin:13px 0 0;line-height:1.8}
 @media(max-width:700px){.discovery-book{margin-top:17px;padding:17px 12px 13px;border-radius:15px}.discovery-book-heading h3{font-size:18px}.discovery-progress{font-size:9px;padding:7px 9px}.discovery-stamps{gap:7px}.discovery-stamp{padding:13px 4px 11px;gap:6px}.stamp-place{width:37px;height:37px;font-size:18px}.discovery-stamp strong{font-size:12px}.discovery-stamp small{font-size:8px}.stamp-icon{right:6px;top:5px;font-size:11px}}
+
+.memory-sync-state{margin-top:12px;font-size:10px;letter-spacing:.35px;color:#8a9d8d;text-align:center}.memory-sync-state::before{content:"";display:inline-block;width:5px;height:5px;margin:0 7px 1px 0;border-radius:50%;background:#9bb99b}

@@ -10,7 +10,6 @@ export default function IslandExplore({ onClose, onVisit }: Props) {
   const [angle, setAngle] = useState(-8);
   const [zoom, setZoom] = useState(1);
   const [focus, setFocus] = useState<"overview" | "garden" | "cottage" | "bridge">("overview");
-  const [nightMode, setNightMode] = useState(false);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -57,7 +56,6 @@ export default function IslandExplore({ onClose, onVisit }: Props) {
       <button onClick={()=>setZoom(value=>Math.max(.72,value-.1))} aria-label="缩小">−</button>
       <span>{Math.round(zoom*100)}%</span>
       <button onClick={()=>setZoom(value=>Math.min(1.7,value+.1))} aria-label="放大">＋</button>
-      <button onClick={()=>setNightMode(value=>!value)}>{nightMode ? "☀ 白日" : "☾ 夜色"}</button>
       <button onClick={()=>onVisit("square")}>粉丝广场 ↗</button>
       <button onClick={()=>onVisit("cafe")}>回忆咖啡馆 ↗</button>
       <button onClick={()=>onVisit("cottage")}>私人小屋 ↗</button>

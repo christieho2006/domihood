@@ -514,3 +514,17 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
  .explore-hint{bottom:17px;left:50%;font-size:8px;padding:8px 10px;gap:6px}
  .explore-bottom{display:none}.explore-zoom{right:14px;top:40%;transform:none}.explore-zoom button{width:33px;height:33px}
 }
+
+
+/* Immersive world controls: cinematic viewpoints, day/night and desktop navigation. */
+.explore-viewpoints{position:absolute;left:50%;top:88px;transform:translateX(-50%);display:flex;gap:5px;padding:5px;border:1px solid #ffffff52;border-radius:28px;background:#304a443d;backdrop-filter:blur(16px)}
+.explore-viewpoints button{border:1px solid transparent;border-radius:20px;padding:8px 14px;background:transparent;color:#fffdf0;font-size:10px;white-space:nowrap;transition:background .2s,border-color .2s}
+.explore-viewpoints button:hover,.explore-viewpoints button.active{background:#fffdf0e8;border-color:#fff;color:#5b735e}
+.explore-time-toggle{position:absolute;right:clamp(18px,4vw,60px);top:calc(50% + 110px);border:1px solid #ffffff70;border-radius:24px;padding:10px 13px;background:#f9f6e91e;color:white;font-size:10px;backdrop-filter:blur(15px);white-space:nowrap}
+.explore-time-toggle:hover{background:#fff3}
+@media(max-width:760px){
+ .explore-viewpoints{top:68px;max-width:calc(100% - 22px);gap:2px;padding:4px}
+ .explore-viewpoints button{padding:7px 11px;font-size:9px}
+ .explore-time-toggle{right:14px;top:calc(40% + 150px);font-size:9px;padding:8px 10px}
+ .explore-hint{max-width:calc(100% - 24px);overflow:hidden}
+}

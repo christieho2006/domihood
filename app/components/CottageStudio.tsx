@@ -67,10 +67,8 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
 
   function toggleFurniture(id: Furniture) {
     setSelected(id);
-    setLayout(current => {
-      if (current.furniture.includes(id)) return current;
-      return { ...current, furniture: [...current.furniture, id] };
-    });
+    if (layout.furniture.includes(id)) return;
+    setLayout(current => ({ ...current, furniture: [...current.furniture, id] }));
     setSaved(false);
     setSaveError(false);
   }

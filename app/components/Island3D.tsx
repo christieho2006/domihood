@@ -226,7 +226,7 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
     aria-label="点击进入沉浸式三维小岛，拖动旋转视角"
     role="button"
     tabIndex={0}
-    onPointerDown={(event) => { pointerStart.current = { x: event.clientX, y: event.clientY, moved: false }; }}
+    onPointerDown={(event) => { pointerStart.current = { x: event.clientX, y: event.clientY, moved: false, angle }; }}
     onPointerMove={(event) => { if (pointerStart.current && Math.hypot(event.clientX-pointerStart.current.x,event.clientY-pointerStart.current.y)>7) pointerStart.current.moved=true; }}
     onPointerUp={() => { pointerStart.current = pointerStart.current; }}
     onClick={() => { if (!pointerStart.current?.moved) onEnter?.(); pointerStart.current = null; }}

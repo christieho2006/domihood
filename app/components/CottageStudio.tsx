@@ -29,6 +29,8 @@ const defaultPositions: Record<Furniture, Cell> = {
 };
 const defaults: Layout = { theme: "cream", furniture: ["sofa", "rug", "plant", "lamp", "table", "picture"], positions: defaultPositions };
 const STORAGE_KEY = "domi_cottage_layout";
+const GUEST_STORAGE_KEY = "domi_cottage_layout_guest";
+const accountStorageKey = (userId: string) => `${STORAGE_KEY}:account:${userId}`;
 
 function isCell(value: unknown): value is Cell {
   if (!value || typeof value !== "object") return false;
@@ -63,53 +65,86 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
   const [dirty, setDirty] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const [accountSignedIn, setAccountSignedIn] = useState(false);
+  const [accountId, setAccountId] = useState<string | null>(null);
   const [cloudStatus, setCloudStatus] = useState<"guest" | "loading" | "synced" | "empty" | "error">("guest");
   const [lastCloudSave, setLastCloudSave] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = parseLayout(JSON.parse(raw));
-        if (parsed) setLayout(parsed);
-      }
-    } catch { /* Keep the default room if saved data is unavailable. */ }
 
-    fetch("/api/auth/session", { cache: "no-store" })
-      .then(response => response.ok ? response.json() : null)
-      .then(async session => {
-        if (cancelled || !session?.user?.id) return;
+    async function loadLayout() {
+      let session: { user?: { id?: string } | null } | null = null;
+      try {
+        const response = await fetch("/api/auth/session", { cache: "no-store" });
+        if (response.ok) session = await response.json();
+      } catch { /* If session lookup is unavailable, keep guest mode available. */ }
+
+      if (cancelled) return;
+      const userId = session?.user?.id;
+      if (userId) {
+        // Signed-in users must never read the shared legacy/guest layout.
         setAccountSignedIn(true);
+        setAccountId(userId);
         setCloudStatus("loading");
+        const userStorageKey = accountStorageKey(userId);
+
         try {
           const response = await fetch("/api/cottage/layout", { cache: "no-store" });
-          if (!response.ok) {
-            if (!cancelled) setCloudStatus("error");
-            return;
-          }
+          if (!response.ok) throw new Error("CLOUD_LAYOUT_UNAVAILABLE");
           const data = await response.json();
           if (cancelled) return;
+
           if (data.layout) {
             const cloudLayout = parseLayout(data.layout);
-            if (cloudLayout) {
-              setLayout(cloudLayout);
-              localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudLayout));
-              if (typeof data.updatedAt === "string") setLastCloudSave(data.updatedAt);
-              setDirty(false);
-              setCloudStatus("synced");
-              return;
-            }
-            setCloudStatus("error");
+            if (!cloudLayout) throw new Error("INVALID_CLOUD_LAYOUT");
+            setLayout(cloudLayout);
+            try { localStorage.setItem(userStorageKey, JSON.stringify(cloudLayout)); } catch { /* Cloud remains authoritative. */ }
+            if (typeof data.updatedAt === "string") setLastCloudSave(data.updatedAt);
+            setDirty(false);
+            setSaved(false);
+            setCloudStatus("synced");
             return;
           }
-          setCloudStatus("empty");
-        } catch {
-          if (!cancelled) setCloudStatus("error");
-        }
-      })
-      .catch(() => { /* Keep the local room available for guests. */ });
 
+          // A new account with no cloud layout starts with a clean default room,
+          // not another account's browser-cached layout.
+          setLayout(defaults);
+          setDirty(false);
+          setSaved(false);
+          setLastCloudSave(null);
+          try { localStorage.removeItem(userStorageKey); } catch { /* Ignore unavailable browser storage. */ }
+          setCloudStatus("empty");
+          return;
+        } catch {
+          if (cancelled) return;
+          // Offline fallback is scoped to this exact account ID.
+          try {
+            const raw = localStorage.getItem(userStorageKey);
+            const cached = raw ? parseLayout(JSON.parse(raw)) : null;
+            setLayout(cached ?? defaults);
+          } catch {
+            setLayout(defaults);
+          }
+          setCloudStatus("error");
+          return;
+        }
+      }
+
+      // Guest layouts use their own key. Do not reuse the old shared key,
+      // which may contain a layout saved while another account was logged in.
+      setAccountSignedIn(false);
+      setAccountId(null);
+      setCloudStatus("guest");
+      try {
+        const raw = localStorage.getItem(GUEST_STORAGE_KEY);
+        const guestLayout = raw ? parseLayout(JSON.parse(raw)) : null;
+        setLayout(guestLayout ?? defaults);
+      } catch {
+        setLayout(defaults);
+      }
+    }
+
+    void loadLayout();
     return () => { cancelled = true; };
   }, []);
 
@@ -142,8 +177,9 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
   async function saveRoom() {
     const nextLayout = { ...layout, positions: { ...defaultPositions, ...layout.positions } };
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextLayout));
-      if (accountSignedIn) {
+      const storageKey = accountId ? accountStorageKey(accountId) : GUEST_STORAGE_KEY;
+      try { localStorage.setItem(storageKey, JSON.stringify(nextLayout)); } catch { /* Cloud save should still be attempted. */ }
+      if (accountId) {
         const response = await fetch("/api/cottage/layout", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

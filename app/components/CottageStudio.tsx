@@ -36,33 +36,81 @@ function isCell(value: unknown): value is Cell {
   return Number.isInteger(cell.col) && cell.col >= 0 && cell.col < 3 && Number.isInteger(cell.row) && cell.row >= 0 && cell.row < 3;
 }
 
+function parseLayout(value: unknown): Layout | null {
+  if (!value || typeof value !== "object") return null;
+  const parsed = value as Layout;
+  if (!themes.some(theme => theme.id === parsed.theme) || !Array.isArray(parsed.furniture)) return null;
+  const furniture = items.map(item => item.id).filter(id => parsed.furniture.includes(id));
+  const positions: Partial<Record<Furniture, Cell>> = { ...defaultPositions };
+  const used = new Set<string>();
+  for (const id of furniture) {
+    const candidate = parsed.positions?.[id];
+    if (isCell(candidate)) {
+      const key = candidate.col + ":" + candidate.row;
+      if (!used.has(key)) {
+        positions[id] = candidate;
+        used.add(key);
+        continue;
+      }
+    }
+    const fallback = defaultPositions[id];
+    const fallbackKey = fallback.col + ":" + fallback.row;
+    if (!used.has(fallbackKey)) used.add(fallbackKey);
+  }
+  return { theme: parsed.theme, furniture, positions };
+}
+
 export default function CottageStudio({ onClose, nickname }: { onClose: () => void; nickname: string }) {
   const [layout, setLayout] = useState<Layout>(defaults);
   const [selected, setSelected] = useState<Furniture>("sofa");
   const [saved, setSaved] = useState(false);
   const [saveError, setSaveError] = useState(false);
+  const [accountSignedIn, setAccountSignedIn] = useState(false);
+  const [cloudStatus, setCloudStatus] = useState<"guest" | "loading" | "synced" | "empty" | "error">("guest");
 
   useEffect(() => {
+    let cancelled = false;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
-        const parsed = JSON.parse(raw) as Layout;
-        if (themes.some(t => t.id === parsed.theme) && Array.isArray(parsed.furniture)) {
-          const positions = { ...defaultPositions };
-          if (parsed.positions && typeof parsed.positions === "object") {
-            for (const item of items) {
-              const cell = parsed.positions[item.id];
-              if (isCell(cell)) positions[item.id] = cell;
-            }
-          }
-          setLayout({
-            theme: parsed.theme,
-            furniture: items.map(i => i.id).filter(id => parsed.furniture.includes(id)),
-            positions,
-          });
-        }
+        const parsed = parseLayout(JSON.parse(raw));
+        if (parsed) setLayout(parsed);
       }
     } catch { /* Keep the default room if saved data is unavailable. */ }
+
+    fetch("/api/auth/session", { cache: "no-store" })
+      .then(response => response.ok ? response.json() : null)
+      .then(async session => {
+        if (cancelled || !session?.user?.id) return;
+        setAccountSignedIn(true);
+        setCloudStatus("loading");
+        try {
+          const response = await fetch("/api/cottage/layout", { cache: "no-store" });
+          if (!response.ok) {
+            if (!cancelled) setCloudStatus("error");
+            return;
+          }
+          const data = await response.json();
+          if (cancelled) return;
+          if (data.layout) {
+            const cloudLayout = parseLayout(data.layout);
+            if (cloudLayout) {
+              setLayout(cloudLayout);
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudLayout));
+              setCloudStatus("synced");
+              return;
+            }
+            setCloudStatus("error");
+            return;
+          }
+          setCloudStatus("empty");
+        } catch {
+          if (!cancelled) setCloudStatus("error");
+        }
+      })
+      .catch(() => { /* Keep the local room available for guests. */ });
+
+    return () => { cancelled = true; };
   }, []);
 
   function toggleFurniture(id: Furniture) {
@@ -88,9 +136,25 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
     setSaveError(false);
   }
 
-  function saveRoom() {
+  async function saveRoom() {
+    const nextLayout = { ...layout, positions: { ...defaultPositions, ...layout.positions } };
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...layout, positions: { ...defaultPositions, ...layout.positions } }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextLayout));
+      if (accountSignedIn) {
+        const response = await fetch("/api/cottage/layout", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ layout: nextLayout }),
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          setSaved(false);
+          setSaveError(true);
+          setCloudStatus("error");
+          return;
+        }
+        setCloudStatus("synced");
+      }
       setSaved(true);
       setSaveError(false);
     } catch {
@@ -156,7 +220,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
             </div>
           </section>
         </div>
-        <footer className="cottage-footer"><span>✦ 当前保存在这台设备；云端同步将在账号系统接入后开放</span><div>{saveError && <small className="save-error">保存失败，请检查设备存储空间或浏览器设置</small>}{saved && <small className="saved-note">已保存 ✓</small>}<button className="cottage-reset" onClick={resetRoom}>恢复初始布置</button><button className="primary-button cottage-save" onClick={saveRoom}>保存我的小屋 <span>♡</span></button></div></footer>
+        <footer className="cottage-footer"><span>✦ {accountSignedIn ? cloudStatus === "synced" ? "账号已连接 · 小屋已同步到云端" : cloudStatus === "empty" ? "账号已连接 · 保存后将建立云端布局" : cloudStatus === "error" ? "云端暂不可用 · 本地布局仍可使用" : "正在连接你的云端小屋…" : "当前保存在这台设备；登录后可同步到云端"}</span><div>{saveError && <small className="save-error">{accountSignedIn ? "云端同步失败；本地布局仍已保存，请稍后重试" : "保存失败，请检查设备存储空间或浏览器设置"}</small>}{saved && <small className="saved-note">{accountSignedIn && cloudStatus === "synced" ? "已保存并同步 ✓" : "已保存 ✓"}</small>}<button className="cottage-reset" onClick={resetRoom}>恢复初始布置</button><button className="primary-button cottage-save" onClick={() => void saveRoom()}>保存我的小屋 <span>♡</span></button></div></footer>
       </section>
     </div>
   );

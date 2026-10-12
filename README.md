@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DOMIHOOD · 浮空小岛
 
-## Getting Started
+DOMIHOOD 正在从旧版粉丝社区转向一个可以持续成长的童话小岛。
 
-First, run the development server:
+## 当前第一阶段
+
+- 浮空岛首页视觉与交互原型
+- 鼠标/触控拖动旋转岛屿视角
+- 缩放与重置视角
+- 粉丝广场、回忆咖啡馆、私人小屋的探索入口
+- 访客昵称模式（保存在当前设备，不需要注册密码）
+- 手机与桌面端适配
+
+## 本地开发
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 构建检查
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 后续规划
 
-## Learn More
+1. 用真实 3D 场景与可复用资产升级岛屿原型。
+2. 将小屋装修、拍照机等小游戏做成独立模块。
+3. 规划岛民数据与云端存储，再决定需要的后端服务。
+4. 通过 GitHub 连接的托管平台实现提交后自动部署。
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> 当前昵称只保存在浏览器本地，尚未同步到云端；岛屿场景和地点弹窗属于第一阶段原型，不代表在线多人功能已经实现。

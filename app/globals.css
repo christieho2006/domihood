@@ -132,3 +132,21 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
 .cottage-3d-status.status-error{background:linear-gradient(135deg,#fff5efed,#f3e2dbed)}
 .room-label{pointer-events:none;z-index:4}
 @media(max-width:620px){.room-preview{height:clamp(270px,42vh,360px)}}
+
+
+/* Nickname account modal */
+.account-modal{max-height:min(90vh,760px);overflow-y:auto}
+.account-modal .account-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin:18px 0 16px;padding:4px;background:#f0f2e9;border-radius:12px}
+.account-tabs button{border:0;border-radius:9px;background:transparent;color:#8a9a87;padding:10px 6px;font-size:12px;transition:background .2s,color .2s}
+.account-tabs button.active{background:#fffdf7;color:#5f7a62;box-shadow:0 2px 8px #657a5610}
+.account-form label{display:block;font-size:11px;color:#6d806f;margin:15px 0 8px}
+.account-form input,.account-modal>input{width:100%;border:1px solid #dfe5d9;background:#fffef9;border-radius:12px;padding:13px;color:#4f6754;outline:none;font:inherit;font-size:13px}
+.account-form input:focus,.account-modal>input:focus{border-color:#9bb99b;box-shadow:0 0 0 3px #dfeadd}
+.account-hint{margin:10px 0 16px;color:#9aa797;font-size:10px;line-height:1.7}
+.account-form .primary-button:disabled,.secondary-account-button:disabled{opacity:.65;cursor:wait}
+.account-error{margin:12px 0;padding:10px 12px;border:1px solid #eedbd3;border-radius:10px;background:#fff4ef;color:#a86f65;font-size:11px;line-height:1.7}
+.account-status{display:flex;align-items:center;gap:8px;margin:18px 0;padding:12px;border-radius:12px;background:#eef3e8;color:#6d866c;font-size:12px}
+.account-status span{width:7px;height:7px;border-radius:50%;background:#85b58b;box-shadow:0 0 0 4px #dbead8}
+.secondary-account-button{display:block;width:100%;margin-top:12px;border:1px solid #e3e8dd;border-radius:12px;background:transparent;color:#8d9b8b;padding:12px;font-size:12px}
+.secondary-account-button:hover{background:#f3f4ec}
+@media(max-width:520px){.account-modal{padding:28px 23px;max-height:88vh}.account-modal .account-tabs button{font-size:11px}.account-form input{padding:12px}}

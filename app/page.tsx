@@ -19,6 +19,12 @@ export default function Home() {
   const [nickname, setNickname] = useState("");
   const [savedName, setSavedName] = useState("");
   const [nameOpen, setNameOpen] = useState(false);
+  const [accountMode, setAccountMode] = useState<"login" | "register" | "guest">("login");
+  const [accountNickname, setAccountNickname] = useState("");
+  const [accountPassword, setAccountPassword] = useState("");
+  const [accountBusy, setAccountBusy] = useState(false);
+  const [accountError, setAccountError] = useState("");
+  const [accountUser, setAccountUser] = useState<{ id: string; nickname: string } | null>(null);
   const [dragging, setDragging] = useState(false);
   const startX = useRef(0);
   const startAngle = useRef(-8);
@@ -26,7 +32,19 @@ export default function Home() {
 
   useEffect(() => {
     const saved = window.localStorage.getItem("domi_island_nickname");
-    if (saved) { setSavedName(saved); setNickname(saved); }
+    if (saved) { setSavedName(saved); setNickname(saved); setAccountNickname(saved); }
+    fetch("/api/auth/session", { cache: "no-store" })
+      .then(response => response.ok ? response.json() : null)
+      .then(data => {
+        if (data?.user?.nickname) {
+          setAccountUser(data.user);
+          setSavedName(data.user.nickname);
+          setNickname(data.user.nickname);
+          setAccountNickname(data.user.nickname);
+          window.localStorage.setItem("domi_island_nickname", data.user.nickname);
+        }
+      })
+      .catch(() => { /* Guest mode remains available when account service is offline. */ });
   }, []);
 
   function pointerDown(event: React.PointerEvent<HTMLDivElement>) {
@@ -50,7 +68,53 @@ export default function Home() {
     window.localStorage.setItem("domi_island_nickname", clean);
     setSavedName(clean);
     setNickname(clean);
+    setAccountNickname(clean);
     setNameOpen(false);
+  }
+
+  async function submitAccount(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (accountBusy) return;
+    setAccountBusy(true);
+    setAccountError("");
+    try {
+      const response = await fetch("/api/auth/" + accountMode, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nickname: accountNickname, password: accountPassword }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.user) {
+        setAccountError(data.error || "暂时无法完成操作，请稍后再试。");
+        return;
+      }
+      setAccountUser(data.user);
+      setSavedName(data.user.nickname);
+      setNickname(data.user.nickname);
+      window.localStorage.setItem("domi_island_nickname", data.user.nickname);
+      setAccountPassword("");
+      setNameOpen(false);
+    } catch {
+      setAccountError("网络暂时没有连上，请稍后重试。");
+    } finally {
+      setAccountBusy(false);
+    }
+  }
+
+  async function logoutAccount() {
+    setAccountBusy(true);
+    setAccountError("");
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      setAccountUser(null);
+      setAccountPassword("");
+      setAccountMode("login");
+      setNameOpen(false);
+    } catch {
+      setAccountError("退出登录失败，请检查网络后重试。");
+    } finally {
+      setAccountBusy(false);
+    }
   }
 
   return (
@@ -59,7 +123,7 @@ export default function Home() {
         <a className="brand" href="/" aria-label="DOMIHOOD 首页"><span className="brand-mark">d.</span><span>DOMIHOOD<small>OUR LITTLE WORLD</small></span></a>
         <div className="topbar-right">
           <span className="online-dot" /> <span className="quiet-label">A tiny world made of memories</span>
-          <button className="profile-chip" onClick={() => setNameOpen(true)}><span className="avatar">{savedName ? savedName.slice(0,1) : "♡"}</span>{savedName || "岛屿访客"} <span className="chevron">⌄</span></button>
+          <button className="profile-chip" onClick={() => { setNameOpen(true); setAccountError(""); setAccountNickname(savedName); }}><span className="avatar">{savedName ? savedName.slice(0,1) : "♡"}</span>{savedName || "岛屿访客"} <span className="chevron">⌄</span></button>
         </div>
       </header>
 
@@ -115,7 +179,7 @@ export default function Home() {
 
       {active === "cottage" && <CottageStudio onClose={() => setActive(null)} nickname={savedName || "岛屿访客"} />}
       {active && active !== "cottage" && <div className="modal-backdrop" onClick={() => setActive(null)}><section className="place-modal" onClick={e => e.stopPropagation()}><button className="modal-close" onClick={() => setActive(null)}>×</button><div className="modal-icon">{places[active].icon}</div><div className="eyebrow left-eyebrow">{places[active].subtitle}</div><h2>{places[active].title}</h2><p>{places[active].description}</p><div className="coming-soon">✧ 这片天地正在慢慢建造中 ✧</div><button className="primary-button" onClick={() => setActive(null)}>继续探索 <span>↗</span></button></section></div>}
-      {nameOpen && <div className="modal-backdrop" onClick={() => setNameOpen(false)}><section className="name-modal" onClick={e => e.stopPropagation()}><button className="modal-close" onClick={() => setNameOpen(false)}>×</button><div className="modal-icon">♡</div><div className="eyebrow left-eyebrow">WELCOME TO YOUR ISLAND</div><h2>给自己取个名字吧</h2><p>访客模式，无需注册密码。昵称保存在当前设备，之后可以再修改。</p><label htmlFor="nickname">岛民昵称</label><input id="nickname" value={nickname} maxLength={16} placeholder="输入一个喜欢的名字" onChange={e => setNickname(e.target.value)} onKeyDown={e => {if(e.key==="Enter")saveNickname()}} autoFocus/><div className="input-count">{nickname.trim().length}/16</div><button className="primary-button" onClick={saveNickname}>进入小岛 <span>↗</span></button></section></div>}
+      {nameOpen && <div className="modal-backdrop" onClick={() => setNameOpen(false)}><section className="name-modal account-modal" onClick={e => e.stopPropagation()}><button className="modal-close" onClick={() => setNameOpen(false)} aria-label="关闭">×</button><div className="modal-icon">♡</div><div className="eyebrow left-eyebrow">WELCOME TO YOUR ISLAND</div>{accountUser ? <><h2>欢迎回来，{accountUser.nickname}</h2><p>你的岛民账号已登录。接下来会逐步接入小屋的云端保存。</p><div className="account-status"><span /> 已登录账号 · {accountUser.nickname}</div><button className="primary-button" onClick={() => setNameOpen(false)}>继续探索 <span>↗</span></button><button className="secondary-account-button" onClick={() => void logoutAccount()} disabled={accountBusy}>{accountBusy ? "正在退出…" : "退出登录"}</button></> : <><h2>{accountMode === "register" ? "创建你的岛民账号" : accountMode === "guest" ? "先来小岛做客吧" : "欢迎回到小岛"}</h2><p>{accountMode === "guest" ? "访客昵称只保存在当前设备，不会同步到其他设备。" : "使用昵称和密码保存你的身份。昵称不需要填写邮箱。"}</p><div className="account-tabs" role="tablist" aria-label="账号方式"><button type="button" className={accountMode === "login" ? "active" : ""} onClick={() => {setAccountMode("login");setAccountError("");}}>登录</button><button type="button" className={accountMode === "register" ? "active" : ""} onClick={() => {setAccountMode("register");setAccountError("");}}>注册</button><button type="button" className={accountMode === "guest" ? "active" : ""} onClick={() => {setAccountMode("guest");setAccountError("");}}>访客体验</button></div>{accountMode === "guest" ? <><label htmlFor="nickname">岛民昵称</label><input id="nickname" value={nickname} maxLength={16} placeholder="输入一个喜欢的名字" onChange={e => setNickname(e.target.value)} onKeyDown={e => {if(e.key==="Enter")saveNickname()}} autoFocus/><div className="input-count">{nickname.trim().length}/16</div><button className="primary-button" onClick={saveNickname}>进入小岛 <span>↗</span></button></> : <form className="account-form" onSubmit={submitAccount}><label htmlFor="account-nickname">岛民昵称</label><input id="account-nickname" autoComplete="username" value={accountNickname} maxLength={16} placeholder="2–16 个字符" onChange={e => setAccountNickname(e.target.value)} required/><label htmlFor="account-password">密码</label><input id="account-password" type="password" autoComplete={accountMode === "register" ? "new-password" : "current-password"} value={accountPassword} minLength={accountMode === "register" ? 8 : 1} maxLength={72} placeholder={accountMode === "register" ? "至少 8 个字符" : "输入你的密码"} onChange={e => setAccountPassword(e.target.value)} required/><div className="account-hint">{accountMode === "register" ? "昵称 2–16 个字符 · 密码至少 8 位" : "请使用注册时设置的昵称与密码"}</div>{accountError && <div className="account-error" role="alert">{accountError}</div>}<button className="primary-button" type="submit" disabled={accountBusy}>{accountBusy ? "请稍候…" : accountMode === "register" ? "创建账号" : "登录小岛"} <span>↗</span></button></form>}{accountError && accountMode === "guest" && <div className="account-error" role="alert">{accountError}</div>}</>}</section></div>}
     </main>
   );
 }

@@ -59,7 +59,7 @@ export default function CottageRoom3D({ theme, furniture, positions, selected, o
      g.userData.furnitureId=id; room.add(g); objects[id]=g;
     }
     furniture.forEach(make);
-    const grid = new T.GridHelper(3.15,3,0xffffff,0xffffff); grid.position.y=.012; grid.material.transparent=true; grid.material.opacity=.18; room.add(grid);
+    const grid = new T.GridHelper(3.15,3,0xffffff,0xffffff); grid.position.y=.012; (grid.material as any).transparent=true; (grid.material as any).opacity=.18; room.add(grid);
     const plane = new T.Plane(new T.Vector3(0,1,0),0), ray = new T.Raycaster(), pointer = new T.Vector2();
     let dragging: string | null = null;
     function position(id: string,col:number,row:number,y=.03){const q=pointFor(col,row);if(objects[id])objects[id].position.set(q.x,y,q.z);}

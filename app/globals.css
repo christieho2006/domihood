@@ -318,11 +318,12 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
 .islander-visit-meta strong{font-size:12px;color:#526b59}
 .islander-visit-meta small{font-size:10px;color:#98a697}
 .islander-readonly-tag{font-size:9px;color:#8da087;background:#edf3e9;border:1px solid #e1e9db;border-radius:15px;padding:7px 10px;white-space:nowrap}
-.islander-room-preview{position:relative;overflow:hidden;border:1px solid #e9e5d9;border-radius:18px;background:#f5e9d8}
-.islander-room-preview .cottage-3d-wrap{height:clamp(260px,45vw,410px);min-height:260px}
-.islander-room-preview .cottage-3d-canvas{pointer-events:none;touch-action:auto}
+.islander-room-preview{position:relative;display:flex;flex-direction:column;width:100%;height:clamp(360px,52vw,500px);min-height:360px;overflow:hidden;border:1px solid #e9e5d9;border-radius:18px;background:#f5e9d8}
+.islander-room-preview .cottage-3d-wrap{position:absolute;inset:0 0 42px;width:100%;height:auto;min-height:0}
+.islander-room-preview .cottage-3d-canvas{pointer-events:none;touch-action:auto;width:100%;height:100%}
 .islander-room-preview .cottage-3d-status{background:#fff9}
-.islander-room-caption{display:flex;align-items:center;justify-content:center;gap:9px;padding:12px 10px;background:#fffdf5d9;border-top:1px solid #fff;color:#8b9a86;font-size:10px}
+.islander-room-caption{position:relative;z-index:1;flex:0 0 42px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:auto;padding:10px;background:#fffdf5e8;border-top:1px solid #fff;color:#8b9a86;font-size:10px}
+
 .islander-room-caption>span{color:#c7a06f}.islander-room-caption i{width:3px;height:3px;border-radius:50%;background:#c4cbbd}
 .islander-furniture-list{margin-top:20px}
 .islander-section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
@@ -335,4 +336,4 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
 .islander-updated{margin:12px 0 0;text-align:right;font-size:9px;color:#a4afa0}
 .islanders-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;border-top:1px solid #e9e8dc;background:#f8f7ef;color:#a0a99c;font-size:9px;letter-spacing:.3px}
 .islanders-footer .memory-done{font-size:10px}
-@media(max-width:650px){.destination-actions{align-items:flex-end;flex-direction:column;gap:9px}.islanders-open-button{padding:8px 11px;font-size:10px}.islanders-hero{padding:26px 17px 21px}.islanders-content{padding:14px 10px 19px}.islander-card{gap:9px;padding:11px 9px}.islander-avatar{width:35px;height:35px;flex-basis:35px}.islander-card-copy strong{font-size:11px}.islander-card-copy small{font-size:9px}.islander-visit-button{padding:8px 9px;font-size:9px}.islander-visit-meta{align-items:flex-start;flex-direction:column}.islander-room-preview .cottage-3d-wrap{height:280px;min-height:250px}.islander-furniture-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.islanders-footer{padding:12px 13px;font-size:8px}.islanders-footer .memory-done{font-size:9px;padding:8px 10px}}
+@media(max-width:650px){.destination-actions{align-items:flex-end;flex-direction:column;gap:9px}.islanders-open-button{padding:8px 11px;font-size:10px}.islanders-hero{padding:26px 17px 21px}.islanders-content{padding:14px 10px 19px}.islander-card{gap:9px;padding:11px 9px}.islander-avatar{width:35px;height:35px;flex-basis:35px}.islander-card-copy strong{font-size:11px}.islander-card-copy small{font-size:9px}.islander-visit-button{padding:8px 9px;font-size:9px}.islander-visit-meta{align-items:flex-start;flex-direction:column}.islander-room-preview{height:420px;min-height:420px}.islander-room-preview .cottage-3d-wrap{inset:0 0 42px;height:auto;min-height:0}.islander-furniture-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.islanders-footer{padding:12px 13px;font-size:8px}.islanders-footer .memory-done{font-size:9px;padding:8px 10px}}

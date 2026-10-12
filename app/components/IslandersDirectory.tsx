@@ -8,6 +8,7 @@ type Furniture = "sofa" | "rug" | "plant" | "lamp" | "table" | "shelf" | "bed" |
 type Cell = { col: number; row: number };
 type PublicLayout = { theme: Theme; furniture: Furniture[]; positions: Partial<Record<Furniture, Cell>> };
 type Islander = { id: string; nickname: string; hasCottage: boolean; layout: PublicLayout | null; updatedAt: string | null };
+type Visitor = { id: string; nickname: string; visitedAt: string };
 const themeNames: Record<Theme, string> = { cream: "奶油暖阳", blossom: "樱花午后", mint: "薄荷花园" };
 const furnitureInfo: { id: Furniture; name: string; icon: string }[] = [
   { id: "sofa", name: "云朵沙发", icon: "🛋️" }, { id: "rug", name: "花瓣地毯", icon: "🌸" },
@@ -27,6 +28,8 @@ export default function IslandersDirectory({ onClose }: { onClose: () => void })
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
+  const [visitors, setVisitors] = useState<Visitor[]>([]);
+  const [visitorError, setVisitorError] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -38,7 +41,17 @@ export default function IslandersDirectory({ onClose }: { onClose: () => void })
         if (!response.ok) throw new Error(data.error || "岛民名册暂时无法打开。");
         if (!cancelled) {
           setIslanders(Array.isArray(data.islanders) ? data.islanders : []);
-          setViewerId(typeof data.viewerId === "string" ? data.viewerId : null);
+          const currentViewerId = typeof data.viewerId === "string" ? data.viewerId : null;
+          setViewerId(currentViewerId);
+          if (currentViewerId) {
+            fetch("/api/cottage-visits", { cache: "no-store" })
+              .then(async response => {
+                const visitData = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(visitData.error || "来访记录暂时无法读取。");
+                if (!cancelled) { setVisitors(Array.isArray(visitData.visitors) ? visitData.visitors : []); setVisitorError(""); }
+              })
+              .catch(reason => { if (!cancelled) setVisitorError(reason instanceof Error ? reason.message : "来访记录暂时无法读取。"); });
+          } else { setVisitors([]); setVisitorError(""); }
         }
       })
       .catch(reason => { if (!cancelled) setError(reason instanceof Error ? reason.message : "网络暂时没有连上，请稍后重试。"); })
@@ -49,6 +62,16 @@ export default function IslandersDirectory({ onClose }: { onClose: () => void })
   const selectedLayout = selected?.layout ?? null;
   const positions = useMemo(() => ({ ...defaultPositions, ...(selectedLayout?.positions ?? {}) }), [selectedLayout]);
   const selectedFurniture = selectedLayout?.furniture ?? [];
+
+  function visitIslander(islander: Islander) {
+    setSelected(islander);
+    if (viewerId && islander.id !== viewerId && islander.hasCottage) {
+      void fetch("/api/cottage-visits", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ownerId: islander.id }),
+      }).catch(() => { /* Visiting remains available if the history service is temporarily offline. */ });
+    }
+  }
 
   return (
     <div className="modal-backdrop islanders-backdrop" onClick={onClose}>
@@ -90,16 +113,22 @@ export default function IslandersDirectory({ onClose }: { onClose: () => void })
           ) : error ? (
             <div className="islanders-empty"><span>☁</span><strong>暂时没有连上小岛</strong><p>{error}</p><button className="islanders-retry" onClick={() => setRefreshKey(value => value + 1)}>重新加载</button></div>
           ) : islanders.length ? (
+            <>
+            {viewerId && <section className="islander-visitors-panel">
+              <div className="islander-section-heading"><h3>最近来访</h3><span>{visitors.length} 条足迹</span></div>
+              {visitorError ? <p className="islander-visitors-empty">{visitorError}</p> : visitors.length ? <div className="islander-visitors-list">{visitors.slice(0, 8).map(visitor => <div className="islander-visitor" key={visitor.id}><span className="islander-avatar">{visitor.nickname.slice(0, 1)}</span><span><b>{visitor.nickname}</b><small>{new Date(visitor.visitedAt).toLocaleString()}</small></span></div>)}</div> : <p className="islander-visitors-empty">还没有岛民来拜访。把小屋布置好，等待第一位朋友来敲门吧。</p>}
+            </section>}
             <div className="islanders-list">
               {islanders.map(islander => {
                 const isMe = islander.id === viewerId;
                 return <article className="islander-card" key={islander.id}>
                   <div className="islander-avatar">{islander.nickname.slice(0, 1)}</div>
                   <div className="islander-card-copy"><strong>{islander.nickname}{isMe && <span className="islander-me-tag">我</span>}</strong><small>{isMe ? "这是属于你的小岛身份" : islander.hasCottage ? `${themeNames[islander.layout!.theme]} · 已布置小屋` : "小屋还在准备中"}</small></div>
-                  <button className="islander-visit-button" disabled={isMe || !islander.hasCottage} onClick={() => setSelected(islander)}>{isMe ? "我的小屋" : islander.hasCottage ? "拜访小屋 ↗" : "尚未开放"}</button>
+                  <button className="islander-visit-button" disabled={isMe || !islander.hasCottage} onClick={() => visitIslander(islander)}>{isMe ? "我的小屋" : islander.hasCottage ? "拜访小屋 ↗" : "尚未开放"}</button>
                 </article>;
               })}
             </div>
+            </>
           ) : (
             <div className="islanders-empty"><span>✿</span><strong>岛上还很安静</strong><p>目前还没有岛民。注册并布置小屋后，就会出现在这里。</p></div>
           )}

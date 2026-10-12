@@ -105,6 +105,7 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
 .placement-copy strong{font-size:11px;color:#526d58;font-weight:650}
 .placement-copy span{font-size:9px;color:#99a599;line-height:1.6}
 .placement-copy small{font-size:9px;color:#7f9e83;line-height:1.6}
+.remove-selected-furniture{align-self:flex-start;border:1px solid #ead8d1;background:#fff7f3;color:#b7837c;border-radius:999px;padding:5px 9px;font-size:9px;transition:background .2s,border-color .2s}.remove-selected-furniture:hover{background:#f8e9e3;border-color:#dcb8ae}
 .placement-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:112px}
 .placement-grid button{aspect-ratio:1;border:1px solid #e1e8dc;border-radius:6px;background:#f8f8f0;color:#8ba68a;display:grid;place-items:center;padding:0;font-size:12px}
 .placement-grid button.cell-current{background:#dce9d5;border-color:#91b28d;color:#547b59;box-shadow:inset 0 0 0 1px #a9c8a0}

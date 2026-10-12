@@ -39,7 +39,6 @@ function isCell(value: unknown): value is Cell {
 export default function CottageStudio({ onClose, nickname }: { onClose: () => void; nickname: string }) {
   const [layout, setLayout] = useState<Layout>(defaults);
   const [selected, setSelected] = useState<Furniture>("sofa");
-  const [loaded, setLoaded] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saveError, setSaveError] = useState(false);
 
@@ -64,7 +63,6 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
         }
       }
     } catch { /* Keep the default room if saved data is unavailable. */ }
-    setLoaded(true);
   }, []);
 
   function toggleFurniture(id: Furniture) {
@@ -133,7 +131,6 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
             }}
           />
           <div className="room-label"><span>3D ROOM 001</span><strong>{themes.find(t => t.id === layout.theme)?.name}</strong><small>拖动家具摆放 · 拖动空白处旋转 · 滚轮缩放</small><small>{layout.furniture.length} 件家具已布置</small></div>
-          {!loaded && <div className="room-loading">正在打开小屋…</div>}
         </div>
         <div className="cottage-controls">
           <section className="decor-section"><div className="decor-heading"><h3>房间氛围</h3><span>ROOM PALETTE</span></div>

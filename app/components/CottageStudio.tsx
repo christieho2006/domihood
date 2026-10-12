@@ -132,7 +132,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
               }
             }}
           />
-          <div className="room-label"><span>3D ROOM 001</span><strong>{themes.find(t => t.id === layout.theme)?.name}</strong><small>拖动家具 · {layout.furniture.length} 件已布置</small></div>
+          <div className="room-label"><span>3D ROOM 001</span><strong>{themes.find(t => t.id === layout.theme)?.name}</strong><small>拖动家具摆放 · 拖动空白处旋转 · 滚轮缩放</small><small>{layout.furniture.length} 件家具已布置</small></div>
           {!loaded && <div className="room-loading">正在打开小屋…</div>}
         </div>
         <div className="cottage-controls">

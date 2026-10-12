@@ -58,7 +58,7 @@ export default function IslandersDirectory({ onClose }: { onClose: () => void })
           <div className="islanders-hero-icon">{selected ? "⌂" : "✿"}</div>
           <div className="eyebrow left-eyebrow">OUR LITTLE ISLAND COMMUNITY</div>
           <h2>{selected ? `拜访 ${selected.nickname} 的小屋` : "岛民名册"}</h2>
-          <p>{selected ? "轻轻推开门，看看这位岛民亲手布置的小小空间。" : "每一间小屋，都藏着一位岛民喜欢的生活模样。来认识新朋友吧。"}</p>
+          <p>{selected ? "轻轻推开门，拖动旋转视角，双指捏合或使用按钮缩放，看看这位岛民的小小空间。" : "每一间小屋，都藏着一位岛民喜欢的生活模样。来认识新朋友吧。"}</p>
           {!selected && <div className="islanders-total"><strong>{islanders.length}</strong> 位岛民 · 一起慢慢长大的小岛</div>}
         </header>
 
@@ -72,7 +72,7 @@ export default function IslandersDirectory({ onClose }: { onClose: () => void })
                 </div>
                 <div className={`islander-room-preview room-${selectedLayout.theme}`}>
                   <CottageRoom3D theme={selectedLayout.theme} furniture={selectedFurniture} positions={positions}
-                    selected={selectedFurniture[0] ?? "sofa"} onSelect={() => {}} onMove={() => {}} />
+                    selected={selectedFurniture[0] ?? "sofa"} onSelect={() => {}} onMove={() => {}} viewOnly />
                   <div className="islander-room-caption"><span>✦</span> {themeNames[selectedLayout.theme]} <i /> 屋主的私人小宇宙</div>
                 </div>
                 <section className="islander-furniture-list">

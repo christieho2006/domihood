@@ -8,9 +8,10 @@ type Props = { onClose: () => void; onVisit: (place: Place) => void };
 export default function IslandExplore({ onClose, onVisit }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [loading, setLoading] = useState(true);
-  const [view, setView] = useState<"overview" | "garden" | "cottage">("overview");
+  const [focus, setFocus] = useState<"overview" | "garden" | "cottage" | "bridge">("overview");
+  const [nightMode, setNightMode] = useState(false);
   const drag = useRef({ active: false, x: 0, y: 0, moved: false });
-  const cameraState = useRef({ theta: -0.62, phi: 1.02, radius: 13.5 });
+  const cameraState = useRef({ theta: -0.62, phi: 1.02, radius: 13.5, targetX: 0, targetY: 0.25, targetZ: 0 });
   const engine = useRef<any>(null);
 
   useEffect(() => {
@@ -211,8 +212,8 @@ export default function IslandExplore({ onClose, onVisit }: Props) {
         function setCamera(){
           const s=cameraState.current;
           s.phi=Math.max(.38,Math.min(1.42,s.phi));
-          camera.position.set(s.radius*Math.sin(s.phi)*Math.sin(s.theta),s.radius*Math.cos(s.phi),s.radius*Math.sin(s.phi)*Math.cos(s.theta));
-          camera.lookAt(0,.25,0);
+          camera.position.set(s.targetX+s.radius*Math.sin(s.phi)*Math.sin(s.theta),s.targetY+s.radius*Math.cos(s.phi),s.targetZ+s.radius*Math.sin(s.phi)*Math.cos(s.theta));
+          camera.lookAt(s.targetX,s.targetY,s.targetZ);
         }
         function resize(){
           if(disposed)return;
@@ -220,7 +221,16 @@ export default function IslandExplore({ onClose, onVisit }: Props) {
           renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();setCamera();
         }
         const onResize=()=>resize();window.addEventListener("resize",onResize);resize();
-        engine.current={camera,scene,renderer,setCamera};
+        function setNight(night:boolean){
+          const sky = new THREE.Color(night ? "#182b42" : "#cfe2e3");
+          scene.background = sky;
+          scene.fog.color.copy(sky);
+          sun.intensity = night ? 0.72 : 3.2;
+          fill.intensity = night ? 1.65 : 1.25;
+          scene.children.forEach((child:any)=>{ if(child.isHemisphereLight) child.intensity = night ? 0.72 : 2.15; });
+          renderer.toneMappingExposure = night ? 0.9 : 1.12;
+        }
+        engine.current={camera,scene,renderer,setCamera,setNight};
         const start=performance.now();
         function animate(now:number){
           if(disposed)return;raf=requestAnimationFrame(animate);
@@ -238,13 +248,35 @@ export default function IslandExplore({ onClose, onVisit }: Props) {
   }, []);
 
   useEffect(()=>{
-    const onKey=(e:KeyboardEvent)=>{if(e.key==="Escape")onClose();if(e.key==="+"||e.key==="=")zoomBy(-1);if(e.key==="-")zoomBy(1);};
+    const onKey=(e:KeyboardEvent)=>{
+      if(e.key==="Escape")onClose();
+      if(e.key==="+"||e.key==="=")zoomBy(-1);
+      if(e.key==="-")zoomBy(1);
+      if(["w","a","s","d","W","A","S","D","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)){
+        const s=cameraState.current, step=.42;
+        const forwardX=-Math.sin(s.theta), forwardZ=-Math.cos(s.theta);
+        if(e.key==="w"||e.key==="W"||e.key==="ArrowUp"){s.targetX+=forwardX*step;s.targetZ+=forwardZ*step;}
+        if(e.key==="s"||e.key==="S"||e.key==="ArrowDown"){s.targetX-=forwardX*step;s.targetZ-=forwardZ*step;}
+        if(e.key==="a"||e.key==="A"||e.key==="ArrowLeft"){s.targetX-=forwardZ*step;s.targetZ+=forwardX*step;}
+        if(e.key==="d"||e.key==="D"||e.key==="ArrowRight"){s.targetX+=forwardZ*step;s.targetZ-=forwardX*step;}
+        setFocus("overview");engine.current?.setCamera();
+      }
+    };
     window.addEventListener("keydown",onKey);
     return()=>window.removeEventListener("keydown",onKey);
   },[onClose]);
 
   function zoomBy(direction:number){
-    const state=cameraState.current;state.radius=Math.max(8,Math.min(21,state.radius+direction*1.1));engine.current?.setCamera();
+    const state=cameraState.current;state.radius=Math.max(6.5,Math.min(21,state.radius+direction*1.1));engine.current?.setCamera();
+  }
+  function focusOn(area:"overview"|"garden"|"cottage"|"bridge"){
+    const s=cameraState.current;
+    const targets={overview:[0,.25,0,13.5],garden:[-2,.72,.8,9.8],cottage:[2.15,.8,-2.0,9.6],bridge:[-2.25,.75,.75,8.9]} as const;
+    const t=targets[area];s.targetX=t[0];s.targetY=t[1];s.targetZ=t[2];s.radius=t[3];
+    setFocus(area);engine.current?.setCamera();
+  }
+  function toggleNight(){
+    const next=!nightMode;setNightMode(next);engine.current?.setNight(next);
   }
   function onPointerDown(e:React.PointerEvent<HTMLCanvasElement>){
     drag.current={active:true,x:e.clientX,y:e.clientY,moved:false};e.currentTarget.setPointerCapture(e.pointerId);
@@ -267,12 +299,19 @@ export default function IslandExplore({ onClose, onVisit }: Props) {
       <div className="explore-title"><span>DOMIHOOD · OPEN WORLD</span><strong>云端小岛</strong><small>一座可以慢慢探索的童话岛屿</small></div>
       <div className="explore-status"><i /> {loading ? "正在生成岛屿" : "世界已载入"}</div>
     </header>
-    <div className="explore-hint"><span>✧</span> 拖动环顾四周 <i /> 滚轮缩放 <i /> ESC 返回</div>
+    <div className="explore-hint"><span>✧</span> 拖动环顾四周 <i /> 滚轮缩放 <i /> WASD 移动视点 <i /> ESC 返回</div>
+    <nav className="explore-viewpoints" aria-label="小岛观景点">
+      <button className={focus==="overview"?"active":""} onClick={()=>focusOn("overview")}>全岛</button>
+      <button className={focus==="garden"?"active":""} onClick={()=>focusOn("garden")}>花园</button>
+      <button className={focus==="bridge"?"active":""} onClick={()=>focusOn("bridge")}>小桥</button>
+      <button className={focus==="cottage"?"active":""} onClick={()=>focusOn("cottage")}>小屋</button>
+    </nav>
+    <button className="explore-time-toggle" onClick={toggleNight}>{nightMode?"☾ 星夜模式":"☀ 日光模式"}</button>
     <aside className="explore-card">
       <span className="explore-kicker">YOUR LITTLE WORLD</span>
       <h2>每个角落，<br/><em>都藏着一段故事。</em></h2>
       <p>沿着石板路散步，穿过花园与小桥，去拜访属于岛民的温暖角落。</p>
-      <div className="explore-weather"><span>☀</span><div><b>晴朗午后</b><small>微风 · 花香 · 云朵缓慢飘过</small></div></div>
+      <div className="explore-weather"><span>{nightMode?"☾":"☀"}</span><div><b>{nightMode?"星光夜晚":"晴朗午后"}</b><small>{nightMode?"暮色降临 · 萤火微亮 · 静谧时分":"微风 · 花香 · 云朵缓慢飘过"}</small></div></div>
       <div className="explore-locations">
         <button onClick={()=>{onClose();onVisit("square");}}><span>✿</span><div><b>粉丝广场</b><small>GATHERING GARDEN</small></div><i>↗</i></button>
         <button onClick={()=>{onClose();onVisit("cafe");}}><span>☕</span><div><b>回忆咖啡馆</b><small>MEMORY CAFE</small></div><i>↗</i></button>

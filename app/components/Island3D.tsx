@@ -116,21 +116,11 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
           const meadow=mesh(new THREE.CircleGeometry(patch[2] as number,24),patch[0] as number < 0 ? turf : turfLight,patch[0] as number,.221,patch[1] as number,false);
           meadow.rotation.x=-Math.PI/2; meadow.scale.y=patch[3] as number;
         }
-        const pathMat = mat(0xe8d9be);
-        const routePoints=[new THREE.Vector3(1.0,.232,1.8),new THREE.Vector3(.82,.235,1.35),new THREE.Vector3(.55,.238,.9),new THREE.Vector3(.38,.24,.48),new THREE.Vector3(.18,.24,.02),new THREE.Vector3(-.05,.24,-.45),new THREE.Vector3(-.28,.24,-.9),new THREE.Vector3(-.5,.24,-1.35),new THREE.Vector3(-.7,.24,-1.75)];
-        const routeCurve=new THREE.CatmullRomCurve3(routePoints);
-        mesh(new THREE.TubeGeometry(routeCurve,48,.13,10,false),pathEdge,0,0,0,false);
-        mesh(new THREE.TubeGeometry(routeCurve,48,.095,10,false),pathMat,0,.006,0,false);
-        // Individual stepping stones follow the curve and add visible surface detail.
-        for(let i=0;i<26;i++){
-          const p=routeCurve.getPoint(i/27), tangent=routeCurve.getTangent(i/27);
-          const tile=mesh(new THREE.BoxGeometry(.12,.025,.085),i%4===0?stone:pathMat,p.x,.255,p.z,false);
-          tile.rotation.y=-Math.atan2(tangent.z,tangent.x); tile.rotation.y+=.08*Math.sin(i*1.7);
-        }
+        // The former path tube followed the exact river centerline and created the long brown-grey strip seen in the screenshot. Removed; paths will remain on the banks.
         // Flowing river: a custom ribbon follows the curve on the ground plane,
         // so the water reads as a stream rather than a round pipe.
         const riverMat = new THREE.MeshStandardMaterial({color:0x53bfc6,roughness:.22,metalness:.12,transparent:true,opacity:.94,side:THREE.DoubleSide});
-        const riverBedMat = mat(0x789c8b);
+        const riverBedMat = mat(0x8eb8a0);
         const riverPoints=[new THREE.Vector3(.95,.225,1.92),new THREE.Vector3(.78,.225,1.45),new THREE.Vector3(.48,.225,.92),new THREE.Vector3(.18,.225,.38),new THREE.Vector3(.02,.225,-.18),new THREE.Vector3(-.2,.225,-.72),new THREE.Vector3(-.5,.225,-1.25),new THREE.Vector3(-.72,.225,-1.82)];
         const riverCurve=new THREE.CatmullRomCurve3(riverPoints);
         function riverRibbon(curve:any,width:number,material:any,yOffset=0){
@@ -140,6 +130,14 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
         }
         riverRibbon(riverCurve,.48,riverBedMat,-.035);
         riverRibbon(riverCurve,.39,riverMat,.012);
+        // Narrow grassy banks sit beside the water ribbon (never across its center).
+        const bankMat = mat(0x9abf86);
+        function riverBank(side:number){
+          const verts:number[]=[]; const idx:number[]=[]; const segments=100; const width=.105;
+          for(let i=0;i<=segments;i++){const t=i/segments,p=riverCurve.getPoint(t),tan=riverCurve.getTangent(t);const len=Math.hypot(tan.x,tan.z)||1;const nx=-tan.z/len,nz=tan.x/len;const inner=side*0.205,outer=side*(0.205+width);verts.push(p.x+nx*inner,p.y-.004,p.z+nz*inner,p.x+nx*outer,p.y-.004,p.z+nz*outer);if(i<segments){const a=i*2;idx.push(a,a+1,a+2,a+1,a+3,a+2);}}
+          const geo=new THREE.BufferGeometry();geo.setAttribute("position",new THREE.Float32BufferAttribute(verts,3));geo.setIndex(idx);geo.computeVertexNormals();mesh(geo,bankMat,0,0,0,false);
+        }
+        riverBank(-1); riverBank(1);
         // Gentle ripples are small flat highlights, kept above the water surface.
         const rippleMat=new THREE.MeshStandardMaterial({color:0xc4f4e9,roughness:.2,transparent:true,opacity:.62});
         for(let i=0;i<18;i++){const t=.08+i*.047,p=riverCurve.getPoint(t);const ripple=mesh(new THREE.BoxGeometry(.035,.006,.12+(i%3)*.025),rippleMat,p.x,.249,p.z,false);ripple.rotation.y=-Math.atan2(riverCurve.getTangent(t).z,riverCurve.getTangent(t).x);}
@@ -224,10 +222,11 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
     aria-label="点击进入沉浸式三维小岛，拖动旋转视角"
     role="button"
     tabIndex={0}
-    onPointerDown={(event) => { pointerStart.current = { x: event.clientX, y: event.clientY, moved: false, angle }; }}
-    onPointerMove={(event) => { if (pointerStart.current && Math.hypot(event.clientX-pointerStart.current.x,event.clientY-pointerStart.current.y)>7) pointerStart.current.moved=true; }}
-    onPointerUp={() => { pointerStart.current = pointerStart.current; }}
-    onClick={() => { if (!pointerStart.current?.moved) onEnter?.(); pointerStart.current = null; }}
+    onPointerDown={(event) => { pointerStart.current = { x: event.clientX, y: event.clientY, moved: false, angle }; if (freeRotate) event.currentTarget.setPointerCapture(event.pointerId); }}
+    onPointerMove={(event) => { if (!pointerStart.current) return; const dx=event.clientX-pointerStart.current.x; const dy=event.clientY-pointerStart.current.y; if (Math.hypot(dx,dy)>7) pointerStart.current.moved=true; if (freeRotate && pointerStart.current.moved && onAngleChange) onAngleChange(pointerStart.current.angle+dx*.45); }}
+    onPointerUp={() => { const moved=pointerStart.current?.moved; pointerStart.current = null; if (freeRotate && !moved) onEnter?.(); }}
+    onPointerCancel={() => { pointerStart.current = null; }}
+    onClick={() => { if (!freeRotate && !pointerStart.current?.moved) onEnter?.(); }}
     onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onEnter?.(); } }}
   />;
 }

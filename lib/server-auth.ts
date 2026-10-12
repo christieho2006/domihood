@@ -31,7 +31,12 @@ function sign(value: string) {
   return createHmac("sha256", getSessionSecret()).update(value).digest("base64url");
 }
 
-export function assertAuthConfigured() {\n  getSessionSecret();\n  getAdminDb();\n}\n\nexport function normalizeNickname(value: string) {
+export function assertAuthConfigured() {
+  getSessionSecret();
+  getAdminDb();
+}
+
+export function normalizeNickname(value: string) {
   return value.normalize("NFKC").trim().toLowerCase();
 }
 

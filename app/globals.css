@@ -392,3 +392,79 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
  .place-pin{font-size:8px;padding:5px 7px 5px 5px}
  .destination-section{padding:20px 14px 28px}
 }
+
+
+/* Desktop-first fullscreen island layout: keep the world as the main viewport. */
+@media (min-width: 701px) {
+  .topbar {
+    height: 64px;
+    max-width: none;
+    padding-inline: clamp(24px, 3.2vw, 58px);
+  }
+  .hero-copy {
+    padding: 12px 20px 0;
+  }
+  .hero-copy h1 {
+    font-size: clamp(25px, 2.4vw, 34px);
+    line-height: 1.2;
+    margin: 8px 0 6px;
+  }
+  .hero-copy p {
+    font-size: 11px;
+  }
+  .eyebrow {
+    font-size: 8px;
+  }
+  .world-layout {
+    width: 100%;
+    max-width: none;
+    height: calc(100svh - 165px);
+    min-height: 500px;
+    margin: 0;
+    padding: 0 clamp(18px, 2.4vw, 42px);
+    grid-template-columns: clamp(120px, 12vw, 170px) minmax(0, 1fr) clamp(120px, 12vw, 170px);
+    gap: clamp(8px, 1.4vw, 24px);
+    align-items: stretch;
+  }
+  .island-stage {
+    height: 100%;
+    min-height: 0;
+    width: 100%;
+  }
+  .island-scene {
+    inset: 0 -2% 4%;
+  }
+  .island-3d-canvas {
+    width: 100%;
+    height: 100%;
+  }
+  .stage-glow {
+    width: 86%;
+    height: 75%;
+    left: 7%;
+    top: 12%;
+  }
+  .sun-orb {
+    top: 8%;
+    right: 12%;
+  }
+  .destination-section {
+    margin-top: 18px;
+  }
+}
+@media (min-width: 701px) and (max-height: 760px) {
+  .hero-copy {
+    padding-top: 5px;
+  }
+  .hero-copy h1 {
+    font-size: 25px;
+    margin: 5px 0 4px;
+  }
+  .hero-copy p {
+    font-size: 10px;
+  }
+  .world-layout {
+    height: calc(100svh - 132px);
+    min-height: 430px;
+  }
+}

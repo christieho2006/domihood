@@ -13,7 +13,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "昵称或密码不正确。" }, { status: 401 });
     }
 
-    assertAuthConfigured();\n    const db = getAdminDb();
+    assertAuthConfigured();
+    const db = getAdminDb();
     const { data, error } = await db.from("domi_accounts")
       .select("id,nickname,password_hash")
       .eq("nickname_normalized", normalizeNickname(nickname))

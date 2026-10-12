@@ -35,27 +35,52 @@ export default function CottageRoom3D({ theme, furniture, positions, selected, o
     const wall = mat(p.wall), floor = mat(p.floor), trim = mat(p.trim), pink = mat(p.pink), green = mat(p.green), wood = mat(p.wood), cream = mat(0xfff1df);
     const add = (g: any, geo: any, m: any, x: number, y: number, z: number) => { const o = new T.Mesh(geo, m); o.position.set(x,y,z); o.castShadow = true; o.receiveShadow = true; g.add(o); return o; };
     add(room,new T.BoxGeometry(4.2,.14,4),floor,0,-.08,0);
+    // Fine timber floorboards add warmth and scale to the little room.
+    for (let z=-1.72, row=0; z<=1.73; z+=.34,row++) {
+      add(room,new T.BoxGeometry(4.08,.012,.012),wood,0,-.002,z);
+      if (row%2===0) for (let x=-1.65; x<1.8; x+=.82) {
+        add(room,new T.BoxGeometry(.012,.012,.33),wood,x,-.001,z+.16);
+      }
+    }
     add(room,new T.BoxGeometry(4.2,2.8,.12),wall,0,1.32,-1.98);
     add(room,new T.BoxGeometry(.12,2.8,4),wall,-2.04,1.32,0);
     add(room,new T.BoxGeometry(4.2,.1,.12),trim,0,.08,-1.9);
+    add(room,new T.BoxGeometry(4.2,.13,.1),wood,0,.18,-1.9);
+    add(room,new T.BoxGeometry(.12,.1,4),trim,-1.97,.08,0);
+    add(room,new T.BoxGeometry(.1,.13,4),wood,-1.9,.18,0);
     add(room,new T.BoxGeometry(.12,.1,4),trim,-1.97,.08,0);
     add(room,new T.BoxGeometry(1.05,1.12,.06),trim,-.86,1.65,-1.88);
     add(room,new T.BoxGeometry(.86,.92,.07),mat(0xa8d9db),-.86,1.65,-1.83);
+    // A soft sky gradient is suggested by two translucent-looking color panes.
+    add(room,new T.BoxGeometry(.4,.88,.012),mat(0xc7e8e8),-.64,1.65,-1.785);
+    add(room,new T.BoxGeometry(.86,.045,.03),trim,-.86,2.12,-1.79);
+    add(room,new T.BoxGeometry(.86,.045,.03),trim,-.86,1.18,-1.79);
+    add(room,new T.BoxGeometry(.08,1.02,.08),pink,-1.43,1.65,-1.77);
+    add(room,new T.BoxGeometry(.08,1.02,.08),pink,-.29,1.65,-1.77);
+    add(room,new T.CylinderGeometry(.025,.025,1.24,10),wood,-.86,2.23,-1.77).rotation.z=Math.PI/2;
     add(room,new T.BoxGeometry(.045,.92,.03),trim,-.86,1.65,-1.79);
     add(room,new T.BoxGeometry(.86,.045,.03),trim,-.86,1.65,-1.79);
     add(room,new T.BoxGeometry(1.12,.08,.18),wood,-.86,1.08,-1.75);
+    // Small wall sconce and framed botanical print.
+    add(room,new T.BoxGeometry(.1,.12,.07),wood,.35,1.75,-1.87);
+    add(room,new T.SphereGeometry(.075,12,8),mat(0xffe4a6),.35,1.78,-1.82);
+    add(room,new T.BoxGeometry(.5,.62,.07),trim,1.08,1.65,-1.88);
+    add(room,new T.BoxGeometry(.4,.52,.03),mat(0xe5ead6),1.08,1.65,-1.83);
+    add(room,new T.CylinderGeometry(.012,.012,.26,8),green,1.08,1.68,-1.8);
+    add(room,new T.SphereGeometry(.07,8,6),green,1.0,1.76,-1.8);
+    add(room,new T.SphereGeometry(.07,8,6),pink,1.16,1.72,-1.8);
     add(room,new T.BoxGeometry(.55,.7,.06),wood,1.1,1.62,-1.88);
     add(room,new T.BoxGeometry(.42,.56,.07),pink,1.1,1.62,-1.83);
     const objects: Record<string, any> = {};
     function make(id: Furniture) {
      const g = new T.Group(), part = (geo: any,m: any,x:number,y:number,z:number) => add(g,geo,m,x,y,z);
-     if(id==="sofa") { part(new T.BoxGeometry(.95,.34,.42),pink,0,.28,0); part(new T.BoxGeometry(.98,.38,.15),pink,0,.42,-.15); part(new T.BoxGeometry(.16,.32,.44),green,-.42,.34,0); part(new T.BoxGeometry(.16,.32,.44),green,.42,.34,0); part(new T.BoxGeometry(.27,.1,.27),cream,-.18,.48,.01); part(new T.BoxGeometry(.27,.1,.27),cream,.18,.48,.01); }
-     else if(id==="rug") { part(new T.CylinderGeometry(.72,.72,.035,32),pink,0,.025,0); for(let i=0;i<8;i++){let a=i*Math.PI/4;part(new T.SphereGeometry(.16,10,8),green,Math.cos(a)*.58,.04,Math.sin(a)*.58);} }
+     if(id==="sofa") { part(new T.BoxGeometry(.95,.34,.42),pink,0,.28,0); part(new T.BoxGeometry(.98,.38,.15),pink,0,.42,-.15); part(new T.BoxGeometry(.16,.32,.44),green,-.42,.34,0); part(new T.BoxGeometry(.16,.32,.44),green,.42,.34,0); part(new T.BoxGeometry(.27,.1,.27),cream,-.18,.48,.01); part(new T.BoxGeometry(.27,.1,.27),cream,.18,.48,.01); for(const x of [-.34,.34])for(const z of [-.13,.13])part(new T.CylinderGeometry(.035,.035,.16,10),wood,x,.09,z); }
+     else if(id==="rug") { part(new T.CylinderGeometry(.72,.72,.035,40),pink,0,.025,0); part(new T.CylinderGeometry(.56,.56,.012,40),cream,0,.048,0); part(new T.CylinderGeometry(.42,.42,.012,40),pink,0,.056,0); for(let i=0;i<8;i++){let a=i*Math.PI/4;const petal=part(new T.SphereGeometry(.16,12,8),green,Math.cos(a)*.58,.05,Math.sin(a)*.58);petal.scale.set(1,.18,.7);} }
      else if(id==="plant") { part(new T.CylinderGeometry(.15,.12,.22,12),pink,0,.12,0); for(let i=0;i<5;i++){let leaf=part(new T.IcosahedronGeometry(.16,1),green,Math.cos(i*1.25)*.13,.42+(i%2)*.1,Math.sin(i*1.25)*.12);leaf.scale.set(.7,1.3,.6);} }
      else if(id==="lamp") { part(new T.CylinderGeometry(.2,.22,.06,16),wood,0,.03,0);part(new T.CylinderGeometry(.035,.045,.66,12),wood,0,.38,0);part(new T.ConeGeometry(.24,.27,16),cream,0,.77,0);part(new T.SphereGeometry(.07,10,8),mat(0xffd88d),0,.62,0); }
-     else if(id==="table") { part(new T.CylinderGeometry(.35,.35,.09,24),wood,0,.42,0);part(new T.CylinderGeometry(.05,.08,.38,12),wood,0,.22,0);part(new T.CylinderGeometry(.23,.26,.05,16),green,0,.04,0);part(new T.CylinderGeometry(.07,.07,.12,12),cream,0,.52,0); }
+     else if(id==="table") { part(new T.CylinderGeometry(.35,.35,.09,24),wood,0,.42,0);part(new T.CylinderGeometry(.05,.08,.38,12),wood,0,.22,0);part(new T.CylinderGeometry(.23,.26,.05,16),green,0,.04,0);part(new T.CylinderGeometry(.07,.07,.12,12),cream,0,.52,0);part(new T.BoxGeometry(.2,.025,.13),pink,-.13,.49,.08);part(new T.BoxGeometry(.16,.02,.11),cream,.13,.49,-.08); }
      else if(id==="shelf") { part(new T.BoxGeometry(.62,.9,.24),wood,0,.46,0);for(let i=0;i<3;i++){part(new T.BoxGeometry(.55,.035,.22),trim,0,.2+i*.25,.02);for(let j=0;j<3;j++)part(new T.BoxGeometry(.1,.15+(j%2)*.04,.12),[pink,green,cream][(i+j)%3],-.18+j*.17,.29+i*.25,.02);} }
-     else if(id==="bed") { part(new T.BoxGeometry(.86,.22,1),wood,0,.18,0);part(new T.BoxGeometry(.82,.13,.92),cream,0,.32,.02);part(new T.BoxGeometry(.82,.2,.12),pink,0,.43,-.42);part(new T.BoxGeometry(.27,.09,.22),green,-.2,.43,-.26);part(new T.BoxGeometry(.27,.09,.22),green,.2,.43,-.26); }
+     else if(id==="bed") { part(new T.BoxGeometry(.86,.22,1),wood,0,.18,0);part(new T.BoxGeometry(.82,.13,.92),cream,0,.32,.02);part(new T.BoxGeometry(.82,.2,.12),pink,0,.43,-.42);part(new T.BoxGeometry(.27,.09,.22),green,-.2,.43,-.26);part(new T.BoxGeometry(.27,.09,.22),green,.2,.43,-.26);for(const x of [-.34,.34])for(const z of [-.38,.38])part(new T.BoxGeometry(.07,.17,.07),wood,x,.08,z);part(new T.BoxGeometry(.82,.025,.24),pink,0,.4,.26); }
      else { part(new T.BoxGeometry(.06,.52,.48),wood,0,.78,0);part(new T.BoxGeometry(.035,.42,.38),green,.04,.78,.01);part(new T.SphereGeometry(.1,12,8),pink,.06,.8,.02); }
      g.userData.furnitureId=id; room.add(g); objects[id]=g;
     }

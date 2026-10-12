@@ -2,12 +2,13 @@
 
 import { useEffect, useRef } from "react";
 
-type Props = { angle: number; zoom: number };
+type Props = { angle: number; zoom: number; onEnter?: () => void };
 
-export default function Island3D({ angle, zoom }: Props) {
+export default function Island3D({ angle, zoom, onEnter }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const worldRef = useRef<any>(null);
   const viewRef = useRef<any>(null);
+  const pointerStart = useRef<{x:number;y:number;moved:boolean} | null>(null);
 
   useEffect(() => {
     let disposed = false;
@@ -196,5 +197,16 @@ export default function Island3D({ angle, zoom }: Props) {
     view.camera.lookAt(0, -0.25, 0);
   }, [angle, zoom]);
 
-  return <canvas ref={canvasRef} className="island-art island-3d-canvas" aria-label="可旋转观察的三维童话浮空小岛" role="img" />;
+  return <canvas
+    ref={canvasRef}
+    className="island-art island-3d-canvas"
+    aria-label="点击进入沉浸式三维小岛，拖动旋转视角"
+    role="button"
+    tabIndex={0}
+    onPointerDown={(event) => { pointerStart.current = { x: event.clientX, y: event.clientY, moved: false }; }}
+    onPointerMove={(event) => { if (pointerStart.current && Math.hypot(event.clientX-pointerStart.current.x,event.clientY-pointerStart.current.y)>7) pointerStart.current.moved=true; }}
+    onPointerUp={() => { pointerStart.current = pointerStart.current; }}
+    onClick={() => { if (!pointerStart.current?.moved) onEnter?.(); pointerStart.current = null; }}
+    onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onEnter?.(); } }}
+  />;
 }

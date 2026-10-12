@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Island3D from "./components/Island3D";
+import CottageStudio from "./components/CottageStudio";
 
 type Place = "square" | "cafe" | "cottage";
 
@@ -112,7 +113,8 @@ export default function Home() {
       </section>
       <footer><span>DOMIHOOD ISLAND</span><span>Made of little moments <b>♡</b></span><span>VERSION 0.1 · THE BEGINNING</span></footer>
 
-      {active && <div className="modal-backdrop" onClick={() => setActive(null)}><section className="place-modal" onClick={e => e.stopPropagation()}><button className="modal-close" onClick={() => setActive(null)}>×</button><div className="modal-icon">{places[active].icon}</div><div className="eyebrow left-eyebrow">{places[active].subtitle}</div><h2>{places[active].title}</h2><p>{places[active].description}</p><div className="coming-soon">✧ 这片天地正在慢慢建造中 ✧</div><button className="primary-button" onClick={() => {setActive(null);if(active==="cottage")setNameOpen(true)}}>{active==="cottage"?"设置岛民昵称":"继续探索"} <span>↗</span></button></section></div>}
+      {active === "cottage" && <CottageStudio onClose={() => setActive(null)} nickname={savedName || "岛屿访客"} />}
+      {active && active !== "cottage" && <div className="modal-backdrop" onClick={() => setActive(null)}><section className="place-modal" onClick={e => e.stopPropagation()}><button className="modal-close" onClick={() => setActive(null)}>×</button><div className="modal-icon">{places[active].icon}</div><div className="eyebrow left-eyebrow">{places[active].subtitle}</div><h2>{places[active].title}</h2><p>{places[active].description}</p><div className="coming-soon">✧ 这片天地正在慢慢建造中 ✧</div><button className="primary-button" onClick={() => setActive(null)}>继续探索 <span>↗</span></button></section></div>}
       {nameOpen && <div className="modal-backdrop" onClick={() => setNameOpen(false)}><section className="name-modal" onClick={e => e.stopPropagation()}><button className="modal-close" onClick={() => setNameOpen(false)}>×</button><div className="modal-icon">♡</div><div className="eyebrow left-eyebrow">WELCOME TO YOUR ISLAND</div><h2>给自己取个名字吧</h2><p>访客模式，无需注册密码。昵称保存在当前设备，之后可以再修改。</p><label htmlFor="nickname">岛民昵称</label><input id="nickname" value={nickname} maxLength={16} placeholder="输入一个喜欢的名字" onChange={e => setNickname(e.target.value)} onKeyDown={e => {if(e.key==="Enter")saveNickname()}} autoFocus/><div className="input-count">{nickname.trim().length}/16</div><button className="primary-button" onClick={saveNickname}>进入小岛 <span>↗</span></button></section></div>}
     </main>
   );

@@ -24,7 +24,6 @@ export default function Island3D({ angle, zoom }: Props) {
         const scene = new THREE.Scene();
         scene.background = null;
         const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
-        camera.position.set(0, 3.2, 8.8); camera.lookAt(0, -0.25, 0);
         renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "low-power" });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
         renderer.outputColorSpace = THREE.SRGBColorSpace;

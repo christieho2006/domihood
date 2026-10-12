@@ -4,14 +4,14 @@ import { useEffect, useRef, useState } from "react";
 type Furniture = "sofa" | "rug" | "plant" | "lamp" | "table" | "shelf" | "bed" | "picture";
 type Theme = "cream" | "blossom" | "mint";
 type Cell = { col: number; row: number };
-type Props = { theme: Theme; furniture: Furniture[]; positions: Record<Furniture, Cell>; selected: Furniture; onSelect: (id: Furniture) => void; onMove: (id: Furniture, col: number, row: number) => void };
+type Props = { theme: Theme; furniture: Furniture[]; positions: Record<Furniture, Cell>; selected: Furniture; onSelect: (id: Furniture) => void; onMove: (id: Furniture, col: number, row: number) => void; viewOnly?: boolean };
 const palette: Record<Theme, { wall: number; floor: number; trim: number; pink: number; green: number; wood: number }> = {
  cream: { wall: 0xf5e9d8, floor: 0xd5b99c, trim: 0xfff7e9, pink: 0xd8a8a0, green: 0x9eb797, wood: 0x98785f },
  blossom: { wall: 0xf7e3e7, floor: 0xd7b5b3, trim: 0xfff5f4, pink: 0xd99aa9, green: 0xb6a1c9, wood: 0x9b7774 },
  mint: { wall: 0xe3eee0, floor: 0xc2cdb0, trim: 0xf7fff0, pink: 0xa9c7a6, green: 0xe3bda7, wood: 0x8a9d7e }
 };
 const pointFor = (col: number, row: number) => ({ x: (col - 1) * 1.05, z: (1 - row) * 1.05 });
-export default function CottageRoom3D({ theme, furniture, positions, selected, onSelect, onMove }: Props) {
+export default function CottageRoom3D({ theme, furniture, positions, selected, onSelect, onMove, viewOnly = false }: Props) {
  const canvasRef = useRef<HTMLCanvasElement>(null);
  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
  const viewRef = useRef<any>(null);
@@ -112,7 +112,7 @@ export default function CottageRoom3D({ theme, furniture, positions, selected, o
     function resize(){const r=canvasElement.getBoundingClientRect();renderer.setSize(Math.max(1,r.width),Math.max(1,r.height),false);camera.aspect=r.width/Math.max(1,r.height);camera.updateProjectionMatrix();}
     function setRay(e:PointerEvent){const r=canvasElement.getBoundingClientRect();pointer.x=(e.clientX-r.left)/r.width*2-1;pointer.y=-(e.clientY-r.top)/r.height*2+1;ray.setFromCamera(pointer,camera);}
     function findGroup(o:any):any{while(o&&o!==room&&!o.userData.furnitureId)o=o.parent;return o&&o!==room?o:null;}
-    function down(e:PointerEvent){pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});canvasElement.setPointerCapture(e.pointerId);if(pointers.size>=2){if(dragging){const old=state.current.positions[dragging as Furniture]||{col:1,row:1};position(dragging,old.col,old.row);}dragging=null;rotating=false;const pts=Array.from(pointers.values());pinchStartDistance=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);pinchStartRadius=radius;e.preventDefault();return;}setRay(e);const hit=ray.intersectObjects(Object.values(objects).flatMap((g:any)=>g.children),true)[0];const g=hit?findGroup(hit.object):null;lastX=e.clientX;lastY=e.clientY;if(g){dragging=g.userData.furnitureId;callbacks.current.onSelect(dragging as Furniture);}else{rotating=true;}e.preventDefault();}
+    function down(e:PointerEvent){pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});canvasElement.setPointerCapture(e.pointerId);if(pointers.size>=2){if(dragging){const old=state.current.positions[dragging as Furniture]||{col:1,row:1};position(dragging,old.col,old.row);}dragging=null;rotating=false;const pts=Array.from(pointers.values());pinchStartDistance=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);pinchStartRadius=radius;e.preventDefault();return;}lastX=e.clientX;lastY=e.clientY;if(viewOnly){dragging=null;rotating=true;}else{setRay(e);const hit=ray.intersectObjects(Object.values(objects).flatMap((g:any)=>g.children),true)[0];const g=hit?findGroup(hit.object):null;if(g){dragging=g.userData.furnitureId;callbacks.current.onSelect(dragging as Furniture);}else{rotating=true;}}e.preventDefault();}
     function move(e:PointerEvent){if(pointers.has(e.pointerId))pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pointers.size>=2){const pts=Array.from(pointers.values());const distance=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);radius=pinchStartRadius-(distance-pinchStartDistance)*.018;updateCamera();return;}if(dragging){setRay(e);const v=new T.Vector3();if(!ray.ray.intersectPlane(plane,v))return;const col=Math.max(0,Math.min(2,Math.round(v.x/1.05+1))),row=Math.max(0,Math.min(2,Math.round(1-v.z/1.05)));position(dragging,col,row,.06);return;}if(rotating){const dx=e.clientX-lastX,dy=e.clientY-lastY;theta-=dx*.008;phi+=dy*.006;lastX=e.clientX;lastY=e.clientY;updateCamera();}}
     function up(e:PointerEvent){if(dragging){setRay(e);const v=new T.Vector3();if(ray.ray.intersectPlane(plane,v)){const col=Math.max(0,Math.min(2,Math.round(v.x/1.05+1))),row=Math.max(0,Math.min(2,Math.round(1-v.z/1.05)));const occupied=state.current.furniture.some((id)=>id!==dragging&&state.current.positions[id]?.col===col&&state.current.positions[id]?.row===row);if(occupied){const old=state.current.positions[dragging as Furniture]||{col:1,row:1};position(dragging,old.col,old.row);}else callbacks.current.onMove(dragging as Furniture,col,row);}dragging=null;}rotating=false;pointers.delete(e.pointerId);if(pointers.size===1){const remaining=Array.from(pointers.values())[0];lastX=remaining.x;lastY=remaining.y;}}
     function wheel(e:WheelEvent){e.preventDefault();radius+=e.deltaY*.012;updateCamera();}
@@ -125,10 +125,10 @@ export default function CottageRoom3D({ theme, furniture, positions, selected, o
    } catch(e){console.error("Could not build 3D cottage room",e); if(!dead) setStatus("error");}
   }
   start(); return ()=>{dead=true;cancelAnimationFrame(frame);cleanup();renderer?.dispose();viewRef.current=null;};
- }, [theme, furniture.join("|")]);
+ }, [theme, furniture.join("|"), viewOnly]);
  useEffect(()=>{const v=viewRef.current;if(!v)return;Object.keys(v.objects).forEach(id=>{const c=positions[id as Furniture]||{col:1,row:1};v.position(id,c.col,c.row);});v.highlight();},[positions,selected,furniture]);
  return <div className="cottage-3d-wrap">
-   <canvas ref={canvasRef} className="cottage-3d-canvas" aria-label="可拖动家具的三维私人小屋" role="img" />
+   <canvas ref={canvasRef} className={"cottage-3d-canvas" + (viewOnly ? " cottage-3d-view-only" : "")} aria-label={viewOnly ? "只读三维小屋，可拖动旋转并缩放视角" : "可拖动家具的三维私人小屋"} role="img" />
    {status === "ready" && <div className="cottage-view-tools" role="group" aria-label="房间视角控制">
      <button type="button" onClick={() => viewRef.current?.zoom(1.12)} aria-label="放大房间">＋</button>
      <button type="button" onClick={() => viewRef.current?.resetView()} aria-label="重置房间视角">↻</button>

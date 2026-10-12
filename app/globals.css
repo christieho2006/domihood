@@ -280,3 +280,59 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
 .square-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #eeeee4;padding:15px 25px;color:#9aa699;font-size:10px}
 .square-footer .memory-done{white-space:nowrap}
 @media(max-width:600px){.square-hero{padding:27px 18px 22px}.square-content{padding:16px 12px 22px}.square-compose{padding:14px}.square-compose-bottom{align-items:stretch}.square-mood-options{width:100%}.square-compose-bottom>.primary-button{width:100%;justify-content:center}.square-post{padding:14px}.square-post-mood{font-size:8px;padding:5px 7px}.square-footer{padding:13px 15px;font-size:9px}}
+
+
+/* Islander directory and read-only cottage visits */
+.destination-actions{display:flex;align-items:center;gap:16px}
+.islanders-open-button{display:inline-flex;align-items:center;gap:14px;padding:10px 14px;border:1px solid #dfe7d9;border-radius:22px;background:#fffdf8;color:#68846a;font-size:11px;white-space:nowrap;box-shadow:0 5px 18px #647c5b0a;transition:transform .2s,border-color .2s}
+.islanders-open-button:hover{transform:translateY(-2px);border-color:#b8cdb1}
+.islanders-open-button span{font-size:14px;color:#c29a83}
+.islanders-backdrop{z-index:46;overflow-y:auto;align-items:start;padding:clamp(10px,3vh,28px) 12px}
+.islanders-modal{position:relative;width:min(100%,880px);margin:auto;background:#fbfaf4;border:1px solid #fff;border-radius:25px;box-shadow:0 28px 100px #34483f35;overflow:hidden;animation:modal-in .22s ease-out}
+.islanders-hero{position:relative;padding:29px 24px 24px;text-align:center;background:radial-gradient(ellipse at 50% 0,#f4e9dc 0,transparent 70%),linear-gradient(135deg,#f8f3e9,#f8e9e8 56%,#edf2e7);border-bottom:1px solid #e9e9df}
+.islanders-hero .modal-close{position:absolute;top:17px;right:18px}
+.islanders-hero-icon{display:grid;place-items:center;width:54px;height:54px;margin:0 auto 14px;border-radius:19px;background:#fffaf0b8;border:1px solid #fff;color:#c69a9a;font-size:27px;box-shadow:0 8px 24px #8d9d8310}
+.islanders-hero h2{font:400 clamp(24px,4vw,33px) Georgia,"Songti SC",serif;color:#506b57;margin:10px 0 9px}
+.islanders-hero p{font-size:11px;line-height:1.9;color:#8e9b8b;margin:0 auto;max-width:520px}
+.islanders-total{display:inline-flex;align-items:center;gap:6px;margin-top:15px;padding:7px 12px;border-radius:18px;background:#ffffffa6;border:1px solid #e6e9dd;color:#93a18e;font-size:10px}
+.islanders-total strong{font:400 17px Georgia,serif;color:#bd9881}
+.islanders-content{padding:20px clamp(13px,3vw,28px) 25px;min-height:180px}
+.islanders-list{display:grid;gap:10px}
+.islander-card{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid #e8e9df;border-radius:15px;background:#fffefa;box-shadow:0 6px 18px #647c5708}
+.islander-avatar{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,#f4e0df,#e6eddf);color:#a7797c;font:19px Georgia,"Songti SC",serif}
+.islander-card-copy{display:grid;gap:5px;min-width:0;flex:1}
+.islander-card-copy strong{font-size:12px;color:#526b59;font-weight:600;overflow-wrap:anywhere}
+.islander-card-copy small{font-size:10px;color:#9ba89a;line-height:1.6}
+.islander-me-tag{display:inline-block;margin-left:7px;padding:2px 6px;border-radius:10px;background:#f8e9e8;color:#b88688;font-size:9px;font-weight:400}
+.islander-visit-button{flex:0 0 auto;border:1px solid #dfe8d9;border-radius:18px;background:#edf3e9;color:#6d896c;padding:9px 12px;font-size:10px;white-space:nowrap;transition:background .2s}
+.islander-visit-button:hover:not(:disabled){background:#e1eddb}
+.islander-visit-button:disabled{background:#f6f5ef;border-color:#ecebe3;color:#b1b8ac;cursor:not-allowed}
+.islanders-empty{min-height:190px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:25px 15px;border:1px dashed #dfe5d8;border-radius:16px;background:#fffefa;color:#9ba89a;font-size:11px;line-height:1.9}
+.islanders-empty>span{font-size:28px;color:#c9b1a4;margin-bottom:8px}
+.islanders-empty strong{font:400 16px Georgia,"Songti SC",serif;color:#7c927e}
+.islanders-empty p{max-width:340px;margin:5px 0 0;color:#a0aa9b}
+.islanders-retry{margin-top:12px;padding:8px 13px;border:1px solid #dce5d7;border-radius:18px;background:#edf2e8;color:#6d876b;font-size:10px}
+.islander-visit-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}
+.islander-visit-meta>div{display:flex;align-items:center;gap:10px;min-width:0}
+.islander-visit-meta>div>span:last-child{display:grid;gap:5px}
+.islander-visit-meta strong{font-size:12px;color:#526b59}
+.islander-visit-meta small{font-size:10px;color:#98a697}
+.islander-readonly-tag{font-size:9px;color:#8da087;background:#edf3e9;border:1px solid #e1e9db;border-radius:15px;padding:7px 10px;white-space:nowrap}
+.islander-room-preview{position:relative;overflow:hidden;border:1px solid #e9e5d9;border-radius:18px;background:#f5e9d8}
+.islander-room-preview .cottage-3d-wrap{height:clamp(260px,45vw,410px);min-height:260px}
+.islander-room-preview .cottage-3d-canvas{pointer-events:none;touch-action:auto}
+.islander-room-preview .cottage-3d-status{background:#fff9}
+.islander-room-caption{display:flex;align-items:center;justify-content:center;gap:9px;padding:12px 10px;background:#fffdf5d9;border-top:1px solid #fff;color:#8b9a86;font-size:10px}
+.islander-room-caption>span{color:#c7a06f}.islander-room-caption i{width:3px;height:3px;border-radius:50%;background:#c4cbbd}
+.islander-furniture-list{margin-top:20px}
+.islander-section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.islander-section-heading h3{font:400 18px Georgia,"Songti SC",serif;color:#536b57;margin:0}
+.islander-section-heading>span{font-size:8px;letter-spacing:1.4px;color:#b0b9a9}
+.islander-furniture-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.islander-furniture-item{display:flex;align-items:center;gap:8px;min-width:0;padding:12px 10px;border:1px solid #e7e9df;border-radius:12px;background:#fffefa}
+.islander-furniture-item>span{font-size:20px}
+.islander-furniture-item b{font-size:10px;font-weight:500;color:#7b8e7b;overflow-wrap:anywhere}
+.islander-updated{margin:12px 0 0;text-align:right;font-size:9px;color:#a4afa0}
+.islanders-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;border-top:1px solid #e9e8dc;background:#f8f7ef;color:#a0a99c;font-size:9px;letter-spacing:.3px}
+.islanders-footer .memory-done{font-size:10px}
+@media(max-width:650px){.destination-actions{align-items:flex-end;flex-direction:column;gap:9px}.islanders-open-button{padding:8px 11px;font-size:10px}.islanders-hero{padding:26px 17px 21px}.islanders-content{padding:14px 10px 19px}.islander-card{gap:9px;padding:11px 9px}.islander-avatar{width:35px;height:35px;flex-basis:35px}.islander-card-copy strong{font-size:11px}.islander-card-copy small{font-size:9px}.islander-visit-button{padding:8px 9px;font-size:9px}.islander-visit-meta{align-items:flex-start;flex-direction:column}.islander-room-preview .cottage-3d-wrap{height:280px;min-height:250px}.islander-furniture-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.islanders-footer{padding:12px 13px;font-size:8px}.islanders-footer .memory-done{font-size:9px;padding:8px 10px}}

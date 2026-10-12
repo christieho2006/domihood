@@ -64,7 +64,7 @@ export default function CottageRoom3D({ theme, furniture, positions, selected, o
     let dragging: string | null = null;
     function position(id: string,col:number,row:number,y=.03){const q=pointFor(col,row);if(objects[id])objects[id].position.set(q.x,y,q.z);}
     Object.keys(objects).forEach(id=>{const c=state.current.positions[id as Furniture]||{col:1,row:1};position(id,c.col,c.row);});
-    function highlight(){Object.entries(objects).forEach(([id,g]:any)=>g.traverse((o:any)=>{if(o.isMesh){if(!o.material.userData.baseEmissive)o.material.userData.baseEmissive=true;o.material.emissive=new T.Color(id===state.current.selected?0x2b4231:0x000000);o.material.emissiveIntensity=id === state.current.selected ? 0.12 : 0;}}));}
+    function highlight(){Object.entries(objects).forEach(([id,g]:any)=>{g.scale.setScalar(id===state.current.selected?1.035:1);g.traverse((o:any)=>{if(o.isMesh)o.material.emissiveIntensity=0;});});}
     highlight();
     function resize(){const r=canvas.getBoundingClientRect();renderer.setSize(Math.max(1,r.width),Math.max(1,r.height),false);camera.aspect=r.width/Math.max(1,r.height);camera.updateProjectionMatrix();}
     function setRay(e:PointerEvent){const r=canvas.getBoundingClientRect();pointer.x=(e.clientX-r.left)/r.width*2-1;pointer.y=-(e.clientY-r.top)/r.height*2+1;ray.setFromCamera(pointer,camera);}

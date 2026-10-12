@@ -126,6 +126,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
     setLayout(current => ({ ...current, furniture: current.furniture.filter(id => id !== selected) }));
     setSaved(false);
     setSaveError(false);
+    setDirty(true);
   }
 
   function moveSelected(col: number, row: number) {
@@ -135,6 +136,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
     }));
     setSaved(false);
     setSaveError(false);
+    setDirty(true);
   }
 
   async function saveRoom() {
@@ -199,6 +201,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
                 setLayout(current => ({ ...current, positions: { ...defaultPositions, ...current.positions, [id]: { col, row } } }));
                 setSaved(false);
                 setSaveError(false);
+                setDirty(true);
               }
             }}
           />
@@ -206,7 +209,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
         </div>
         <div className="cottage-controls">
           <section className="decor-section"><div className="decor-heading"><h3>房间氛围</h3><span>ROOM PALETTE</span></div>
-            <div className="theme-options">{themes.map(theme => <button key={theme.id} className={"theme-option " + (layout.theme === theme.id ? "selected" : "")} onClick={() => { setLayout(current => ({ ...current, theme: theme.id })); setSaved(false); setSaveError(false); }}><span className={"theme-swatch swatch-" + theme.id} /><span><b>{theme.name}</b><small>{theme.note}</small></span><i>{layout.theme === theme.id ? "✓" : ""}</i></button>)}</div>
+            <div className="theme-options">{themes.map(theme => <button key={theme.id} className={"theme-option " + (layout.theme === theme.id ? "selected" : "")} onClick={() => { setLayout(current => ({ ...current, theme: theme.id })); setSaved(false); setSaveError(false); setDirty(true); }}><span className={"theme-swatch swatch-" + theme.id} /><span><b>{theme.name}</b><small>{theme.note}</small></span><i>{layout.theme === theme.id ? "✓" : ""}</i></button>)}</div>
           </section>
           <section className="decor-section"><div className="decor-heading"><h3>挑选家具</h3><span>FURNITURE · {layout.furniture.length}/{items.length}</span></div>
             <div className="furniture-grid">{items.map(item => { const active = layout.furniture.includes(item.id); const focused = selected === item.id; return <button key={item.id} className={"furniture-option " + (active ? "furniture-active" : "") + (focused ? " furniture-focused" : "")} aria-pressed={focused} onClick={() => toggleFurniture(item.id)}><span>{item.icon}</span><b>{item.name}</b><i>{active ? (focused ? "已选中 · 可移动" : "已摆放 · 点选调整") : "点击添加"}</i></button>; })}</div>

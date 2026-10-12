@@ -337,3 +337,9 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
 .islanders-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;border-top:1px solid #e9e8dc;background:#f8f7ef;color:#a0a99c;font-size:9px;letter-spacing:.3px}
 .islanders-footer .memory-done{font-size:10px}
 @media(max-width:650px){.destination-actions{align-items:flex-end;flex-direction:column;gap:9px}.islanders-open-button{padding:8px 11px;font-size:10px}.islanders-hero{padding:26px 17px 21px}.islanders-content{padding:14px 10px 19px}.islander-card{gap:9px;padding:11px 9px}.islander-avatar{width:35px;height:35px;flex-basis:35px}.islander-card-copy strong{font-size:11px}.islander-card-copy small{font-size:9px}.islander-visit-button{padding:8px 9px;font-size:9px}.islander-visit-meta{align-items:flex-start;flex-direction:column}.islander-room-preview{height:420px;min-height:420px}.islander-room-preview .cottage-3d-wrap{inset:0 0 42px;height:auto;min-height:0}.islander-furniture-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.islanders-footer{padding:12px 13px;font-size:8px}.islanders-footer .memory-done{font-size:9px;padding:8px 10px}}
+
+
+/* Visiting a cottage is read-only for furniture, but the camera stays interactive. */
+.islander-room-preview .cottage-3d-canvas{pointer-events:auto;touch-action:none;cursor:grab}
+.islander-room-preview .cottage-3d-canvas:active{cursor:grabbing}
+.islander-room-preview .cottage-view-tools{pointer-events:auto;z-index:6}

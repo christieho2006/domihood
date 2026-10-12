@@ -147,11 +147,11 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
         // with a continuous deck and separate parapets to avoid inverted roof-like slabs.
         const bridgeStone=mat(0xb9b4a2);const bridgeTop=mat(0xe5d9c2);const bridgeDark=mat(0x888d83);
         const bridgeZ=.36, halfSpan=.66, archRise=.27, deckY=.34, blocks=15;
-        for(let i=0;i<blocks;i++){const t=(i+.5)/blocks,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise;const slope=Math.atan2(Math.cos(t*Math.PI)*archRise*Math.PI,2*halfSpan/blocks);const block=mesh(new THREE.BoxGeometry(2*halfSpan/blocks+.018,.105,.28),bridgeStone,x,y,bridgeZ,false);block.rotation.z=slope;}
+        for(let i=0;i<blocks;i++){const t=(i+.5)/blocks,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise;const slope=Math.atan2(Math.cos(t*Math.PI)*archRise*Math.PI,2*halfSpan);const block=mesh(new THREE.BoxGeometry(2*halfSpan/blocks+.018,.105,.28),bridgeStone,x,y,bridgeZ,false);block.rotation.z=slope;}
         // Paved walking surface sits on top of the arch stones.
-        for(let i=0;i<blocks;i++){const t=(i+.5)/blocks,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise+.065;const tread=mesh(new THREE.BoxGeometry(2*halfSpan/blocks+.012,.035,.29),bridgeTop,x,y,bridgeZ,false);tread.rotation.z=Math.atan2(Math.cos(t*Math.PI)*archRise*Math.PI,2*halfSpan/blocks);}
+        for(let i=0;i<blocks;i++){const t=(i+.5)/blocks,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise+.065;const tread=mesh(new THREE.BoxGeometry(2*halfSpan/blocks+.012,.035,.29),bridgeTop,x,y,bridgeZ,false);tread.rotation.z=Math.atan2(Math.cos(t*Math.PI)*archRise*Math.PI,2*halfSpan);}
         // Side rails follow the same arch profile, using short posts and capstones.
-        for(const side of [-1,1]){for(let i=0;i<=8;i++){const t=i/8,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise+.12;mesh(new THREE.BoxGeometry(.065,.13,.065),bridgeDark,x,y,bridgeZ+side*.145,false);}for(let i=0;i<10;i++){const t=(i+.5)/10,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise+.21;const rail=mesh(new THREE.BoxGeometry(.15,.045,.055),bridgeTop,x,y,bridgeZ+side*.145,false);rail.rotation.z=Math.atan2(Math.cos(t*Math.PI)*archRise*Math.PI,2*halfSpan/10);}}
+        for(const side of [-1,1]){for(let i=0;i<=8;i++){const t=i/8,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise+.12;mesh(new THREE.BoxGeometry(.065,.13,.065),bridgeDark,x,y,bridgeZ+side*.145,false);}for(let i=0;i<10;i++){const t=(i+.5)/10,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise+.21;const rail=mesh(new THREE.BoxGeometry(.15,.045,.055),bridgeTop,x,y,bridgeZ+side*.145,false);rail.rotation.z=Math.atan2(Math.cos(t*Math.PI)*archRise*Math.PI,2*halfSpan);}}
         tree(-1.75,-.55,1.0); tree(-2.05,.25,.83); tree(-1.28,-1.35,.75); tree(1.9,-.58,.92); tree(2.12,.18,.78); tree(1.35,-1.35,.72); tree(-.45,-1.72,.68);
         house(1.22,-.55,.78,roof); house(-1.15,.78,.62,roofLilac);
         // Small garden beds, flowering borders, rocks, shrubs and lanterns fill the open spaces.
@@ -174,9 +174,7 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
           mesh(new THREE.BoxGeometry(.07,.25,.07),wood,x,.32,-.82+i*.18,false);
         }
         for(const p of [[-.98,.95],[1.2,.32]]) lampPost(p[0],p[1]);
-        // A tiny stream spills over the front edge.
-        const water = new THREE.MeshStandardMaterial({ color: 0x8fcfce, roughness: 0.24, metalness: 0.05, transparent: true, opacity: 0.9 });
-        const cascade = mesh(new THREE.BoxGeometry(0.12, 0.78, 0.1), water, 0.48, -0.78, 1.53, false); cascade.rotation.z = -0.14;
+        // Keep the river as one continuous surface; remove the detached waterfall slab that intersected the terrain.
         for (let i = 0; i < 8; i++) {
           const a = i * Math.PI * 2 / 8 + 0.2;
           const x = Math.cos(a) * 2.05; const z = Math.sin(a) * 1.55;

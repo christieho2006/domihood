@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 
 type Theme = "cream" | "blossom" | "mint";
 type Furniture = "sofa" | "rug" | "plant" | "lamp" | "table" | "shelf" | "bed" | "picture";
@@ -85,7 +85,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
     setSaveError(false);
   }
 
-  function furnitureStyle(id: Furniture): React.CSSProperties {
+  function furnitureStyle(id: Furniture): CSSProperties {
     const cell = layout.positions?.[id] ?? defaultPositions[id];
     return {
       left: `${6 + cell.col * 29}%`,

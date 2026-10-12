@@ -87,7 +87,7 @@ footer{max-width:1120px;margin:auto;padding:19px 26px 24px;border-top:1px solid 
 .room-grid-guides i:nth-child(n+7){border-bottom:0}
 .room-object{cursor:pointer;transition:left .18s ease,bottom .18s ease,filter .18s ease,outline-color .18s ease;z-index:2}
 button.room-object{padding:0;border:0;font:inherit;color:inherit}
-button.furniture-picture,button.furniture-plant,button.furniture-lamp,button.furniture-bookshelf,button.furniture-bed,button.furniture-rug,button.furniture-sofa,button.furniture-table{background:transparent}
+button.furniture-plant,button.furniture-lamp{background:transparent}
 .room-object-selected{outline:2px solid #fffdf0!important;outline-offset:4px;filter:drop-shadow(0 0 7px #fff9)!important;z-index:4!important}
 .room-object:hover{filter:drop-shadow(0 4px 6px #5f69552b)}
 .furniture-sofa{width:30%;height:22%}

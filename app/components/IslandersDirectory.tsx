@@ -113,6 +113,11 @@ export default function IslandersDirectory({ onClose }: { onClose: () => void })
           ) : error ? (
             <div className="islanders-empty"><span>☁</span><strong>暂时没有连上小岛</strong><p>{error}</p><button className="islanders-retry" onClick={() => setRefreshKey(value => value + 1)}>重新加载</button></div>
           ) : islanders.length ? (
+            <>
+            {viewerId && <section className="islander-visitors-panel">
+              <div className="islander-section-heading"><h3>最近来访</h3><span>{visitors.length} 条足迹</span></div>
+              {visitorError ? <p className="islander-visitors-empty">{visitorError}</p> : visitors.length ? <div className="islander-visitors-list">{visitors.slice(0, 8).map(visitor => <div className="islander-visitor" key={visitor.id}><span className="islander-avatar">{visitor.nickname.slice(0, 1)}</span><span><b>{visitor.nickname}</b><small>{new Date(visitor.visitedAt).toLocaleString()}</small></span></div>)}</div> : <p className="islander-visitors-empty">还没有岛民来拜访。把小屋布置好，等待第一位朋友来敲门吧。</p>}
+            </section>}
             <div className="islanders-list">
               {islanders.map(islander => {
                 const isMe = islander.id === viewerId;
@@ -123,6 +128,7 @@ export default function IslandersDirectory({ onClose }: { onClose: () => void })
                 </article>;
               })}
             </div>
+            </>
           ) : (
             <div className="islanders-empty"><span>✿</span><strong>岛上还很安静</strong><p>目前还没有岛民。注册并布置小屋后，就会出现在这里。</p></div>
           )}

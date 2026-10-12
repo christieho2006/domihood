@@ -12,9 +12,10 @@ type PublicLayout = { theme: "cream" | "blossom" | "mint"; furniture: Furniture[
 function safeLayout(value: unknown): PublicLayout | null {
   if (!value || typeof value !== "object") return null;
   const input = value as { theme?: unknown; furniture?: unknown; positions?: unknown };
-  if (typeof input.theme !== "string" || !themes.has(input.theme) || !Array.isArray(input.furniture)) return null;
-  const furniture = furnitureIds.filter(id => input.furniture!.includes(id));
-  if (furniture.length !== input.furniture.length) return null;
+  const rawFurniture = input.furniture;
+  if (typeof input.theme !== "string" || !themes.has(input.theme) || !Array.isArray(rawFurniture)) return null;
+  const furniture = furnitureIds.filter(id => rawFurniture.includes(id));
+  if (furniture.length !== rawFurniture.length) return null;
   const rawPositions = input.positions && typeof input.positions === "object" && !Array.isArray(input.positions)
     ? input.positions as Record<string, unknown> : {};
   const positions: Partial<Record<Furniture, Cell>> = {};

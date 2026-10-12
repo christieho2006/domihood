@@ -24,8 +24,8 @@ const items: { id: Furniture; name: string; icon: string }[] = [
 ];
 const defaultPositions: Record<Furniture, Cell> = {
   sofa: { col: 1, row: 1 }, rug: { col: 1, row: 0 }, plant: { col: 2, row: 0 },
-  lamp: { col: 2, row: 1 }, table: { col: 1, row: 0 }, shelf: { col: 2, row: 2 },
-  bed: { col: 0, row: 1 }, picture: { col: 1, row: 2 },
+  lamp: { col: 0, row: 1 }, table: { col: 2, row: 1 }, shelf: { col: 0, row: 2 },
+  bed: { col: 0, row: 0 }, picture: { col: 2, row: 2 },
 };
 const defaults: Layout = { theme: "cream", furniture: ["sofa", "rug", "plant", "lamp", "table", "picture"], positions: defaultPositions };
 const STORAGE_KEY = "domi_cottage_layout";

@@ -150,3 +150,57 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
 .secondary-account-button{display:block;width:100%;margin-top:12px;border:1px solid #e3e8dd;border-radius:12px;background:transparent;color:#8d9b8b;padding:12px;font-size:12px}
 .secondary-account-button:hover{background:#f3f4ec}
 @media(max-width:520px){.account-modal{padding:28px 23px;max-height:88vh}.account-modal .account-tabs button{font-size:11px}.account-form input{padding:12px}}
+
+
+/* Memory cafe: a real, local-first journal inside the island. */
+.memory-backdrop{z-index:35;overflow-y:auto;display:block;padding:clamp(10px,3vh,28px) 14px}
+.memory-modal{position:relative;width:min(100%,980px);margin:0 auto;background:#fbfaf5;border:1px solid #fff;border-radius:26px;box-shadow:0 28px 100px #34483f38;overflow:hidden;animation:modal-in .22s ease-out}
+.memory-hero{position:relative;padding:30px clamp(20px,4vw,42px) 24px;background:radial-gradient(ellipse at 85% 0,#fff3dc 0,transparent 43%),linear-gradient(135deg,#f5e9df,#f8f2e8 60%,#e9eee1);border-bottom:1px solid #e8e6db}
+.memory-cup{position:absolute;right:clamp(24px,5vw,56px);top:30px;width:64px;height:64px;border-radius:22px;display:grid;place-items:center;background:#fffaf0a8;border:1px solid #fff;font-size:30px;box-shadow:0 10px 24px #927c5c12}
+.memory-hero .eyebrow{margin:2px 0 13px;font-size:8px}
+.memory-hero h2{font:400 clamp(25px,4vw,34px) Georgia,"Songti SC",serif;color:#506b57;margin:0 80px 9px 0;letter-spacing:.5px}
+.memory-hero>p{font-size:11px;line-height:1.9;color:#8e9b8b;margin:0;max-width:560px}
+.memory-count{display:flex;align-items:center;gap:10px;margin-top:20px;color:#91a18b;font-size:10px}
+.memory-count strong{font:400 22px Georgia,serif;color:#c49c83}
+.memory-content{display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:20px;padding:22px clamp(16px,3vw,30px) 26px;align-items:start}
+.memory-form,.memory-archive{min-width:0}
+.memory-form{padding:19px;border:1px solid #e9e8dc;border-radius:18px;background:#fffdf8}
+.memory-form-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:18px}
+.memory-form-heading h3{font:400 18px Georgia,"Songti SC",serif;color:#536b57;margin:0}
+.memory-form-heading>span{font-size:8px;letter-spacing:1.2px;color:#b0b9a9;white-space:nowrap}
+.memory-form label{display:block;margin:15px 0 7px;color:#6e816e;font-size:10px}
+.memory-form input,.memory-form textarea{width:100%;border:1px solid #e4e7dc;background:#fffefa;border-radius:10px;padding:11px 12px;color:#506553;font-size:11px;outline:none;resize:vertical}
+.memory-form input:focus,.memory-form textarea:focus{border-color:#a7bda0;box-shadow:0 0 0 3px #e9f0e4}
+.memory-form input::placeholder,.memory-form textarea::placeholder{color:#b5beb1}
+.memory-moods{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.memory-moods button{border:1px solid #e7e8dd;background:#fffefa;border-radius:10px;padding:8px 3px;color:#98a393;font-size:9px;display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap}
+.memory-moods button span{font-size:14px}
+.memory-moods button.selected{border-color:#b9cbb0;background:#edf3e8;color:#5e7a62;box-shadow:inset 0 0 0 1px #d7e4d1}
+.memory-form-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:13px}
+.memory-form-bottom small{font-size:9px;color:#a4afa0;line-height:1.6}
+.memory-form-bottom .primary-button{width:auto;white-space:nowrap;padding:11px 14px;gap:16px;font-size:10px}
+.memory-notice{font-size:10px;color:#81967e;line-height:1.7;margin:10px 0 0}
+.memory-archive>.memory-form-heading{margin:3px 0 14px}
+.memory-list{display:grid;gap:10px;max-height:490px;overflow-y:auto;padding:1px 5px 2px 1px}
+.memory-card{border:1px solid #e9e8dc;border-radius:15px;padding:15px 16px 11px;background:#fffdf8}
+.memory-card.mood-happy{background:#fffdf6;border-color:#eee5ce}
+.memory-card.mood-calm{background:#f8fbf6;border-color:#e2eadf}
+.memory-card.mood-nostalgic{background:#fcf7f8;border-color:#eee0e3}
+.memory-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.memory-mood-tag{font-size:9px;color:#8ba086;background:#edf2e8;border-radius:20px;padding:5px 8px;white-space:nowrap}
+.mood-happy .memory-mood-tag{background:#f7f0db;color:#b39a68}.mood-calm .memory-mood-tag{background:#eaf1ec;color:#7d9d95}.mood-nostalgic .memory-mood-tag{background:#f5e9ed;color:#bc929f}
+.memory-card time{font-size:9px;color:#b0b7aa}
+.memory-card h4{font:400 16px Georgia,"Songti SC",serif;color:#566f5a;margin:12px 0 7px;overflow-wrap:anywhere}
+.memory-card>p{font-size:11px;line-height:1.9;color:#879486;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.memory-card-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;border-top:1px solid #eff0e8;margin-top:12px;padding-top:9px;min-height:28px}
+.memory-card-actions button{border:0;background:transparent;color:#a3afa0;font-size:9px;padding:4px}
+.memory-card-actions button:hover{color:#b8797e}
+.memory-card-actions span{margin-right:auto;font-size:9px;color:#b8797e}
+.memory-card-actions button:nth-last-child(2){color:#bb7d82}
+.memory-empty{min-height:210px;border:1px dashed #dfe5d8;border-radius:16px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:24px;background:#fffdf8}
+.memory-empty>span{font-size:28px;color:#c6b69a;margin-bottom:9px}
+.memory-empty strong{font:400 16px Georgia,"Songti SC",serif;color:#6f866f}
+.memory-empty p{font-size:10px;line-height:1.9;color:#a0aa9b;max-width:240px}
+.memory-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px clamp(20px,4vw,40px);border-top:1px solid #e9e8dc;background:#f8f7ef;color:#a0a99c;font-size:10px;letter-spacing:.3px}
+.memory-done{border:1px solid #dce5d7;border-radius:20px;background:#edf2e8;color:#6d876b;padding:9px 13px;font-size:10px;white-space:nowrap}
+@media(max-width:720px){.memory-backdrop{padding:8px;align-items:start}.memory-modal{border-radius:20px}.memory-hero{padding:23px 18px 19px}.memory-cup{width:47px;height:47px;top:20px;right:17px;font-size:23px;border-radius:16px}.memory-hero h2{font-size:25px;margin-right:48px}.memory-hero>p{font-size:10px;max-width:90%}.memory-content{grid-template-columns:1fr;gap:22px;padding:16px 12px 20px}.memory-form{padding:15px}.memory-list{max-height:360px}.memory-footer{padding:13px 16px;font-size:9px}.memory-moods button{font-size:9px}.memory-form-bottom{align-items:flex-end}.memory-form-bottom .primary-button{padding:10px 11px}.memory-archive>.memory-form-heading{margin-top:0}}

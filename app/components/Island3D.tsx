@@ -215,7 +215,7 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
     const view = viewRef.current;
     if (!view) return;
     const radians = (angle * Math.PI) / 180;
-    const distance = 9.4 / zoom;
+    const distance = 8.4 / zoom;
     view.camera.position.set(Math.sin(radians) * distance, 4.0, Math.cos(radians) * distance);
     view.camera.lookAt(0, -0.25, 0);
   }, [angle, zoom]);

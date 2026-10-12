@@ -66,11 +66,17 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
   }, []);
 
   function toggleFurniture(id: Furniture) {
-    setLayout(current => {
-      const exists = current.furniture.includes(id);
-      return { ...current, furniture: exists ? current.furniture.filter(item => item !== id) : [...current.furniture, id] };
-    });
     setSelected(id);
+    setLayout(current => {
+      if (current.furniture.includes(id)) return current;
+      return { ...current, furniture: [...current.furniture, id] };
+    });
+    setSaved(false);
+    setSaveError(false);
+  }
+
+  function removeSelectedFurniture() {
+    setLayout(current => ({ ...current, furniture: current.furniture.filter(id => id !== selected) }));
     setSaved(false);
     setSaveError(false);
   }
@@ -137,9 +143,9 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
             <div className="theme-options">{themes.map(theme => <button key={theme.id} className={"theme-option " + (layout.theme === theme.id ? "selected" : "")} onClick={() => { setLayout(current => ({ ...current, theme: theme.id })); setSaved(false); setSaveError(false); }}><span className={"theme-swatch swatch-" + theme.id} /><span><b>{theme.name}</b><small>{theme.note}</small></span><i>{layout.theme === theme.id ? "✓" : ""}</i></button>)}</div>
           </section>
           <section className="decor-section"><div className="decor-heading"><h3>挑选家具</h3><span>FURNITURE · {layout.furniture.length}/{items.length}</span></div>
-            <div className="furniture-grid">{items.map(item => { const active = layout.furniture.includes(item.id); const focused = selected === item.id; return <button key={item.id} className={"furniture-option " + (active ? "furniture-active" : "") + (focused ? " furniture-focused" : "")} aria-pressed={active} onClick={() => toggleFurniture(item.id)}><span>{item.icon}</span><b>{item.name}</b><i>{active ? (focused ? "已选中 · 可移动" : "已摆放 · 点选调整") : "点击添加"}</i></button>; })}</div>
+            <div className="furniture-grid">{items.map(item => { const active = layout.furniture.includes(item.id); const focused = selected === item.id; return <button key={item.id} className={"furniture-option " + (active ? "furniture-active" : "") + (focused ? " furniture-focused" : "")} aria-pressed={focused} onClick={() => toggleFurniture(item.id)}><span>{item.icon}</span><b>{item.name}</b><i>{active ? (focused ? "已选中 · 可移动" : "已摆放 · 点选调整") : "点击添加"}</i></button>; })}</div>
             <div className="placement-panel">
-              <div className="placement-copy"><strong>网格摆放</strong><span>先选家具，再选择房间中的位置</span><small>当前：{selectedItem.icon} {selectedItem.name} · 第 {selectedCell.row + 1} 行 / 第 {selectedCell.col + 1} 列</small></div>
+              <div className="placement-copy"><strong>网格摆放</strong><span>先选家具，再选择房间中的位置</span><small>当前：{selectedItem.icon} {selectedItem.name} · 第 {selectedCell.row + 1} 行 / 第 {selectedCell.col + 1} 列</small>{layout.furniture.includes(selected) && <button type="button" className="remove-selected-furniture" onClick={removeSelectedFurniture}>移除这件家具 −</button>}</div>
               <div className="placement-grid" role="group" aria-label="家具网格位置">
                 {Array.from({ length: 9 }, (_, index) => {
                   const col = index % 3;

@@ -15,8 +15,8 @@ export default function CottageRoom3D({ theme, furniture, positions, selected, o
  const canvasRef = useRef<HTMLCanvasElement>(null);
  const viewRef = useRef<any>(null);
  const callbacks = useRef({ onSelect, onMove });
- const state = useRef({ positions, selected });
- callbacks.current = { onSelect, onMove }; state.current = { positions, selected };
+ const state = useRef({ positions, selected, furniture });
+ callbacks.current = { onSelect, onMove }; state.current = { positions, selected, furniture };
  useEffect(() => {
   let dead = false; let frame = 0; let renderer: any; let cleanup = () => {};
   async function start() {
@@ -71,7 +71,7 @@ export default function CottageRoom3D({ theme, furniture, positions, selected, o
     function findGroup(o:any):any{while(o&&o!==room&&!o.userData.furnitureId)o=o.parent;return o&&o!==room?o:null;}
     function down(e:PointerEvent){setRay(e);const hit=ray.intersectObjects(Object.values(objects).flatMap((g:any)=>g.children),true)[0];if(!hit)return;const g=findGroup(hit.object);if(!g)return;dragging=g.userData.furnitureId;callbacks.current.onSelect(dragging as Furniture);canvas.setPointerCapture(e.pointerId);e.preventDefault();}
     function move(e:PointerEvent){if(!dragging)return;setRay(e);const v=new T.Vector3();if(!ray.ray.intersectPlane(plane,v))return;const col=Math.max(0,Math.min(2,Math.round(v.x/1.05+1))),row=Math.max(0,Math.min(2,Math.round(1-v.z/1.05)));position(dragging,col,row,.06);}
-    function up(e:PointerEvent){if(!dragging)return;setRay(e);const v=new T.Vector3();if(ray.ray.intersectPlane(plane,v)){const col=Math.max(0,Math.min(2,Math.round(v.x/1.05+1))),row=Math.max(0,Math.min(2,Math.round(1-v.z/1.05)));callbacks.current.onMove(dragging as Furniture,col,row);}dragging=null;}
+    function up(e:PointerEvent){if(!dragging)return;setRay(e);const v=new T.Vector3();if(ray.ray.intersectPlane(plane,v)){const col=Math.max(0,Math.min(2,Math.round(v.x/1.05+1))),row=Math.max(0,Math.min(2,Math.round(1-v.z/1.05)));const occupied=state.current.furniture.some((id)=>id!==dragging&&state.current.positions[id]?.col===col&&state.current.positions[id]?.row===row);if(occupied){const old=state.current.positions[dragging as Furniture]||{col:1,row:1};position(dragging,old.col,old.row);}else callbacks.current.onMove(dragging as Furniture,col,row);}dragging=null;}
     canvas.addEventListener("pointerdown",down);canvas.addEventListener("pointermove",move);canvas.addEventListener("pointerup",up);canvas.addEventListener("pointercancel",up);
     const resizeHandler=()=>resize();window.addEventListener("resize",resizeHandler);resize();
     const tick=()=>{if(dead)return;frame=requestAnimationFrame(tick);renderer.render(scene,camera);};frame=requestAnimationFrame(tick);

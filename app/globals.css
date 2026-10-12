@@ -113,3 +113,11 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
 .furniture-option.furniture-focused{border-color:#91b38e;box-shadow:0 0 0 2px #e1ebdc}
 .save-error{font-size:9px;color:#b76e67;max-width:190px;line-height:1.5}
 @media(max-width:620px){.placement-panel{grid-template-columns:minmax(0,1fr) 96px;gap:9px;padding:10px}.placement-grid{width:96px}.placement-copy span{font-size:8px}.placement-copy small{font-size:8px}.room-grid-guides{inset:8% 3% 30%}.furniture-bookshelf{width:35px;height:58px}.furniture-sofa{width:34%}.furniture-bed{width:38%}}
+
+
+/* Three-dimensional cottage room and touch-friendly furniture dragging. */
+.room-preview{height:clamp(260px,42vh,390px);background:#f5e9d8;overflow:hidden}
+.cottage-3d-canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.cottage-3d-canvas:active{cursor:grabbing}
+.room-label{pointer-events:none;z-index:4}
+@media(max-width:620px){.room-preview{height:clamp(250px,38vh,320px)}}

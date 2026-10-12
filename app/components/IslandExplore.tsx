@@ -118,10 +118,11 @@ export default function IslandExplore({ onClose, onVisit }: Props) {
           const g=new THREE.Group(); g.position.set(x,.82,z); g.scale.setScalar(scale); world.add(g);
           const bodyMat=mat(body), rMat=mat(roofColor), trim=mat("#fff0d7"), dark=mat("#795441");
           box(0,.5,0,1.25,1.0,1.0,bodyMat,g); box(0,.02,0,1.42,.12,1.15,stoneLight,g);
-          // roof is built from two independent sloped panels
-          const r1=box(-.34,1.12,0,.82,.13,1.28,rMat,g); r1.rotation.z=-.55;
-          const r2=box(.34,1.12,0,.82,.13,1.28,rMat,g); r2.rotation.z=.55;
-          box(0,1.05,-.01,.08,.12,1.32,roofLight,g);
+          // Use one compact, centered hip roof like the cottage on the home island.
+          // Two intersecting rotated boxes caused visible clipping and inverted-looking roof planes.
+          const roofTop = add(new THREE.ConeGeometry(0.72, 0.68, 4), rMat, 0, 1.28, 0, g);
+          roofTop.rotation.y = Math.PI / 4;
+          box(0,1.0,0,1.36,.08,1.18,rMat,g);
           box(0,1.13,.55,.25,.48,.08,dark,g);
           box(0,1.34,.6,.35,.08,.08,woodLight,g);
           for(const wx of [-.38,.38]){

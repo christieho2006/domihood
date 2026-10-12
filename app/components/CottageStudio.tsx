@@ -128,7 +128,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
           <div className="room-wall-art">♡</div>
           <div className="room-shelf"><i /><i /><i /><i /></div>
           <div className="room-floor" />
-          <div className="room-grid-guides" aria-hidden="true"><i /><i /><i /><i /></div>
+          <div className="room-grid-guides" aria-hidden="true">{Array.from({ length: 9 }, (_, index) => <i key={index} />)}</div>
           {layout.furniture.includes("picture") && <button aria-label="选择墙上挂画" className={"furniture-picture room-object " + (selected === "picture" ? "room-object-selected" : "")} style={furnitureStyle("picture")} onClick={() => setSelected("picture")}>🌷</button>}
           {layout.furniture.includes("plant") && <button aria-label="选择绿植盆栽" className={"furniture-plant room-object " + (selected === "plant" ? "room-object-selected" : "")} style={furnitureStyle("plant")} onClick={() => setSelected("plant")}><span>🪴</span><small>little garden</small></button>}
           {layout.furniture.includes("lamp") && <button aria-label="选择暖光落地灯" className={"furniture-lamp room-object " + (selected === "lamp" ? "room-object-selected" : "")} style={furnitureStyle("lamp")} onClick={() => setSelected("lamp")}><i /><span /><b /></button>}

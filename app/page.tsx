@@ -37,7 +37,7 @@ export default function Home() {
     if (saved) { setSavedName(saved); setNickname(saved); setAccountNickname(saved); }
     try {
       const discoveries = JSON.parse(window.localStorage.getItem("domi_island_discoveries") || "[]");
-      if (Array.isArray(discoveries)) setExploredPlaces(discoveries.filter((place): place is Place => place === "square" || place === "cafe" || place === "cottage"));
+      if (Array.isArray(discoveries)) setExploredPlaces(Array.from(new Set(discoveries.filter((place): place is Place => place === "square" || place === "cafe" || place === "cottage"))));
     } catch { /* Keep a fresh exploration book if local progress is unavailable. */ }
     fetch("/api/auth/session", { cache: "no-store" })
       .then(response => response.ok ? response.json() : null)
@@ -177,7 +177,7 @@ export default function Home() {
           <div className="weather-pill"><span>☀</span> 温柔晴天 <i /></div>
           <h2>今天也要<br /><em>好好生活。</em></h2>
           <p>点选岛上的小屋，开始探索这个正在慢慢生长的世界。</p>
-          <button className="explore-button" onClick={() => setActive("cottage")}>拜访我的小屋 <span>↗</span></button>
+          <button className="explore-button" onClick={() => visitPlace("cottage")}>拜访我的小屋 <span>↗</span></button>
           <div className="island-stats"><div><strong>{exploredPlaces.length.toString().padStart(2, "0")}/03</strong><small>已探索地点</small></div><div><strong>{exploredPlaces.length === 3 ? "✦" : 3 - exploredPlaces.length}</strong><small>{exploredPlaces.length === 3 ? "图鉴已点亮" : "待发现角落"}</small></div></div>
         </aside>
       </section>

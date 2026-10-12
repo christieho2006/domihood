@@ -14,8 +14,8 @@ export default function IslandExplore({ onClose, onVisit }: Props) {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
-      if (event.key === "ArrowLeft" || event.key.toLowerCase() === "a") setAngle(value => Math.max(-160, value - 8));
-      if (event.key === "ArrowRight" || event.key.toLowerCase() === "d") setAngle(value => Math.min(160, value + 8));
+      if (event.key === "ArrowLeft" || event.key.toLowerCase() === "a") setAngle(value => value - 8);
+      if (event.key === "ArrowRight" || event.key.toLowerCase() === "d") setAngle(value => value + 8);
       if (event.key === "+" || event.key === "=") setZoom(value => Math.min(1.7, value + .08));
       if (event.key === "-" || event.key === "_") setZoom(value => Math.max(.72, value - .08));
     };
@@ -37,7 +37,7 @@ export default function IslandExplore({ onClose, onVisit }: Props) {
 
   return <div className="island-explore" role="dialog" aria-modal="true" aria-label="沉浸式小岛探索">
     <div className="explore-world-canvas">
-      <Island3D angle={angle} zoom={zoom} />
+      <Island3D angle={angle} zoom={zoom} freeRotate onAngleChange={setAngle} />
     </div>
     <div className="explore-vignette" />
     <header className="explore-topbar">

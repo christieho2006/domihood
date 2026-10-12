@@ -60,6 +60,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
   const [layout, setLayout] = useState<Layout>(defaults);
   const [selected, setSelected] = useState<Furniture>("sofa");
   const [saved, setSaved] = useState(false);
+  const [dirty, setDirty] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const [accountSignedIn, setAccountSignedIn] = useState(false);
   const [cloudStatus, setCloudStatus] = useState<"guest" | "loading" | "synced" | "empty" | "error">("guest");
@@ -95,6 +96,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
               setLayout(cloudLayout);
               localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudLayout));
               if (typeof data.updatedAt === "string") setLastCloudSave(data.updatedAt);
+              setDirty(false);
               setCloudStatus("synced");
               return;
             }
@@ -117,12 +119,14 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
     setLayout(current => ({ ...current, furniture: [...current.furniture, id] }));
     setSaved(false);
     setSaveError(false);
+    setDirty(true);
   }
 
   function removeSelectedFurniture() {
     setLayout(current => ({ ...current, furniture: current.furniture.filter(id => id !== selected) }));
     setSaved(false);
     setSaveError(false);
+    setDirty(true);
   }
 
   function moveSelected(col: number, row: number) {
@@ -132,6 +136,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
     }));
     setSaved(false);
     setSaveError(false);
+    setDirty(true);
   }
 
   async function saveRoom() {
@@ -156,6 +161,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
       }
       setSaved(true);
       setSaveError(false);
+      setDirty(false);
     } catch {
       setSaved(false);
       setSaveError(true);
@@ -167,6 +173,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
     setSelected("sofa");
     setSaved(false);
     setSaveError(false);
+    setDirty(true);
   }
 
   const selectedItem = items.find(item => item.id === selected)!;
@@ -194,6 +201,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
                 setLayout(current => ({ ...current, positions: { ...defaultPositions, ...current.positions, [id]: { col, row } } }));
                 setSaved(false);
                 setSaveError(false);
+                setDirty(true);
               }
             }}
           />
@@ -201,7 +209,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
         </div>
         <div className="cottage-controls">
           <section className="decor-section"><div className="decor-heading"><h3>房间氛围</h3><span>ROOM PALETTE</span></div>
-            <div className="theme-options">{themes.map(theme => <button key={theme.id} className={"theme-option " + (layout.theme === theme.id ? "selected" : "")} onClick={() => { setLayout(current => ({ ...current, theme: theme.id })); setSaved(false); setSaveError(false); }}><span className={"theme-swatch swatch-" + theme.id} /><span><b>{theme.name}</b><small>{theme.note}</small></span><i>{layout.theme === theme.id ? "✓" : ""}</i></button>)}</div>
+            <div className="theme-options">{themes.map(theme => <button key={theme.id} className={"theme-option " + (layout.theme === theme.id ? "selected" : "")} onClick={() => { setLayout(current => ({ ...current, theme: theme.id })); setSaved(false); setSaveError(false); setDirty(true); }}><span className={"theme-swatch swatch-" + theme.id} /><span><b>{theme.name}</b><small>{theme.note}</small></span><i>{layout.theme === theme.id ? "✓" : ""}</i></button>)}</div>
           </section>
           <section className="decor-section"><div className="decor-heading"><h3>挑选家具</h3><span>FURNITURE · {layout.furniture.length}/{items.length}</span></div>
             <div className="furniture-grid">{items.map(item => { const active = layout.furniture.includes(item.id); const focused = selected === item.id; return <button key={item.id} className={"furniture-option " + (active ? "furniture-active" : "") + (focused ? " furniture-focused" : "")} aria-pressed={focused} onClick={() => toggleFurniture(item.id)}><span>{item.icon}</span><b>{item.name}</b><i>{active ? (focused ? "已选中 · 可移动" : "已摆放 · 点选调整") : "点击添加"}</i></button>; })}</div>
@@ -219,7 +227,7 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
             </div>
           </section>
         </div>
-        <footer className="cottage-footer"><span>✦ {accountSignedIn ? cloudStatus === "synced" ? "账号已连接 · 小屋已同步到云端" : cloudStatus === "empty" ? "账号已连接 · 保存后将建立云端布局" : cloudStatus === "error" ? "云端暂不可用 · 本地布局仍可使用" : "正在连接你的云端小屋…" : "当前保存在这台设备；登录后可同步到云端"}</span><div>{accountSignedIn && cloudStatus === "synced" && lastCloudSave && <small className="saved-note">最近同步：{new Date(lastCloudSave).toLocaleString()}</small>}{saveError && <small className="save-error">{accountSignedIn ? "云端同步失败；本地布局仍已保存，请稍后重试" : "保存失败，请检查设备存储空间或浏览器设置"}</small>}{saved && <small className="saved-note">{accountSignedIn && cloudStatus === "synced" ? "已保存并同步 ✓" : "已保存 ✓"}</small>}<button className="cottage-reset" onClick={resetRoom}>恢复初始布置</button><button className="primary-button cottage-save" onClick={() => void saveRoom()}>{accountSignedIn ? "保存并同步小屋" : "保存我的小屋"} <span>♡</span></button></div></footer>
+        <footer className="cottage-footer"><span>✦ {dirty ? accountSignedIn ? "有未同步的更改 · 点击保存同步到云端" : "有未保存的更改 · 点击保存保留布置" : accountSignedIn ? cloudStatus === "synced" ? "账号已连接 · 小屋已同步到云端" : cloudStatus === "empty" ? "账号已连接 · 保存后将建立云端布局" : cloudStatus === "error" ? "云端暂不可用 · 本地布局仍可使用" : "正在连接你的云端小屋…" : "当前保存在这台设备；登录后可同步到云端"}</span><div>{accountSignedIn && cloudStatus === "synced" && lastCloudSave && <small className="saved-note">最近同步：{new Date(lastCloudSave).toLocaleString()}</small>}{saveError && <small className="save-error">{accountSignedIn ? "云端同步失败；本地布局仍已保存，请稍后重试" : "保存失败，请检查设备存储空间或浏览器设置"}</small>}{saved && <small className="saved-note">{accountSignedIn && cloudStatus === "synced" ? "已保存并同步 ✓" : "已保存 ✓"}</small>}<button className="cottage-reset" onClick={resetRoom}>恢复初始布置</button><button className="primary-button cottage-save" onClick={() => void saveRoom()}>{accountSignedIn ? "保存并同步小屋" : "保存我的小屋"} <span>♡</span></button></div></footer>
       </section>
     </div>
   );

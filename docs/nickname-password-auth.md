@@ -11,7 +11,7 @@
 
 ## 启用前必须完成的配置
 
-1. 在 Supabase SQL Editor 执行 `supabase/migrations/202610120001_domi_accounts.sql`。
+1. 在 Supabase SQL Editor 依次执行 `supabase/migrations/202610120001_domi_accounts.sql` 与 `supabase/migrations/202610120002_domi_cottage_layouts.sql`。
 2. 在部署平台服务器端配置环境变量：
    - `SUPABASE_URL`（或已有的 `NEXT_PUBLIC_SUPABASE_URL`）
    - `SUPABASE_SERVICE_ROLE_KEY`（仅服务器端，绝不能使用 `NEXT_PUBLIC_` 前缀）

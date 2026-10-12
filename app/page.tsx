@@ -19,6 +19,12 @@ export default function Home() {
   const [nickname, setNickname] = useState("");
   const [savedName, setSavedName] = useState("");
   const [nameOpen, setNameOpen] = useState(false);
+  const [accountMode, setAccountMode] = useState<"login" | "register" | "guest">("login");
+  const [accountNickname, setAccountNickname] = useState("");
+  const [accountPassword, setAccountPassword] = useState("");
+  const [accountBusy, setAccountBusy] = useState(false);
+  const [accountError, setAccountError] = useState("");
+  const [accountUser, setAccountUser] = useState<{ id: string; nickname: string } | null>(null);
   const [dragging, setDragging] = useState(false);
   const startX = useRef(0);
   const startAngle = useRef(-8);
@@ -26,7 +32,19 @@ export default function Home() {
 
   useEffect(() => {
     const saved = window.localStorage.getItem("domi_island_nickname");
-    if (saved) { setSavedName(saved); setNickname(saved); }
+    if (saved) { setSavedName(saved); setNickname(saved); setAccountNickname(saved); }
+    fetch("/api/auth/session", { cache: "no-store" })
+      .then(response => response.ok ? response.json() : null)
+      .then(data => {
+        if (data?.user?.nickname) {
+          setAccountUser(data.user);
+          setSavedName(data.user.nickname);
+          setNickname(data.user.nickname);
+          setAccountNickname(data.user.nickname);
+          window.localStorage.setItem("domi_island_nickname", data.user.nickname);
+        }
+      })
+      .catch(() => { /* Guest mode remains available when account service is offline. */ });
   }, []);
 
   function pointerDown(event: React.PointerEvent<HTMLDivElement>) {
@@ -50,7 +68,53 @@ export default function Home() {
     window.localStorage.setItem("domi_island_nickname", clean);
     setSavedName(clean);
     setNickname(clean);
+    setAccountNickname(clean);
     setNameOpen(false);
+  }
+
+  async function submitAccount(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (accountBusy) return;
+    setAccountBusy(true);
+    setAccountError("");
+    try {
+      const response = await fetch("/api/auth/" + accountMode, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nickname: accountNickname, password: accountPassword }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.user) {
+        setAccountError(data.error || "暂时无法完成操作，请稍后再试。");
+        return;
+      }
+      setAccountUser(data.user);
+      setSavedName(data.user.nickname);
+      setNickname(data.user.nickname);
+      window.localStorage.setItem("domi_island_nickname", data.user.nickname);
+      setAccountPassword("");
+      setNameOpen(false);
+    } catch {
+      setAccountError("网络暂时没有连上，请稍后重试。");
+    } finally {
+      setAccountBusy(false);
+    }
+  }
+
+  async function logoutAccount() {
+    setAccountBusy(true);
+    setAccountError("");
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      setAccountUser(null);
+      setAccountPassword("");
+      setAccountMode("login");
+      setNameOpen(false);
+    } catch {
+      setAccountError("退出登录失败，请检查网络后重试。");
+    } finally {
+      setAccountBusy(false);
+    }
   }
 
   return (
@@ -59,7 +123,7 @@ export default function Home() {
         <a className="brand" href="/" aria-label="DOMIHOOD 首页"><span className="brand-mark">d.</span><span>DOMIHOOD<small>OUR LITTLE WORLD</small></span></a>
         <div className="topbar-right">
           <span className="online-dot" /> <span className="quiet-label">A tiny world made of memories</span>
-          <button className="profile-chip" onClick={() => setNameOpen(true)}><span className="avatar">{savedName ? savedName.slice(0,1) : "♡"}</span>{savedName || "岛屿访客"} <span className="chevron">⌄</span></button>
+          <button className="profile-chip" onClick={() => { setNameOpen(true); setAccountError(""); setAccountNickname(savedName); }}><span className="avatar">{savedName ? savedName.slice(0,1) : "♡"}</span>{savedName || "岛屿访客"} <span className="chevron">⌄</span></button>
         </div>
       </header>
 

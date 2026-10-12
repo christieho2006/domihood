@@ -2,13 +2,13 @@
 
 import { useEffect, useRef } from "react";
 
-type Props = { angle: number; zoom: number; onEnter?: () => void };
+type Props = { angle: number; zoom: number; onEnter?: () => void; onAngleChange?: (angle: number) => void; freeRotate?: boolean };
 
-export default function Island3D({ angle, zoom, onEnter }: Props) {
+export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRotate = false }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const worldRef = useRef<any>(null);
   const viewRef = useRef<any>(null);
-  const pointerStart = useRef<{x:number;y:number;moved:boolean} | null>(null);
+  const pointerStart = useRef<{x:number;y:number;moved:boolean;angle:number} | null>(null);
 
   useEffect(() => {
     let disposed = false;
@@ -25,7 +25,7 @@ export default function Island3D({ angle, zoom, onEnter }: Props) {
         const scene = new THREE.Scene();
         scene.background = null;
         const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
-        camera.position.set(0, 3.2, 8.8); camera.lookAt(0, -0.25, 0);
+        camera.position.set(0, 3.2, 8.8); camera.lookAt(0, -0.22, 0);
         renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "low-power" });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
         renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -103,21 +103,21 @@ export default function Island3D({ angle, zoom, onEnter }: Props) {
           mesh(new THREE.CylinderGeometry(.11,.11,.035,12),woodDark,x,.73,z);
         }
         // Floating island: stacked tapered strata make the underside visibly three-dimensional.
-        const top = mesh(new THREE.CylinderGeometry(2.45, 2.25, 0.36, 9, 1), grass, 0, 0.02, 0); top.scale.z = 0.78;
-        const shelf = mesh(new THREE.CylinderGeometry(2.25, 1.95, 0.48, 9, 1), earthC, 0, -0.34, 0); shelf.scale.z = 0.78;
-        const middle = mesh(new THREE.CylinderGeometry(1.95, 1.28, 0.75, 8, 1), earthA, 0, -0.88, 0); middle.scale.z = 0.78;
-        const tip = mesh(new THREE.ConeGeometry(1.3, 1.45, 8, 1), earthB, 0, -1.82, 0); tip.scale.z = 0.8;
+        const top = mesh(new THREE.CylinderGeometry(3.05, 2.82, 0.36, 12, 1), grass, 0, 0.02, 0); top.scale.z = 0.84;
+        const shelf = mesh(new THREE.CylinderGeometry(2.82, 2.42, 0.48, 12, 1), earthC, 0, -0.34, 0); shelf.scale.z = 0.84;
+        const middle = mesh(new THREE.CylinderGeometry(2.42, 1.62, 0.75, 10, 1), earthA, 0, -0.88, 0); middle.scale.z = 0.84;
+        const tip = mesh(new THREE.ConeGeometry(1.65, 1.45, 10, 1), earthB, 0, -1.82, 0); tip.scale.z = 0.84;
         // Rolling lawn patches create a richer, layered terrain instead of a flat green disc.
         const turf = mat(0xb8dc93);
         const turfLight = mat(0xd0e6a9);
         const turfDark = mat(0x91c17c);
-        const lawn = mesh(new THREE.CircleGeometry(1.82, 48), grassLight, -.1,.215,.02,false); lawn.rotation.x=-Math.PI/2;
+        const lawn = mesh(new THREE.CircleGeometry(2.42, 56), grassLight, -.1,.215,.02,false); lawn.rotation.x=-Math.PI/2;
         for (const patch of [[-.9,.25,.58,.42],[.8,.55,.62,.38],[-.3,-.9,.7,.38],[1.1,-.45,.42,.32]]) {
           const meadow=mesh(new THREE.CircleGeometry(patch[2] as number,24),patch[0] as number < 0 ? turf : turfLight,patch[0] as number,.221,patch[1] as number,false);
           meadow.rotation.x=-Math.PI/2; meadow.scale.y=patch[3] as number;
         }
         const pathMat = mat(0xe8d9be);
-        const routePoints=[new THREE.Vector3(.7,.232,1.18),new THREE.Vector3(.52,.235,.88),new THREE.Vector3(.28,.238,.62),new THREE.Vector3(.1,.24,.34),new THREE.Vector3(-.08,.24,.1),new THREE.Vector3(-.32,.24,-.08),new THREE.Vector3(-.62,.24,-.28),new THREE.Vector3(-.82,.24,-.54)];
+        const routePoints=[new THREE.Vector3(1.0,.232,1.8),new THREE.Vector3(.82,.235,1.35),new THREE.Vector3(.55,.238,.9),new THREE.Vector3(.38,.24,.48),new THREE.Vector3(.18,.24,.02),new THREE.Vector3(-.05,.24,-.45),new THREE.Vector3(-.28,.24,-.9),new THREE.Vector3(-.5,.24,-1.35),new THREE.Vector3(-.7,.24,-1.75)];
         const routeCurve=new THREE.CatmullRomCurve3(routePoints);
         mesh(new THREE.TubeGeometry(routeCurve,48,.13,10,false),pathEdge,0,0,0,false);
         mesh(new THREE.TubeGeometry(routeCurve,48,.095,10,false),pathMat,0,.006,0,false);
@@ -127,11 +127,33 @@ export default function Island3D({ angle, zoom, onEnter }: Props) {
           const tile=mesh(new THREE.BoxGeometry(.12,.025,.085),i%4===0?stone:pathMat,p.x,.255,p.z,false);
           tile.rotation.y=-Math.atan2(tangent.z,tangent.x); tile.rotation.y+=.08*Math.sin(i*1.7);
         }
-        // A miniature footbridge crosses the stream at the island's front edge.
-        for(let i=0;i<5;i++) mesh(new THREE.BoxGeometry(.12,.045,.42),wood, .42+i*.12,.245,1.08,false);
-        for(const x of [.38,.98]) for(const z of [.88,1.28]) mesh(new THREE.CylinderGeometry(.025,.03,.24,7),trunk,x,.19,z,false);
-        tree(-1.35,-.35,1.0); tree(-1.72,.15,.83); tree(-.95,-1.02,.75); tree(1.45,-.5,.92); tree(1.78,.08,.78); tree(.95,-1.1,.72); tree(-.3,-1.45,.68);
-        house(.68,-.2,.86,roof); house(-.68,.45,.65,roofLilac);
+        // Flowing river: a custom ribbon follows the curve on the ground plane,
+        // so the water reads as a stream rather than a round pipe.
+        const riverMat = new THREE.MeshStandardMaterial({color:0x53bfc6,roughness:.22,metalness:.12,transparent:true,opacity:.94,side:THREE.DoubleSide});
+        const riverBedMat = mat(0x789c8b);
+        const riverPoints=[new THREE.Vector3(.95,.225,1.92),new THREE.Vector3(.78,.225,1.45),new THREE.Vector3(.48,.225,.92),new THREE.Vector3(.18,.225,.38),new THREE.Vector3(.02,.225,-.18),new THREE.Vector3(-.2,.225,-.72),new THREE.Vector3(-.5,.225,-1.25),new THREE.Vector3(-.72,.225,-1.82)];
+        const riverCurve=new THREE.CatmullRomCurve3(riverPoints);
+        function riverRibbon(curve:any,width:number,material:any,yOffset=0){
+          const vertices:number[]=[]; const indices:number[]=[]; const segments=100;
+          for(let i=0;i<=segments;i++){const t=i/segments,p=curve.getPoint(t),tan=curve.getTangent(t);const len=Math.hypot(tan.x,tan.z)||1;const nx=-tan.z/len,nz=tan.x/len;vertices.push(p.x+nx*width/2,p.y+yOffset,p.z+nz*width/2,p.x-nx*width/2,p.y+yOffset,p.z-nz*width/2);if(i<segments){const a=i*2;indices.push(a,a+1,a+2,a+1,a+3,a+2);}}
+          const geo=new THREE.BufferGeometry();geo.setAttribute("position",new THREE.Float32BufferAttribute(vertices,3));geo.setIndex(indices);geo.computeVertexNormals();return mesh(geo,material,0,0,0,false);
+        }
+        riverRibbon(riverCurve,.48,riverBedMat,-.035);
+        riverRibbon(riverCurve,.39,riverMat,.012);
+        // Gentle ripples are small flat highlights, kept above the water surface.
+        const rippleMat=new THREE.MeshStandardMaterial({color:0xc4f4e9,roughness:.2,transparent:true,opacity:.62});
+        for(let i=0;i<18;i++){const t=.08+i*.047,p=riverCurve.getPoint(t);const ripple=mesh(new THREE.BoxGeometry(.035,.006,.12+(i%3)*.025),rippleMat,p.x,.249,p.z,false);ripple.rotation.y=-Math.atan2(riverCurve.getTangent(t).z,riverCurve.getTangent(t).x);}
+        // Arched stone bridge crosses the stream. Each voussoir follows the arch,
+        // with a continuous deck and separate parapets to avoid inverted roof-like slabs.
+        const bridgeStone=mat(0xb9b4a2);const bridgeTop=mat(0xe5d9c2);const bridgeDark=mat(0x888d83);
+        const bridgeZ=.36, halfSpan=.66, archRise=.27, deckY=.34, blocks=15;
+        for(let i=0;i<blocks;i++){const t=(i+.5)/blocks,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise;const slope=Math.atan2(Math.cos(t*Math.PI)*archRise*Math.PI,2*halfSpan/blocks);const block=mesh(new THREE.BoxGeometry(2*halfSpan/blocks+.018,.105,.28),bridgeStone,x,y,bridgeZ,false);block.rotation.z=slope;}
+        // Paved walking surface sits on top of the arch stones.
+        const deck=mesh(new THREE.BoxGeometry(1.36,.07,.31),bridgeTop,0,deckY+archRise+.015,bridgeZ,false);
+        // Side rails follow the same arch profile, using short posts and capstones.
+        for(const side of [-1,1]){for(let i=0;i<=8;i++){const t=i/8,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise+.12;mesh(new THREE.BoxGeometry(.065,.13,.065),bridgeDark,x,y,bridgeZ+side*.145,false);}for(let i=0;i<10;i++){const t=(i+.5)/10,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise+.21;const rail=mesh(new THREE.BoxGeometry(.15,.045,.055),bridgeTop,x,y,bridgeZ+side*.145,false);rail.rotation.z=Math.atan2(Math.cos(t*Math.PI)*archRise*Math.PI,2*halfSpan/10);}}
+        tree(-1.75,-.55,1.0); tree(-2.05,.25,.83); tree(-1.28,-1.35,.75); tree(1.9,-.58,.92); tree(2.12,.18,.78); tree(1.35,-1.35,.72); tree(-.45,-1.72,.68);
+        house(1.22,-.55,.78,roof); house(-1.15,.78,.62,roofLilac);
         // Small garden beds, flowering borders, rocks, shrubs and lanterns fill the open spaces.
         const shrubMat=mat(0x85b77d);
         for(const p of [[-1.15,.82],[-1.42,.72],[1.18,.75],[1.38,.72],[-1.05,-.72],[1.12,-.82],[.18,-1.52]]){
@@ -193,8 +215,8 @@ export default function Island3D({ angle, zoom, onEnter }: Props) {
     const view = viewRef.current;
     if (!view) return;
     const radians = (angle * Math.PI) / 180;
-    const distance = 7.5 / zoom;
-    view.camera.position.set(Math.sin(radians) * distance, 3.2, Math.cos(radians) * distance);
+    const distance = 9.4 / zoom;
+    view.camera.position.set(Math.sin(radians) * distance, 4.0, Math.cos(radians) * distance);
     view.camera.lookAt(0, -0.25, 0);
   }, [angle, zoom]);
 

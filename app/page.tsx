@@ -17,6 +17,7 @@ export default function Home() {
   const [angle, setAngle] = useState(-8);
   const [zoom, setZoom] = useState(1);
   const [active, setActive] = useState<Place | null>(null);
+  const [exploredPlaces, setExploredPlaces] = useState<Place[]>([]);
   const [nickname, setNickname] = useState("");
   const [savedName, setSavedName] = useState("");
   const [nameOpen, setNameOpen] = useState(false);
@@ -34,6 +35,10 @@ export default function Home() {
   useEffect(() => {
     const saved = window.localStorage.getItem("domi_island_nickname");
     if (saved) { setSavedName(saved); setNickname(saved); setAccountNickname(saved); }
+    try {
+      const discoveries = JSON.parse(window.localStorage.getItem("domi_island_discoveries") || "[]");
+      if (Array.isArray(discoveries)) setExploredPlaces(discoveries.filter((place): place is Place => place === "square" || place === "cafe" || place === "cottage"));
+    } catch { /* Keep a fresh exploration book if local progress is unavailable. */ }
     fetch("/api/auth/session", { cache: "no-store" })
       .then(response => response.ok ? response.json() : null)
       .then(data => {
@@ -63,6 +68,13 @@ export default function Home() {
     setAngle(Math.max(-35, Math.min(35, startAngle.current + delta * 0.35)));
   }
   function pointerUp() { setDragging(false); }
+  function visitPlace(place: Place) {
+    const next = exploredPlaces.includes(place) ? exploredPlaces : [...exploredPlaces, place];
+    setExploredPlaces(next);
+    try { window.localStorage.setItem("domi_island_discoveries", JSON.stringify(next)); } catch { /* Exploration still works for this visit. */ }
+    setActive(place);
+  }
+
   function saveNickname() {
     const clean = nickname.trim().slice(0, 16);
     if (!clean) return;
@@ -152,9 +164,9 @@ export default function Home() {
           <div className="sparkle sparkle-one">✦</div><div className="sparkle sparkle-two">✧</div><div className="sparkle sparkle-three">·</div><div className="sparkle sparkle-four">✦</div>
           <div className="island-scene" style={{ transform: `translateY(8px) scale(${zoom}) rotateY(${angle}deg)` }}>
             <Island3D angle={angle} zoom={zoom} />
-            <button className="place-pin pin-square" onClick={() => setActive("square")}><span>✿</span><b>粉丝广场</b></button>
-            <button className="place-pin pin-cafe" onClick={() => setActive("cafe")}><span>☕</span><b>回忆咖啡馆</b></button>
-            <button className="place-pin pin-cottage" onClick={() => setActive("cottage")}><span>⌂</span><b>私人小屋</b></button>
+            <button className="place-pin pin-square" onClick={() => visitPlace("square")}><span>✿</span><b>粉丝广场</b></button>
+            <button className="place-pin pin-cafe" onClick={() => visitPlace("cafe")}><span>☕</span><b>回忆咖啡馆</b></button>
+            <button className="place-pin pin-cottage" onClick={() => visitPlace("cottage")}><span>⌂</span><b>私人小屋</b></button>
           </div>
           <div className="stage-hint"><span>↔</span> 拖动小岛旋转 <i /> 滚动缩放</div>
           <div className="zoom-tools"><button aria-label="缩小" onClick={() => setZoom(z => Math.max(.78,z-.1))}>−</button><span>{Math.round(zoom*100)}%</span><button aria-label="放大" onClick={() => setZoom(z => Math.min(1.22,z+.1))}>＋</button><button aria-label="重置视角" onClick={() => {setAngle(-8);setZoom(1)}}>↺</button></div>
@@ -166,15 +178,16 @@ export default function Home() {
           <h2>今天也要<br /><em>好好生活。</em></h2>
           <p>点选岛上的小屋，开始探索这个正在慢慢生长的世界。</p>
           <button className="explore-button" onClick={() => setActive("cottage")}>拜访我的小屋 <span>↗</span></button>
-          <div className="island-stats"><div><strong>03</strong><small>岛上地点</small></div><div><strong>∞</strong><small>未来可能</small></div></div>
+          <div className="island-stats"><div><strong>{exploredPlaces.length.toString().padStart(2, "0")}/03</strong><small>已探索地点</small></div><div><strong>{exploredPlaces.length === 3 ? "✦" : 3 - exploredPlaces.length}</strong><small>{exploredPlaces.length === 3 ? "图鉴已点亮" : "待发现角落"}</small></div></div>
         </aside>
       </section>
 
       <section className="destination-section">
         <div className="section-heading"><div><span className="eyebrow left-eyebrow">A PLACE FOR EVERY MEMORY</span><h2>岛上的小小目的地</h2></div><span className="section-caption">慢慢探索，不必着急。</span></div>
         <div className="destination-grid">
-          {(Object.keys(places) as Place[]).map((key, i) => <button className="destination-card" key={key} onClick={() => setActive(key)}><span className={`destination-icon icon-${key}`}>{places[key].icon}</span><span className="destination-copy"><small>0{i+1} / DISCOVER</small><strong>{places[key].title}</strong><span>{key==="square"?"在岛屿中央相遇":key==="cafe"?"收藏每一段珍贵回忆":"装饰属于自己的空间"}</span></span><span className="card-arrow">↗</span></button>)}
+          {(Object.keys(places) as Place[]).map((key, i) => <button className="destination-card" key={key} onClick={() => visitPlace(key)}><span className={`destination-icon icon-${key}`}>{places[key].icon}</span><span className="destination-copy"><small>0{i+1} / DISCOVER</small><strong>{places[key].title}</strong><span>{key==="square"?"在岛屿中央相遇":key==="cafe"?"收藏每一段珍贵回忆":"装饰属于自己的空间"}</span></span><span className="card-arrow">↗</span></button>)}
         </div>
+        <div className="discovery-book"><div className="discovery-book-heading"><div><span className="eyebrow left-eyebrow">YOUR ISLAND FIELD NOTES</span><h3>小岛探索图鉴</h3></div><span className="discovery-progress">{exploredPlaces.length} / 3 已点亮</span></div><div className="discovery-stamps">{(Object.keys(places) as Place[]).map((key) => <div key={key} className={"discovery-stamp " + (exploredPlaces.includes(key) ? "unlocked" : "")}><span className="stamp-icon">{exploredPlaces.includes(key) ? "✦" : "✧"}</span><span className={"stamp-place icon-" + key}>{places[key].icon}</span><strong>{places[key].title}</strong><small>{exploredPlaces.includes(key) ? "已探索 · 收入图鉴" : "等待你来发现"}</small></div>)}</div><p className="discovery-note">每次拜访一个地点，就会点亮一枚小小印章。探索进度保存在当前设备。</p></div>
       </section>
       <footer><span>DOMIHOOD ISLAND</span><span>Made of little moments <b>♡</b></span><span>VERSION 0.1 · THE BEGINNING</span></footer>
 

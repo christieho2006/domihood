@@ -68,29 +68,43 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
           mesh(new THREE.IcosahedronGeometry(0.18 * size, 1), leafA, x + 0.04 * size, 1.15 * size, z + 0.02 * size);
         }
         function house(x: number, z: number, scale: number, roofMat: any) {
-          const foundation = mesh(new THREE.BoxGeometry(.94 * scale,.12 * scale,.82 * scale), stone, x,.17 * scale,z);
-          foundation.rotation.y = -.12;
-          const base = mesh(new THREE.BoxGeometry(.82 * scale,.58 * scale,.7 * scale), cream,x,.48 * scale,z);
-          base.rotation.y = -.12;
-          const top = mesh(new THREE.ConeGeometry(.68 * scale,.52 * scale,4),roofMat,x,.99 * scale,z);
-          top.rotation.y = Math.PI / 4 - .12;
-          // Eaves, chimney and a tiny front porch make each cottage read as a complete building.
-          const eave = mesh(new THREE.BoxGeometry(.98 * scale,.07 * scale,.83 * scale),roofMat,x,.78 * scale,z);
-          eave.rotation.y = -.12;
-          mesh(new THREE.BoxGeometry(.12 * scale,.38 * scale,.13 * scale),trunk,x+.22 * scale,.98 * scale,z-.18 * scale);
-          mesh(new THREE.BoxGeometry(.16 * scale,.32 * scale,.045 * scale),woodDark,x+.06 * scale,.34 * scale,z+.36 * scale,false);
-          mesh(new THREE.CircleGeometry(.025 * scale,12),flowerCream,x+.1 * scale,.42 * scale,z+.388 * scale,false).rotation.y = 0;
-          for (const wx of [-.22,.27]) {
-            mesh(new THREE.BoxGeometry(.18 * scale,.17 * scale,.045 * scale),woodDark,x+wx*scale,.51 * scale,z+.365 * scale,false);
-            mesh(new THREE.BoxGeometry(.135 * scale,.125 * scale,.025 * scale),windowMat,x+wx*scale,.52 * scale,z+.39 * scale,false);
-            mesh(new THREE.BoxGeometry(.025 * scale,.17 * scale,.025 * scale),cream,x+wx*scale,.51 * scale,z+.408 * scale,false);
-            mesh(new THREE.BoxGeometry(.18 * scale,.025 * scale,.025 * scale),cream,x+wx*scale,.51 * scale,z+.408 * scale,false);
+          // One local-coordinate assembly keeps all facade parts aligned when the cottage turns.
+          const building = new THREE.Group();
+          building.position.set(x, 0, z);
+          building.rotation.y = -0.12;
+          world.add(building);
+          const part = (geometry:any, material:any, px:number, py:number, pz:number, cast=true) => {
+            const item = new THREE.Mesh(geometry, material);
+            item.position.set(px*scale, py*scale, pz*scale);
+            item.castShadow = cast; item.receiveShadow = true; building.add(item); return item;
+          };
+          const trimMat = mat(0xf9e5cb);
+          const glassMat = new THREE.MeshStandardMaterial({color:0x9fcfcf,roughness:.28,metalness:.04,emissive:0x345e59,emissiveIntensity:.18});
+          part(new THREE.BoxGeometry(.98,.12,.88),stone,0,.12,0);
+          part(new THREE.BoxGeometry(.82,.58,.70),cream,0,.46,0);
+          part(new THREE.BoxGeometry(1.00,.075,.88),roofMat,0,.765,0);
+          const roofMesh=part(new THREE.ConeGeometry(.70,.48,4),roofMat,0,1.035,0);
+          roofMesh.rotation.y=Math.PI/4;
+          // Chimney and cap are placed visibly above the rear roof plane.
+          part(new THREE.BoxGeometry(.12,.29,.12),woodDark,.24,1.10,-.18);
+          part(new THREE.BoxGeometry(.17,.045,.16),stone,.24,1.265,-.18);
+          // Tall door with a recessed panel and visible handle.
+          part(new THREE.BoxGeometry(.205,.39,.035),woodDark,.035,.365,.368);
+          part(new THREE.BoxGeometry(.17,.35,.018),wood,.035,.365,.391,false);
+          part(new THREE.SphereGeometry(.018,10,8),flowerCream,.095,.36,.407,false);
+          // Upright windows, with all frame/glass parts parallel to the facade.
+          for (const wx of [-.245,.275]) {
+            part(new THREE.BoxGeometry(.205,.205,.035),woodDark,wx,.535,.367,false);
+            part(new THREE.BoxGeometry(.16,.16,.018),glassMat,wx,.535,.389,false);
+            part(new THREE.BoxGeometry(.018,.16,.012),trimMat,wx,.535,.402,false);
+            part(new THREE.BoxGeometry(.16,.018,.012),trimMat,wx,.535,.402,false);
+            part(new THREE.BoxGeometry(.235,.028,.045),wood,wx,.415,.392,false);
           }
-          // Window boxes and flower boxes.
-          mesh(new THREE.BoxGeometry(.22 * scale,.055 * scale,.08 * scale),wood,x-.22 * scale,.405 * scale,z+.42 * scale,false);
-          for(let i=0;i<3;i++) mesh(new THREE.SphereGeometry(.035 * scale,8,6),i===1?flowerPink:leafB,x+(-.28+i*.06)*scale,.46 * scale,z+.45 * scale,false);
-          mesh(new THREE.BoxGeometry(.28 * scale,.055 * scale,.18 * scale),wood,x+.06 * scale,.2 * scale,z+.48 * scale);
-          for(let i=0;i<3;i++) mesh(new THREE.CylinderGeometry(.018*scale,.018*scale,.16*scale,6),trunk,x+(-.04+i*.1)*scale,.12*scale,z+.52*scale,false);
+          // Step and porch sit outside the front wall.
+          part(new THREE.BoxGeometry(.30,.055,.20),stone,.035,.17,.49);
+          part(new THREE.BoxGeometry(.34,.045,.24),wood,.035,.205,.53);
+          part(new THREE.BoxGeometry(.22,.045,.075),wood,-.245,.405,.43,false);
+          for(let i=0;i<3;i++) part(new THREE.SphereGeometry(.027,8,6),i===1?flowerPink:leafB,-.30+i*.055,.445,.455,false);
         }
         function flower(x:number,z:number,size:number,color:any) {
           mesh(new THREE.CylinderGeometry(.008*size,.012*size,.09*size,5),leafDeep,x,.27*size,z,false);
@@ -154,7 +168,7 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
         house(1.22,-.55,.78,roof); house(-1.15,.78,.62,roofLilac);
         // Small garden beds, flowering borders, rocks, shrubs and lanterns fill the open spaces.
         const shrubMat=mat(0x85b77d);
-        for(const p of [[-1.15,.82],[-1.42,.72],[1.18,.75],[1.38,.72],[-1.05,-.72],[1.12,-.82],[.18,-1.52]]){
+        for(const p of [[-2.05,.92],[-2.18,.68],[2.05,.98],[2.18,.72],[-1.85,-1.05],[1.92,-1.08],[-.15,-1.72]]){
           mesh(new THREE.SphereGeometry(.16,10,8),shrubMat,p[0],.29,p[1],false);
           mesh(new THREE.SphereGeometry(.11,10,8),leafB,p[0]+.09,.32,p[1]+.03,false);
         }
@@ -168,10 +182,11 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
         }
         // Low wooden fences frame the cottage gardens without enclosing the island.
         for(const side of [-1,1]) for(let i=0;i<4;i++){
-          const x=side*(1.42+i*.09);
-          mesh(new THREE.BoxGeometry(.07,.25,.07),wood,x,.32,-.82+i*.18,false);
+          const x=side*(1.65+i*.08);
+          mesh(new THREE.BoxGeometry(.055,.20,.055),wood,x,.30,-1.02+i*.16,false);
         }
-        for(const p of [[-.98,.95],[1.2,.32]]) lampPost(p[0],p[1]);
+        // Lamps stand on the outer paths, clear of house walls, shrubs and river.
+        for(const p of [[-2.25,-.72],[2.28,.62]]) lampPost(p[0],p[1]);
         // Keep the river as one continuous surface; remove the detached waterfall slab that intersected the terrain.
         for (let i = 0; i < 8; i++) {
           const a = i * Math.PI * 2 / 8 + 0.2;

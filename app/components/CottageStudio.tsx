@@ -41,21 +41,17 @@ function parseLayout(value: unknown): Layout | null {
   const parsed = value as Layout;
   if (!themes.some(theme => theme.id === parsed.theme) || !Array.isArray(parsed.furniture)) return null;
   const furniture = items.map(item => item.id).filter(id => parsed.furniture.includes(id));
-  const positions: Partial<Record<Furniture, Cell>> = { ...defaultPositions };
+  const positions: Partial<Record<Furniture, Cell>> = {};
   const used = new Set<string>();
   for (const id of furniture) {
     const candidate = parsed.positions?.[id];
-    if (isCell(candidate)) {
-      const key = candidate.col + ":" + candidate.row;
-      if (!used.has(key)) {
-        positions[id] = candidate;
-        used.add(key);
-        continue;
-      }
+    let chosen = isCell(candidate) && !used.has(candidate.col + ":" + candidate.row) ? candidate : null;
+    if (!chosen) {
+      chosen = Array.from({ length: 9 }, (_, index) => ({ col: index % 3, row: Math.floor(index / 3) }))
+        .find(cell => !used.has(cell.col + ":" + cell.row)) ?? defaultPositions[id];
     }
-    const fallback = defaultPositions[id];
-    const fallbackKey = fallback.col + ":" + fallback.row;
-    if (!used.has(fallbackKey)) used.add(fallbackKey);
+    positions[id] = chosen;
+    used.add(chosen.col + ":" + chosen.row);
   }
   return { theme: parsed.theme, furniture, positions };
 }

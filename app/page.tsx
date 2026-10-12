@@ -5,6 +5,7 @@ import Island3D from "./components/Island3D";
 import CottageStudio from "./components/CottageStudio";
 import MemoryCafe from "./components/MemoryCafe";
 import FanSquare from "./components/FanSquare";
+import IslandersDirectory from "./components/IslandersDirectory";
 
 type Place = "square" | "cafe" | "cottage";
 
@@ -18,6 +19,7 @@ export default function Home() {
   const [angle, setAngle] = useState(-8);
   const [zoom, setZoom] = useState(1);
   const [active, setActive] = useState<Place | null>(null);
+  const [islandersOpen, setIslandersOpen] = useState(false);
   const [exploredPlaces, setExploredPlaces] = useState<Place[]>([]);
   const [nickname, setNickname] = useState("");
   const [savedName, setSavedName] = useState("");
@@ -184,7 +186,7 @@ export default function Home() {
       </section>
 
       <section className="destination-section">
-        <div className="section-heading"><div><span className="eyebrow left-eyebrow">A PLACE FOR EVERY MEMORY</span><h2>岛上的小小目的地</h2></div><span className="section-caption">慢慢探索，不必着急。</span></div>
+        <div className="section-heading"><div><span className="eyebrow left-eyebrow">A PLACE FOR EVERY MEMORY</span><h2>岛上的小小目的地</h2></div><div className="destination-actions"><span className="section-caption">慢慢探索，不必着急。</span><button className="islanders-open-button" onClick={() => setIslandersOpen(true)}>岛民名册 <span>↗</span></button></div></div>
         <div className="destination-grid">
           {(Object.keys(places) as Place[]).map((key, i) => <button className="destination-card" key={key} onClick={() => visitPlace(key)}><span className={`destination-icon icon-${key}`}>{places[key].icon}</span><span className="destination-copy"><small>0{i+1} / DISCOVER</small><strong>{places[key].title}</strong><span>{key==="square"?"在岛屿中央相遇":key==="cafe"?"收藏每一段珍贵回忆":"装饰属于自己的空间"}</span></span><span className="card-arrow">↗</span></button>)}
         </div>
@@ -195,6 +197,7 @@ export default function Home() {
       {active === "cottage" && <CottageStudio onClose={() => setActive(null)} nickname={savedName || "岛屿访客"} />}
       {active === "cafe" && <MemoryCafe onClose={() => setActive(null)} />}
       {active === "square" && <FanSquare onClose={() => setActive(null)} />}
+      {islandersOpen && <IslandersDirectory onClose={() => setIslandersOpen(false)} />}
       {nameOpen && <div className="modal-backdrop" onClick={() => setNameOpen(false)}><section className="name-modal account-modal" onClick={e => e.stopPropagation()}><button className="modal-close" onClick={() => setNameOpen(false)} aria-label="关闭">×</button><div className="modal-icon">♡</div><div className="eyebrow left-eyebrow">WELCOME TO YOUR ISLAND</div>{accountUser ? <><h2>欢迎回来，{accountUser.nickname}</h2><p>你的岛民账号已登录。小屋布置可以保存到账号云端；更多岛屿功能正在逐步开放。</p><div className="account-status"><span /> 已登录账号 · {accountUser.nickname}</div><button className="primary-button" onClick={() => setNameOpen(false)}>继续探索 <span>↗</span></button><button className="secondary-account-button" onClick={() => void logoutAccount()} disabled={accountBusy}>{accountBusy ? "正在退出…" : "退出登录"}</button></> : <><h2>{accountMode === "register" ? "创建你的岛民账号" : accountMode === "guest" ? "先来小岛做客吧" : "欢迎回到小岛"}</h2><p>{accountMode === "guest" ? "访客昵称只保存在当前设备，不会同步到其他设备。" : "使用昵称和密码保存你的身份。昵称不需要填写邮箱。"}</p><div className="account-tabs" role="tablist" aria-label="账号方式"><button type="button" className={accountMode === "login" ? "active" : ""} onClick={() => {setAccountMode("login");setAccountError("");}}>登录</button><button type="button" className={accountMode === "register" ? "active" : ""} onClick={() => {setAccountMode("register");setAccountError("");}}>注册</button><button type="button" className={accountMode === "guest" ? "active" : ""} onClick={() => {setAccountMode("guest");setAccountError("");}}>访客体验</button></div>{accountMode === "guest" ? <><label htmlFor="nickname">岛民昵称</label><input id="nickname" value={nickname} maxLength={16} placeholder="输入一个喜欢的名字" onChange={e => setNickname(e.target.value)} onKeyDown={e => {if(e.key==="Enter")saveNickname()}} autoFocus/><div className="input-count">{nickname.trim().length}/16</div><button className="primary-button" onClick={saveNickname}>进入小岛 <span>↗</span></button></> : <form className="account-form" onSubmit={submitAccount}><label htmlFor="account-nickname">岛民昵称</label><input id="account-nickname" autoComplete="username" value={accountNickname} maxLength={16} placeholder="2–16 个字符" onChange={e => setAccountNickname(e.target.value)} required/><label htmlFor="account-password">密码</label><input id="account-password" type="password" autoComplete={accountMode === "register" ? "new-password" : "current-password"} value={accountPassword} minLength={accountMode === "register" ? 8 : 1} maxLength={72} placeholder={accountMode === "register" ? "至少 8 个字符" : "输入你的密码"} onChange={e => setAccountPassword(e.target.value)} required/><div className="account-hint">{accountMode === "register" ? "昵称 2–16 个字符 · 密码至少 8 位" : "请使用注册时设置的昵称与密码"}</div>{accountError && <div className="account-error" role="alert">{accountError}</div>}<button className="primary-button" type="submit" disabled={accountBusy}>{accountBusy ? "请稍候…" : accountMode === "register" ? "创建账号" : "登录小岛"} <span>↗</span></button></form>}{accountError && accountMode === "guest" && <div className="account-error" role="alert">{accountError}</div>}</>}</section></div>}
     </main>
   );

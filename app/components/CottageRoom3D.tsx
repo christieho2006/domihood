@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Furniture = "sofa" | "rug" | "plant" | "lamp" | "table" | "shelf" | "bed" | "picture";
 type Theme = "cream" | "blossom" | "mint";
@@ -13,12 +13,14 @@ const palette: Record<Theme, { wall: number; floor: number; trim: number; pink: 
 const pointFor = (col: number, row: number) => ({ x: (col - 1) * 1.05, z: (1 - row) * 1.05 });
 export default function CottageRoom3D({ theme, furniture, positions, selected, onSelect, onMove }: Props) {
  const canvasRef = useRef<HTMLCanvasElement>(null);
+ const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
  const viewRef = useRef<any>(null);
  const callbacks = useRef({ onSelect, onMove });
  const state = useRef({ positions, selected, furniture });
  callbacks.current = { onSelect, onMove }; state.current = { positions, selected, furniture };
  useEffect(() => {
   let dead = false; let frame = 0; let renderer: any; let cleanup = () => {};
+  setStatus("loading");
   async function start() {
    const canvas = canvasRef.current; if (!canvas) return;
    const canvasElement = canvas as HTMLCanvasElement;
@@ -114,12 +116,20 @@ export default function CottageRoom3D({ theme, furniture, positions, selected, o
     canvasElement.addEventListener("pointerdown",down);canvasElement.addEventListener("pointermove",move);canvasElement.addEventListener("pointerup",up);canvasElement.addEventListener("pointercancel",up);canvasElement.addEventListener("wheel",wheel,{passive:false});
     const resizeHandler=()=>resize();window.addEventListener("resize",resizeHandler);resize();
     const tick=()=>{if(dead)return;frame=requestAnimationFrame(tick);renderer.render(scene,camera);};frame=requestAnimationFrame(tick);
-    cleanup=()=>{window.removeEventListener("resize",resizeHandler);canvasElement.removeEventListener("pointerdown",down);canvasElement.removeEventListener("pointermove",move);canvasElement.removeEventListener("pointerup",up);canvasElement.removeEventListener("pointercancel",up);canvasElement.removeEventListener("wheel",wheel);};
+    cleanup=()=>{window.removeEventListener("resize",resizeHandler);canvasElement.removeEventListener("pointerdown",down);canvasElement.removeEventListener("pointermove",move);canvasElement.removeEventListener("pointerup",up);canvasElement.removeEventListener("pointercancel",up);canvasElement.removeEventListener("wheel",wheel);scene.traverse((object:any)=>{if(object.geometry)object.geometry.dispose();if(object.material){const materials=Array.isArray(object.material)?object.material:[object.material];materials.forEach((material:any)=>material.dispose());}});};
     viewRef.current={objects,position,highlight};
-   } catch(e){console.error("Could not build 3D cottage room",e);}
+    setStatus("ready");
+   } catch(e){console.error("Could not build 3D cottage room",e); if(!dead) setStatus("error");}
   }
   start(); return ()=>{dead=true;cancelAnimationFrame(frame);cleanup();renderer?.dispose();viewRef.current=null;};
  }, [theme, furniture.join("|")]);
  useEffect(()=>{const v=viewRef.current;if(!v)return;Object.keys(v.objects).forEach(id=>{const c=positions[id as Furniture]||{col:1,row:1};v.position(id,c.col,c.row);});v.highlight();},[positions,selected,furniture]);
- return <canvas ref={canvasRef} className="cottage-3d-canvas" aria-label="可拖动家具的三维私人小屋" role="img" />;
+ return <div className="cottage-3d-wrap">
+   <canvas ref={canvasRef} className="cottage-3d-canvas" aria-label="可拖动家具的三维私人小屋" role="img" />
+   {status !== "ready" && <div className={"cottage-3d-status " + (status === "error" ? "status-error" : "")} role="status">
+     <span>{status === "error" ? "✧" : "✦"}</span>
+     <strong>{status === "error" ? "小屋暂时没有打开" : "正在点亮你的小屋…"}</strong>
+     <small>{status === "error" ? "当前浏览器可能无法启动 3D 画面，请尝试更新浏览器或关闭省电模式。" : "正在准备家具与柔和的光线"}</small>
+   </div>}
+ </div>;
 }

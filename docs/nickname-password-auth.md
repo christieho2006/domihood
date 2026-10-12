@@ -1,28 +1,40 @@
-# DOMIHOOD 昵称 + 密码账号
+# DOMIHOOD 昵称 + 密码账号与小屋云端同步
 
 ## 已实现的应用端能力
 
 - 昵称注册、登录、退出和当前会话查询 API。
 - 密码使用 bcrypt 哈希保存，不保存明文密码。
-- 登录态放在 HttpOnly、SameSite=Lax Cookie 中，服务端签名并设置过期时间。
-- 账号表启用 RLS，不给浏览器角色开放直接读写权限。
+- 登录态使用 HttpOnly、SameSite=Lax Cookie，并由服务端签名、设置过期时间。
+- 账号表与小屋布局表启用 RLS，不向浏览器角色开放直接读写权限；服务端 API 使用服务器密钥访问。
 - 昵称长度为 2–16 个字符，支持中文、字母、数字、下划线和连字符；密码长度为 8–72 个字符。
-- 浏览器仍可使用访客模式；访客昵称只保存在当前设备。
+- 访客模式可用，访客昵称和访客小屋布局只保存在当前设备。
+- 小屋支持三种房间主题、家具添加/移除/摆放、碰撞检查与本地保存。
+- 登录状态下，小屋工作室会尝试读取该账号的云端布局；点击“保存我的小屋”会保存到本地，并在账号服务可用时写入该账号的云端布局。
 
-## 启用前必须完成的配置
+## 启用账号与云端同步前必须完成的配置
 
-1. 在 Supabase SQL Editor 依次执行 `supabase/migrations/202610120001_domi_accounts.sql` 与 `supabase/migrations/202610120002_domi_cottage_layouts.sql`。
-2. 在部署平台服务器端配置环境变量：
-   - `SUPABASE_URL`（或已有的 `NEXT_PUBLIC_SUPABASE_URL`）
-   - `SUPABASE_SERVICE_ROLE_KEY`（仅服务器端，绝不能使用 `NEXT_PUBLIC_` 前缀）
-   - `SESSION_SECRET`（至少 32 个随机字符，建议使用密码管理器生成）
-3. 确认 EdgeOne Pages 当前项目支持 Next.js Node.js Route Handlers / Node.js runtime，并将以上环境变量配置到需要部署的环境。
-4. 重新部署后验证注册、退出、登录、会话过期和错误提示。
+1. 在 Supabase SQL Editor 依次执行：
+   - `supabase/migrations/202610120001_domi_accounts.sql`
+   - `supabase/migrations/202610120002_domi_cottage_layouts.sql`
+2. 在 EdgeOne Pages 的服务器端环境变量中配置：
+   - `SUPABASE_URL`：Supabase 项目 URL。
+   - `SUPABASE_SERVICE_ROLE_KEY`：Supabase 服务端密钥；仅服务器端使用，绝不能加 `NEXT_PUBLIC_` 前缀。
+   - `SESSION_SECRET`：至少 32 个随机字符，建议使用密码管理器或安全随机数工具生成。
+3. 配置到实际需要部署的环境（Production / Preview），然后触发新部署。
+4. 确认 EdgeOne Pages 当前运行环境支持本项目使用的 Next.js Node.js Route Handlers / Node.js runtime。GitHub 构建成功本身并不能证明平台运行时兼容或环境变量已生效。
+5. 部署后按“注册 → 退出 → 登录 → 打开小屋 → 保存 → 刷新后检查”的顺序验证。
 
-## 安全注意事项
+## 小屋同步行为与数据说明
 
-- 不要把服务角色密钥或 SESSION_SECRET 写进代码仓库或发到聊天中。
-- 不要把昵称或 localStorage 当作已登录身份；只有通过服务端签名 Cookie 才算已登录。
+- 如果账号已有云端布局，打开小屋时会优先加载云端布局。
+- 如果账号还没有云端布局，当前设备上的本地布置会保留；点击“保存我的小屋”后才会创建该账号的云端布局。
+- 不会自动把旧访客的昵称或本地布局升级成账号数据。首次登录后请确认小屋布置，再主动保存。
+- 云端布局按已验证会话中的账号 ID 读写，不接受客户端传入的账号 ID 作为授权依据。
+- 访客模式不提供跨设备同步。
+
+## 安全与上线注意事项
+
+- 不要把服务角色密钥或 `SESSION_SECRET` 写进代码仓库、浏览器代码或聊天中。
+- 不要把昵称或 localStorage 当作已登录身份；只有服务端验证过的签名 Cookie 才代表登录状态。
 - 正式公开注册前，建议增加持久化速率限制 / 防滥用措施和密码重置流程。
-- 当前账号 API 不会自动把旧访客昵称升级为账号，也不会在注册时覆盖本地小屋布局。
-- 跨设备云端装修同步尚未接入；需要在认证配置验证后，再为每个账号建立独立布局记录和访问策略。
+- 本项目的 GitHub Actions 构建检查与 EdgeOne 实际部署是两回事；需在配置环境变量后进行真实部署和端到端验证。

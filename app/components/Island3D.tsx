@@ -52,6 +52,7 @@ export default function Island3D({ angle, zoom, onEnter }: Props) {
         const flowerCream = mat(0xffe5a7);
         const stone = mat(0xd8c9ae);
         const pathEdge = mat(0xb9a68c);
+        const wood = mat(0x9a765e);
         const woodDark = mat(0x795b4c);
         function tree(x: number, z: number, size: number) {
           const root = mesh(new THREE.CylinderGeometry(0.10 * size, 0.14 * size, 0.12 * size, 8), barkLight, x, 0.27 * size, z);

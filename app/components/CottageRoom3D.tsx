@@ -98,6 +98,7 @@ export default function CottageRoom3D({ theme, furniture, positions, selected, o
     let radius = camera.position.distanceTo(target);
     let theta = Math.atan2(camera.position.x - target.x, camera.position.z - target.z);
     let phi = Math.acos((camera.position.y - target.y) / radius);
+    const initialView = { radius, theta, phi };
     function updateCamera() {
       phi = Math.max(0.42, Math.min(1.32, phi));
       radius = Math.max(5.8, Math.min(12, radius));
@@ -119,7 +120,7 @@ export default function CottageRoom3D({ theme, furniture, positions, selected, o
     const resizeHandler=()=>resize();window.addEventListener("resize",resizeHandler);resize();
     const tick=()=>{if(dead)return;frame=requestAnimationFrame(tick);renderer.render(scene,camera);};frame=requestAnimationFrame(tick);
     cleanup=()=>{window.removeEventListener("resize",resizeHandler);canvasElement.removeEventListener("pointerdown",down);canvasElement.removeEventListener("pointermove",move);canvasElement.removeEventListener("pointerup",up);canvasElement.removeEventListener("pointercancel",up);canvasElement.removeEventListener("wheel",wheel);scene.traverse((object:any)=>{if(object.geometry)object.geometry.dispose();if(object.material){const materials=Array.isArray(object.material)?object.material:[object.material];materials.forEach((material:any)=>material.dispose());}});};
-    viewRef.current={objects,position,highlight};
+    viewRef.current={objects,position,highlight,zoom:(factor:number)=>{radius*=factor;updateCamera();},resetView:()=>{radius=initialView.radius;theta=initialView.theta;phi=initialView.phi;updateCamera();}};
     setStatus("ready");
    } catch(e){console.error("Could not build 3D cottage room",e); if(!dead) setStatus("error");}
   }
@@ -128,6 +129,11 @@ export default function CottageRoom3D({ theme, furniture, positions, selected, o
  useEffect(()=>{const v=viewRef.current;if(!v)return;Object.keys(v.objects).forEach(id=>{const c=positions[id as Furniture]||{col:1,row:1};v.position(id,c.col,c.row);});v.highlight();},[positions,selected,furniture]);
  return <div className="cottage-3d-wrap">
    <canvas ref={canvasRef} className="cottage-3d-canvas" aria-label="可拖动家具的三维私人小屋" role="img" />
+   {status === "ready" && <div className="cottage-view-tools" role="group" aria-label="房间视角控制">
+     <button type="button" onClick={() => viewRef.current?.zoom(1.12)} aria-label="放大房间">＋</button>
+     <button type="button" onClick={() => viewRef.current?.resetView()} aria-label="重置房间视角">↻</button>
+     <button type="button" onClick={() => viewRef.current?.zoom(.89)} aria-label="缩小房间">−</button>
+   </div>}
    {status !== "ready" && <div className={"cottage-3d-status " + (status === "error" ? "status-error" : "")} role="status">
      <span>{status === "error" ? "✧" : "✦"}</span>
      <strong>{status === "error" ? "小屋暂时没有打开" : "正在点亮你的小屋…"}</strong>

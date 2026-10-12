@@ -228,3 +228,55 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
 @media(max-width:700px){.discovery-book{margin-top:17px;padding:17px 12px 13px;border-radius:15px}.discovery-book-heading h3{font-size:18px}.discovery-progress{font-size:9px;padding:7px 9px}.discovery-stamps{gap:7px}.discovery-stamp{padding:13px 4px 11px;gap:6px}.stamp-place{width:37px;height:37px;font-size:18px}.discovery-stamp strong{font-size:12px}.discovery-stamp small{font-size:8px}.stamp-icon{right:6px;top:5px;font-size:11px}}
 
 .memory-sync-state{margin-top:12px;font-size:10px;letter-spacing:.35px;color:#8a9d8d;text-align:center}.memory-sync-state::before{content:"";display:inline-block;width:5px;height:5px;margin:0 7px 1px 0;border-radius:50%;background:#9bb99b}
+
+
+/* Fan square community */
+.square-backdrop{z-index:35;overflow-y:auto;align-items:start;padding:clamp(12px,3vh,30px) 14px}
+.square-modal{position:relative;width:min(100%,880px);margin:auto;background:#fbfaf4;border:1px solid #fff;border-radius:26px;box-shadow:0 28px 100px #34483f35;overflow:hidden;animation:modal-in .22s ease-out;max-height:calc(100dvh - 28px);overflow-y:auto}
+.square-hero{padding:30px 30px 24px;text-align:center;background:radial-gradient(ellipse at 50% 0,#f2e8dc 0,transparent 70%),linear-gradient(135deg,#f7f4eb,#f8e9e6 55%,#edf2e7)}
+.square-flower{font-size:34px;color:#d4a1a3;margin-bottom:12px}
+.square-hero h2{font:400 clamp(23px,4vw,32px) Georgia,"Songti SC",serif;color:#4e6755;margin:14px 0 9px}
+.square-hero p{font-size:12px;color:#91a094;line-height:1.9;margin:0 auto;max-width:480px}
+.square-hero-bottom{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+.square-hero-bottom span{font-size:10px;color:#8a9e8d;border:1px solid #dce5d8;background:#ffffff9c;border-radius:20px;padding:7px 11px}
+.square-content{padding:22px clamp(14px,4vw,32px) 28px}
+.square-compose{padding:20px;border-radius:18px;background:#fffefa;border:1px solid #e9eadf;box-shadow:0 8px 24px #637b5710}
+.square-compose-heading{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:13px}
+.square-compose-heading h3,.square-feed-heading h3{font:400 19px Georgia,"Songti SC",serif;color:#526b59;margin:7px 0 0}
+.square-count{font-size:10px;color:#a1aca0}
+.square-compose textarea{display:block;width:100%;resize:vertical;min-height:84px;padding:13px 14px;border:1px solid #e4e8dc;border-radius:12px;background:#fcfbf6;color:#536759;font-size:12px;line-height:1.8;outline:none}
+.square-compose textarea:focus,.square-comment-form input:focus{border-color:#a8c1a5;box-shadow:0 0 0 3px #dfeadd75}
+.square-compose-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:13px;flex-wrap:wrap}
+.square-mood-options{display:flex;gap:6px;flex-wrap:wrap}
+.square-mood-options button{border:1px solid #e6e8df;background:#fff;border-radius:18px;padding:7px 9px;font-size:10px;color:#849387}
+.square-mood-options button.selected{border-color:#c5d8c0;background:#edf4e9;color:#5f8063}
+.square-compose .primary-button{white-space:nowrap}
+.square-login-note{font-size:10px;line-height:1.8;color:#b58f8d;margin:12px 0 0}
+.square-notice{font-size:11px;color:#829782;padding:10px 13px;background:#f0f5ec;border-radius:10px;margin:12px 0}
+.square-feed-heading{display:flex;align-items:center;justify-content:space-between;margin:28px 0 14px}
+.square-feed-heading button{border:1px solid #e2e8dc;border-radius:18px;background:#fff;padding:7px 11px;font-size:10px;color:#7f9582}
+.square-feed{display:grid;gap:13px}
+.square-post{background:#fffefa;border:1px solid #e9eadf;border-radius:17px;padding:17px 18px;box-shadow:0 7px 20px #637b5709}
+.square-post-top{display:flex;align-items:center;gap:10px}
+.square-avatar{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,#f4e0df,#e6eddf);color:#a7797c;font:16px Georgia,serif}
+.square-author{display:grid;gap:4px;min-width:0}
+.square-author strong{font-size:12px;color:#526b59;font-weight:600}
+.square-author time{font-size:9px;color:#a5afa3}
+.square-post-mood{margin-left:auto;align-self:start;border-radius:15px;padding:6px 9px;font-size:9px;white-space:nowrap;background:#f0f4e9;color:#829c7d}
+.square-post-mood.mood-happy{background:#f9eee5;color:#c19370}.square-post-mood.mood-support{background:#f8e9eb;color:#bd858d}.square-post-mood.mood-daily{background:#efedf7;color:#9286b0}
+.square-post-content{font-size:12px;line-height:1.9;color:#63766a;white-space:pre-wrap;overflow-wrap:anywhere;margin:15px 0}
+.square-post-actions{display:flex;align-items:center;gap:16px;border-top:1px solid #f0f0e8;padding-top:11px;font-size:10px;color:#9ba79a}
+.square-post-actions button{border:0;background:transparent;color:#9ba79a;padding:0;font-size:10px}
+.square-post-actions button.liked{color:#cc8d95}.square-post-actions button:disabled{opacity:.55;cursor:not-allowed}
+.square-comments{margin-top:11px;padding:10px 12px;border-radius:10px;background:#f7f7f0;display:grid;gap:8px}
+.square-comments p{display:flex;gap:8px;align-items:start;margin:0;font-size:10px;line-height:1.7;overflow-wrap:anywhere}
+.square-comments strong{flex:0 0 auto;color:#7e987f;font-weight:600}.square-comments span{color:#758276}
+.square-comment-form{display:flex;gap:7px;margin-top:11px}
+.square-comment-form input{min-width:0;flex:1;border:1px solid #e7e9df;background:#fff;border-radius:20px;padding:9px 12px;font-size:10px;color:#526b59;outline:none}
+.square-comment-form button{border:0;border-radius:18px;background:#e7efe2;color:#668168;padding:0 13px;font-size:10px}
+.square-comment-form button:disabled{opacity:.5}
+.square-empty{padding:30px 15px;text-align:center;border:1px dashed #dfe5d8;border-radius:16px;color:#9ba89a;font-size:11px;line-height:1.9}
+.square-empty span{display:block;font-size:23px;color:#c9b1a4}.square-empty strong{display:block;color:#7c927e;font-weight:500;margin-top:6px}.square-empty p{margin:4px 0 0}
+.square-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #eeeee4;padding:15px 25px;color:#9aa699;font-size:10px}
+.square-footer .memory-done{white-space:nowrap}
+@media(max-width:600px){.square-hero{padding:27px 18px 22px}.square-content{padding:16px 12px 22px}.square-compose{padding:14px}.square-compose-bottom{align-items:stretch}.square-mood-options{width:100%}.square-compose-bottom>.primary-button{width:100%;justify-content:center}.square-post{padding:14px}.square-post-mood{font-size:8px;padding:5px 7px}.square-footer{padding:13px 15px;font-size:9px}}

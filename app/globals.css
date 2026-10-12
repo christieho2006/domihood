@@ -78,3 +78,38 @@ footer{max-width:1120px;margin:auto;padding:19px 26px 24px;border-top:1px solid 
 .cottage-footer{border-top:1px solid #e6e9df;padding:14px 2px 0;display:flex;align-items:center;justify-content:space-between;gap:12px}.cottage-footer>span{font-size:9px;color:#9ca99b}.cottage-footer>div{display:flex;align-items:center;gap:12px}.saved-note{color:#6e9871;font-size:10px}.cottage-reset{border:0;background:transparent;color:#98a495;font-size:10px;padding:8px 0}.cottage-save{width:auto;gap:20px;padding:12px 16px;border-radius:12px;white-space:nowrap}
 @media(max-width:620px){.cottage-modal{padding:18px;border-radius:21px;max-height:calc(100dvh - 20px)}.cottage-header h2{font-size:24px}.room-preview{height:220px}.cottage-controls{grid-template-columns:1fr;gap:18px;padding-top:17px}.theme-options{display:grid;grid-template-columns:1fr;gap:6px}.theme-option{padding:7px}.theme-swatch{width:27px;height:27px}.furniture-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.furniture-option{padding:8px 5px;align-items:center;text-align:center;gap:4px}.furniture-option>span{font-size:18px}.furniture-option b{font-size:8px;white-space:nowrap}.furniture-option i{font-size:7px}.cottage-footer{align-items:flex-start;flex-direction:column}.cottage-footer>div{width:100%;flex-wrap:wrap;justify-content:space-between;gap:8px}.cottage-save{margin-left:auto}.room-window{width:78px;height:84px}.room-wall-art{right:14%;width:42px;height:52px}.furniture-plant{right:5%}.furniture-sofa{left:24%;width:35%}.furniture-bed{left:26%;width:42%}}
 
+
+
+/* Cottage grid placement: positions snap to a gentle 3 × 3 room grid. */
+.room-grid-guides{position:absolute;inset:8% 4% 30%;z-index:1;pointer-events:none;opacity:.2;border:1px dashed #fff;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr)}
+.room-grid-guides i{border-right:1px dashed #fff;border-bottom:1px dashed #fff}
+.room-grid-guides i:nth-child(3n){border-right:0}
+.room-grid-guides i:nth-child(n+7){border-bottom:0}
+.room-object{cursor:pointer;transition:left .18s ease,bottom .18s ease,filter .18s ease,outline-color .18s ease;z-index:2}
+button.room-object{padding:0;border:0;font:inherit;color:inherit}
+button.furniture-picture,button.furniture-plant,button.furniture-lamp,button.furniture-bookshelf,button.furniture-bed,button.furniture-rug,button.furniture-sofa,button.furniture-table{background:transparent}
+.room-object-selected{outline:2px solid #fffdf0!important;outline-offset:4px;filter:drop-shadow(0 0 7px #fff9)!important;z-index:4!important}
+.room-object:hover{filter:drop-shadow(0 4px 6px #5f69552b)}
+.furniture-sofa{width:30%;height:22%}
+.furniture-sofa b{box-shadow:110px 0 #98785f}
+.furniture-table{width:19%;height:7%}
+.furniture-plant{width:18%}
+.furniture-plant span{font-size:clamp(27px,4vw,38px)}
+.furniture-lamp{width:30px;height:30%}
+.furniture-picture{z-index:2}
+.furniture-bookshelf{width:44px;height:67px}
+.furniture-bed{width:37%;height:24%}
+.furniture-rug{width:42%;height:19%}
+.placement-panel{display:grid;grid-template-columns:minmax(0,1fr) 112px;align-items:center;gap:14px;margin-top:12px;padding:12px;border:1px solid #e6e9df;border-radius:14px;background:#fff8}
+.placement-copy{display:flex;flex-direction:column;gap:5px;min-width:0}
+.placement-copy strong{font-size:11px;color:#526d58;font-weight:650}
+.placement-copy span{font-size:9px;color:#99a599;line-height:1.6}
+.placement-copy small{font-size:9px;color:#7f9e83;line-height:1.6}
+.placement-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:112px}
+.placement-grid button{aspect-ratio:1;border:1px solid #e1e8dc;border-radius:6px;background:#f8f8f0;color:#8ba68a;display:grid;place-items:center;padding:0;font-size:12px}
+.placement-grid button.cell-current{background:#dce9d5;border-color:#91b28d;color:#547b59;box-shadow:inset 0 0 0 1px #a9c8a0}
+.placement-grid button.cell-occupied:not(.cell-current){background:#f1eee5;color:#c1c7b9}
+.placement-grid button:hover{border-color:#8eb18b}
+.furniture-option.furniture-focused{border-color:#91b38e;box-shadow:0 0 0 2px #e1ebdc}
+.save-error{font-size:9px;color:#b76e67;max-width:190px;line-height:1.5}
+@media(max-width:620px){.placement-panel{grid-template-columns:minmax(0,1fr) 96px;gap:9px;padding:10px}.placement-grid{width:96px}.placement-copy span{font-size:8px}.placement-copy small{font-size:8px}.room-grid-guides{inset:8% 3% 30%}.furniture-bookshelf{width:35px;height:58px}.furniture-sofa{width:34%}.furniture-bed{width:38%}}

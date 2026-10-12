@@ -528,3 +528,13 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
  .explore-time-toggle{right:14px;top:calc(40% + 150px);font-size:9px;padding:8px 10px}
  .explore-hint{max-width:calc(100% - 24px);overflow:hidden}
 }
+
+/* Immersive mode deliberately reuses the exact homepage Three.js island canvas. */
+.explore-world-canvas{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,#e6efdf 0%,#cfe2e3 62%,#b6d0d0 100%)}
+.explore-world-canvas .island-3d-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;filter:drop-shadow(0 22px 24px #425e4c35)}
+.explore-world-canvas~.explore-vignette{pointer-events:none}
+.explore-actions{position:absolute;z-index:3;left:50%;bottom:28px;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;max-width:calc(100vw - 24px);padding:9px 12px;border:1px solid #ffffffaa;border-radius:24px;background:#fffdf0d9;box-shadow:0 10px 36px #456b6130;backdrop-filter:blur(14px)}
+.explore-actions button{border:0;border-radius:18px;padding:9px 13px;background:#e7efdf;color:#54735a;font-size:12px;white-space:nowrap;cursor:pointer}
+.explore-actions button:hover{background:#d4e4cd}
+.explore-actions span{font-size:12px;color:#718674;min-width:38px;text-align:center}
+@media(max-width:700px){.explore-actions{bottom:14px;gap:5px;padding:7px 8px}.explore-actions button{font-size:10px;padding:8px 9px}.explore-title small{display:none}.explore-hint{max-width:92vw;white-space:normal;text-align:center}}

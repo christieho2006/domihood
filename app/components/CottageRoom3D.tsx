@@ -63,6 +63,18 @@ export default function CottageRoom3D({ theme, furniture, positions, selected, o
     const grid = new T.GridHelper(3.15,3,0xffffff,0xffffff); grid.position.y=.012; (grid.material as any).transparent=true; (grid.material as any).opacity=.18; room.add(grid);
     const plane = new T.Plane(new T.Vector3(0,1,0),0), ray = new T.Raycaster(), pointer = new T.Vector2();
     let dragging: string | null = null;
+    let rotating = false;
+    let lastX = 0, lastY = 0;
+    const target = new T.Vector3(0, 0.65, 0);
+    let radius = camera.position.distanceTo(target);
+    let theta = Math.atan2(camera.position.x - target.x, camera.position.z - target.z);
+    let phi = Math.acos((camera.position.y - target.y) / radius);
+    function updateCamera() {
+      phi = Math.max(0.42, Math.min(1.32, phi));
+      radius = Math.max(5.8, Math.min(12, radius));
+      camera.position.set(target.x + radius * Math.sin(phi) * Math.sin(theta), target.y + radius * Math.cos(phi), target.z + radius * Math.sin(phi) * Math.cos(theta));
+      camera.lookAt(target);
+    }
     function position(id: string,col:number,row:number,y=.03){const q=pointFor(col,row);if(objects[id])objects[id].position.set(q.x,y,q.z);}
     Object.keys(objects).forEach(id=>{const c=state.current.positions[id as Furniture]||{col:1,row:1};position(id,c.col,c.row);});
     function highlight(){Object.entries(objects).forEach(([id,g]:any)=>{g.scale.setScalar(id===state.current.selected?1.035:1);g.traverse((o:any)=>{if(o.isMesh)o.material.emissiveIntensity=0;});});}
@@ -70,13 +82,14 @@ export default function CottageRoom3D({ theme, furniture, positions, selected, o
     function resize(){const r=canvasElement.getBoundingClientRect();renderer.setSize(Math.max(1,r.width),Math.max(1,r.height),false);camera.aspect=r.width/Math.max(1,r.height);camera.updateProjectionMatrix();}
     function setRay(e:PointerEvent){const r=canvasElement.getBoundingClientRect();pointer.x=(e.clientX-r.left)/r.width*2-1;pointer.y=-(e.clientY-r.top)/r.height*2+1;ray.setFromCamera(pointer,camera);}
     function findGroup(o:any):any{while(o&&o!==room&&!o.userData.furnitureId)o=o.parent;return o&&o!==room?o:null;}
-    function down(e:PointerEvent){setRay(e);const hit=ray.intersectObjects(Object.values(objects).flatMap((g:any)=>g.children),true)[0];if(!hit)return;const g=findGroup(hit.object);if(!g)return;dragging=g.userData.furnitureId;callbacks.current.onSelect(dragging as Furniture);canvasElement.setPointerCapture(e.pointerId);e.preventDefault();}
-    function move(e:PointerEvent){if(!dragging)return;setRay(e);const v=new T.Vector3();if(!ray.ray.intersectPlane(plane,v))return;const col=Math.max(0,Math.min(2,Math.round(v.x/1.05+1))),row=Math.max(0,Math.min(2,Math.round(1-v.z/1.05)));position(dragging,col,row,.06);}
-    function up(e:PointerEvent){if(!dragging)return;setRay(e);const v=new T.Vector3();if(ray.ray.intersectPlane(plane,v)){const col=Math.max(0,Math.min(2,Math.round(v.x/1.05+1))),row=Math.max(0,Math.min(2,Math.round(1-v.z/1.05)));const occupied=state.current.furniture.some((id)=>id!==dragging&&state.current.positions[id]?.col===col&&state.current.positions[id]?.row===row);if(occupied){const old=state.current.positions[dragging as Furniture]||{col:1,row:1};position(dragging,old.col,old.row);}else callbacks.current.onMove(dragging as Furniture,col,row);}dragging=null;}
-    canvasElement.addEventListener("pointerdown",down);canvasElement.addEventListener("pointermove",move);canvasElement.addEventListener("pointerup",up);canvasElement.addEventListener("pointercancel",up);
+    function down(e:PointerEvent){setRay(e);const hit=ray.intersectObjects(Object.values(objects).flatMap((g:any)=>g.children),true)[0];const g=hit?findGroup(hit.object):null;lastX=e.clientX;lastY=e.clientY;if(g){dragging=g.userData.furnitureId;callbacks.current.onSelect(dragging as Furniture);}else{rotating=true;}canvasElement.setPointerCapture(e.pointerId);e.preventDefault();}
+    function move(e:PointerEvent){if(dragging){setRay(e);const v=new T.Vector3();if(!ray.ray.intersectPlane(plane,v))return;const col=Math.max(0,Math.min(2,Math.round(v.x/1.05+1))),row=Math.max(0,Math.min(2,Math.round(1-v.z/1.05)));position(dragging,col,row,.06);return;}if(rotating){const dx=e.clientX-lastX,dy=e.clientY-lastY;theta-=dx*.008;phi+=dy*.006;lastX=e.clientX;lastY=e.clientY;updateCamera();}}
+    function up(e:PointerEvent){if(dragging){setRay(e);const v=new T.Vector3();if(ray.ray.intersectPlane(plane,v)){const col=Math.max(0,Math.min(2,Math.round(v.x/1.05+1))),row=Math.max(0,Math.min(2,Math.round(1-v.z/1.05)));const occupied=state.current.furniture.some((id)=>id!==dragging&&state.current.positions[id]?.col===col&&state.current.positions[id]?.row===row);if(occupied){const old=state.current.positions[dragging as Furniture]||{col:1,row:1};position(dragging,old.col,old.row);}else callbacks.current.onMove(dragging as Furniture,col,row);}dragging=null;}rotating=false;}
+    function wheel(e:WheelEvent){e.preventDefault();radius+=e.deltaY*.012;updateCamera();}
+    canvasElement.addEventListener("pointerdown",down);canvasElement.addEventListener("pointermove",move);canvasElement.addEventListener("pointerup",up);canvasElement.addEventListener("pointercancel",up);canvasElement.addEventListener("wheel",wheel,{passive:false});
     const resizeHandler=()=>resize();window.addEventListener("resize",resizeHandler);resize();
     const tick=()=>{if(dead)return;frame=requestAnimationFrame(tick);renderer.render(scene,camera);};frame=requestAnimationFrame(tick);
-    cleanup=()=>{window.removeEventListener("resize",resizeHandler);canvasElement.removeEventListener("pointerdown",down);canvasElement.removeEventListener("pointermove",move);canvasElement.removeEventListener("pointerup",up);canvasElement.removeEventListener("pointercancel",up);};
+    cleanup=()=>{window.removeEventListener("resize",resizeHandler);canvasElement.removeEventListener("pointerdown",down);canvasElement.removeEventListener("pointermove",move);canvasElement.removeEventListener("pointerup",up);canvasElement.removeEventListener("pointercancel",up);canvasElement.removeEventListener("wheel",wheel);};
     viewRef.current={objects,position,highlight};
    } catch(e){console.error("Could not build 3D cottage room",e);}
   }

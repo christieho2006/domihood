@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useState } from "react";
+import CottageRoom3D from "./CottageRoom3D";
 
 type Theme = "cream" | "blossom" | "mint";
 type Furniture = "sofa" | "rug" | "plant" | "lamp" | "table" | "shelf" | "bed" | "picture";
@@ -85,16 +86,6 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
     setSaveError(false);
   }
 
-  function furnitureStyle(id: Furniture): CSSProperties {
-    const cell = layout.positions?.[id] ?? defaultPositions[id];
-    return {
-      left: `${6 + cell.col * 29}%`,
-      bottom: `${5 + cell.row * 20}%`,
-      top: "auto",
-      right: "auto",
-    };
-  }
-
   function saveRoom() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...layout, positions: { ...defaultPositions, ...layout.positions } }));
@@ -124,20 +115,24 @@ export default function CottageStudio({ onClose, nickname }: { onClose: () => vo
           <button className="modal-close" onClick={onClose} aria-label="关闭小屋">×</button>
         </header>
         <div className={"room-preview room-" + layout.theme}>
-          <div className="room-window"><span>☀</span><i /><i /><i /></div>
-          <div className="room-wall-art">♡</div>
-          <div className="room-shelf"><i /><i /><i /><i /></div>
-          <div className="room-floor" />
-          <div className="room-grid-guides" aria-hidden="true">{Array.from({ length: 9 }, (_, index) => <i key={index} />)}</div>
-          {layout.furniture.includes("picture") && <button aria-label="选择墙上挂画" className={"furniture-picture room-object " + (selected === "picture" ? "room-object-selected" : "")} style={furnitureStyle("picture")} onClick={() => setSelected("picture")}>🌷</button>}
-          {layout.furniture.includes("plant") && <button aria-label="选择绿植盆栽" className={"furniture-plant room-object " + (selected === "plant" ? "room-object-selected" : "")} style={furnitureStyle("plant")} onClick={() => setSelected("plant")}><span>🪴</span><small>little garden</small></button>}
-          {layout.furniture.includes("lamp") && <button aria-label="选择暖光落地灯" className={"furniture-lamp room-object " + (selected === "lamp" ? "room-object-selected" : "")} style={furnitureStyle("lamp")} onClick={() => setSelected("lamp")}><i /><span /><b /></button>}
-          {layout.furniture.includes("shelf") && <button aria-label="选择回忆书架" className={"furniture-bookshelf room-object " + (selected === "shelf" ? "room-object-selected" : "")} style={furnitureStyle("shelf")} onClick={() => setSelected("shelf")}><span>📚</span><i /><i /><i /></button>}
-          {layout.furniture.includes("bed") && <button aria-label="选择软软小床" className={"furniture-bed room-object " + (selected === "bed" ? "room-object-selected" : "")} style={furnitureStyle("bed")} onClick={() => setSelected("bed")}><span>☁️</span><i /></button>}
-          {layout.furniture.includes("rug") && <button aria-label="选择花瓣地毯" className={"furniture-rug room-object " + (selected === "rug" ? "room-object-selected" : "")} style={furnitureStyle("rug")} onClick={() => setSelected("rug")} /> }
-          {layout.furniture.includes("sofa") && <button aria-label="选择云朵沙发" className={"furniture-sofa room-object " + (selected === "sofa" ? "room-object-selected" : "")} style={furnitureStyle("sofa")} onClick={() => setSelected("sofa")}><span /><i /><b /></button>}
-          {layout.furniture.includes("table") && <button aria-label="选择小圆茶几" className={"furniture-table room-object " + (selected === "table" ? "room-object-selected" : "")} style={furnitureStyle("table")} onClick={() => setSelected("table")}><span>🫖</span><i /></button>}
-          <div className="room-label"><span>ROOM 001</span><strong>{themes.find(t => t.id === layout.theme)?.name}</strong><small>{layout.furniture.length} 件家具已布置</small></div>
+          <CottageRoom3D
+            theme={layout.theme}
+            furniture={layout.furniture}
+            positions={{ ...defaultPositions, ...layout.positions }}
+            selected={selected}
+            onSelect={setSelected}
+            onMove={(id, col, row) => {
+              const occupied = items.some(item => item.id !== id && layout.furniture.includes(item.id) &&
+                (layout.positions?.[item.id] ?? defaultPositions[item.id]).col === col &&
+                (layout.positions?.[item.id] ?? defaultPositions[item.id]).row === row);
+              if (!occupied) {
+                setLayout(current => ({ ...current, positions: { ...defaultPositions, ...current.positions, [id]: { col, row } } }));
+                setSaved(false);
+                setSaveError(false);
+              }
+            }}
+          />
+          <div className="room-label"><span>3D ROOM 001</span><strong>{themes.find(t => t.id === layout.theme)?.name}</strong><small>拖动家具 · {layout.furniture.length} 件已布置</small></div>
           {!loaded && <div className="room-loading">正在打开小屋…</div>}
         </div>
         <div className="cottage-controls">

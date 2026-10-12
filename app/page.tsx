@@ -94,6 +94,14 @@ export default function Home() {
               </defs>
               <ellipse cx="380" cy="405" rx="260" ry="38" fill="#658caa" opacity=".16" filter="url(#soft)"/>
               <path d="M118 239 Q128 173 224 151 Q300 91 393 125 Q490 104 560 163 Q650 176 656 240 Q624 292 548 311 Q470 351 370 346 Q251 354 173 310 Q117 288 118 239Z" fill="url(#earth)"/>
+              <path d="M132 253 Q188 286 245 300 L224 329 Q183 316 151 289Z" fill="#9b746a" opacity=".9"/>
+              <path d="M245 300 Q311 319 371 318 L360 346 Q296 347 224 329Z" fill="#8d6b68" opacity=".92"/>
+              <path d="M371 318 Q447 317 508 291 L529 315 Q463 346 360 346Z" fill="#806571" opacity=".94"/>
+              <path d="M508 291 Q582 272 624 244 L640 258 Q602 294 529 315Z" fill="#916d70" opacity=".9"/>
+              <path d="M183 289 L198 301 L187 314 L173 301Z M269 313 L284 316 L275 334 L258 330Z M420 315 L438 311 L445 328 L426 336Z M548 288 L563 281 L571 294 L556 302Z" fill="#d2a18a" opacity=".72"/>
+              <path d="M203 299 Q214 311 222 329 M318 319 Q321 333 316 344 M470 306 Q469 326 460 338 M585 270 Q588 285 578 299" fill="none" stroke="#684f68" strokeWidth="3" strokeLinecap="round" opacity=".32"/>
+              <path d="M388 319 Q391 334 385 350 Q379 357 374 350 L376 322Z" fill="#9dd3d1" opacity=".9"/>
+              <path d="M397 316 Q403 333 399 344" fill="none" stroke="#e2f4e9" strokeWidth="3" strokeLinecap="round" opacity=".9"/>
               <path d="M126 235 Q151 188 230 166 Q299 113 393 143 Q480 120 551 174 Q628 187 646 236 Q614 279 538 297 Q456 329 372 326 Q259 337 180 297 Q133 278 126 235Z" fill="url(#grass)"/>
               <path d="M147 241 Q212 204 278 221 Q353 248 409 215 Q484 180 558 216 Q604 232 624 250 Q575 290 511 298 Q413 322 344 309 Q239 313 176 278Z" fill="#b9dc93" opacity=".85"/>
               <path d="M348 298 Q377 268 398 247 Q423 225 451 227 Q477 232 481 250 Q467 270 445 275 Q412 285 397 315Z" fill="#e8d4b2"/>

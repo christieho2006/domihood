@@ -89,22 +89,22 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
           part(new THREE.BoxGeometry(.13,.34,.13),woodDark,.24,1.245,-.18);
           part(new THREE.BoxGeometry(.18,.05,.17),stone,.24,1.44,-.18);
           // Tall door with a recessed panel and visible handle.
-          part(new THREE.BoxGeometry(.225,.48,.035),woodDark,.035,.405,.368);
-          part(new THREE.BoxGeometry(.19,.44,.018),wood,.035,.405,.391,false);
-          part(new THREE.SphereGeometry(.018,10,8),flowerCream,.105,.405,.407,false);
+          part(new THREE.BoxGeometry(.225,.48,.035),woodDark,.035,.405,.382);
+          part(new THREE.BoxGeometry(.19,.44,.018),wood,.035,.405,.405,false);
+          part(new THREE.SphereGeometry(.018,10,8),flowerCream,.105,.405,.421,false);
           // Upright windows, with all frame/glass parts parallel to the facade.
           for (const wx of [-.245,.275]) {
-            part(new THREE.BoxGeometry(.205,.205,.035),woodDark,wx,.535,.367,false);
-            part(new THREE.BoxGeometry(.16,.16,.018),glassMat,wx,.535,.389,false);
-            part(new THREE.BoxGeometry(.018,.16,.012),trimMat,wx,.535,.402,false);
-            part(new THREE.BoxGeometry(.16,.018,.012),trimMat,wx,.535,.402,false);
-            part(new THREE.BoxGeometry(.235,.028,.045),wood,wx,.415,.392,false);
+            part(new THREE.BoxGeometry(.205,.205,.035),woodDark,wx,.535,.382,false);
+            part(new THREE.BoxGeometry(.16,.16,.018),glassMat,wx,.535,.405,false);
+            part(new THREE.BoxGeometry(.018,.16,.012),trimMat,wx,.535,.418,false);
+            part(new THREE.BoxGeometry(.16,.018,.012),trimMat,wx,.535,.418,false);
+            part(new THREE.BoxGeometry(.235,.028,.045),wood,wx,.415,.414,false);
           }
           // Step and porch sit outside the front wall.
-          part(new THREE.BoxGeometry(.30,.055,.20),stone,.035,.17,.49);
-          part(new THREE.BoxGeometry(.34,.045,.24),wood,.035,.205,.53);
-          part(new THREE.BoxGeometry(.22,.045,.075),wood,-.245,.405,.43,false);
-          for(let i=0;i<3;i++) part(new THREE.SphereGeometry(.027,8,6),i===1?flowerPink:leafB,-.30+i*.055,.445,.455,false);
+          part(new THREE.BoxGeometry(.30,.055,.20),stone,.035,.17,.51);
+          part(new THREE.BoxGeometry(.34,.045,.24),wood,.035,.205,.55);
+          part(new THREE.BoxGeometry(.22,.045,.075),wood,-.245,.405,.445,false);
+          for(let i=0;i<3;i++) part(new THREE.SphereGeometry(.027,8,6),i===1?flowerPink:leafB,-.30+i*.055,.445,.47,false);
         }
         function flower(x:number,z:number,size:number,color:any) {
           mesh(new THREE.CylinderGeometry(.008*size,.012*size,.09*size,5),leafDeep,x,.27*size,z,false);
@@ -164,11 +164,11 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
         for(let i=0;i<blocks;i++){const t=(i+.5)/blocks,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise+.065;const tread=mesh(new THREE.BoxGeometry(2*halfSpan/blocks+.012,.035,.29),bridgeTop,x,y,bridgeZ,false);tread.rotation.z=Math.atan2(Math.cos(t*Math.PI)*archRise*Math.PI,2*halfSpan);}
         // Side rails follow the same arch profile, using short posts and capstones.
         for(const side of [-1,1]){for(let i=0;i<=8;i++){const t=i/8,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise+.12;mesh(new THREE.BoxGeometry(.065,.13,.065),bridgeDark,x,y,bridgeZ+side*.145,false);}for(let i=0;i<10;i++){const t=(i+.5)/10,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise+.21;const rail=mesh(new THREE.BoxGeometry(.15,.045,.055),bridgeTop,x,y,bridgeZ+side*.145,false);rail.rotation.z=Math.atan2(Math.cos(t*Math.PI)*archRise*Math.PI,2*halfSpan);}}
-        tree(-2.15,-.72,.92); tree(-2.25,-.05,.72); tree(-1.75,-1.48,.68); tree(2.08,-1.02,.78); tree(2.32,.08,.68); tree(1.62,-1.62,.62); tree(-.55,-2.0,.58);
+        tree(-2.38,-.82,.82); tree(-2.42,-.02,.68); tree(-1.92,-1.62,.60); tree(2.48,-1.15,.68); tree(2.55,.18,.60); tree(1.78,-1.82,.56); tree(-.55,-2.12,.52);
         house(1.22,-.55,.78,roof); house(-1.15,.78,.62,roofLilac);
         // Small garden beds, flowering borders, rocks, shrubs and lanterns fill the open spaces.
         const shrubMat=mat(0x85b77d);
-        for(const p of [[-2.2,1.12],[-2.42,.78],[2.18,1.08],[2.38,.78],[-1.95,-1.18],[1.95,-1.42],[-.05,-1.88]]){
+        for(const p of [[-2.45,1.20],[-2.55,.82],[2.45,1.20],[2.58,.82],[-2.08,-1.30],[2.05,-1.62],[-.05,-2.02]]){
           mesh(new THREE.SphereGeometry(.16,10,8),shrubMat,p[0],.29,p[1],false);
           mesh(new THREE.SphereGeometry(.11,10,8),leafB,p[0]+.09,.32,p[1]+.03,false);
         }
@@ -177,7 +177,7 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
           if(Math.abs(x)<.55 && z>-.35 && z<.75) continue;
           flower(x,z,.7+(i%3)*.18,i%2?flowerPink:flowerCream);
         }
-        for(const p of [[-2.35,-1.05],[2.38,-1.1],[-.85,1.45],[.25,-2.05],[1.78,.95]]){
+        for(const p of [[-2.55,-1.18],[2.58,-1.28],[-.85,1.58],[.25,-2.15],[1.92,1.18]]){
           const rock=mesh(new THREE.DodecahedronGeometry(.12,0),stone,p[0],.25,p[1],false); rock.scale.set(1,.55,.8);
         }
         // Low wooden fences frame the cottage gardens without enclosing the island.
@@ -186,7 +186,7 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
           mesh(new THREE.BoxGeometry(.055,.18,.055),wood,x,.29,-1.42+i*.14,false);
         }
         // Lamps stand on the outer paths, clear of house walls, shrubs and river.
-        for(const p of [[-2.48,-.62],[2.52,.42]]) lampPost(p[0],p[1]);
+        for(const p of [[-2.62,-.72],[2.68,.48]]) lampPost(p[0],p[1]);
         // Keep the river as one continuous surface; remove the detached waterfall slab that intersected the terrain.
         for (let i = 0; i < 8; i++) {
           const a = i * Math.PI * 2 / 8 + 0.2;

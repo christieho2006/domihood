@@ -25,7 +25,7 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
         const scene = new THREE.Scene();
         scene.background = null;
         const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
-        camera.position.set(0, 3.2, 8.8); camera.lookAt(0, -0.22, 0);
+        camera.position.set(0, 3.5, 9.8); camera.lookAt(0, -0.28, 0);
         renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "low-power" });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
         renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -81,24 +81,24 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
           const trimMat = mat(0xf9e5cb);
           const glassMat = new THREE.MeshStandardMaterial({color:0x9fcfcf,roughness:.28,metalness:.04,emissive:0x345e59,emissiveIntensity:.18});
           part(new THREE.BoxGeometry(.98,.12,.88),stone,0,.12,0);
-          part(new THREE.BoxGeometry(.82,.58,.70),cream,0,.46,0);
-          part(new THREE.BoxGeometry(1.00,.075,.88),roofMat,0,.765,0);
-          const roofMesh=part(new THREE.ConeGeometry(.70,.48,4),roofMat,0,1.035,0);
+          part(new THREE.BoxGeometry(.86,.82,.72),cream,0,.55,0);
+          part(new THREE.BoxGeometry(1.06,.085,.92),roofMat,0,1.00,0);
+          const roofMesh=part(new THREE.ConeGeometry(.76,.56,4),roofMat,0,1.31,0);
           roofMesh.rotation.y=Math.PI/4;
           // Chimney and cap are placed visibly above the rear roof plane.
-          part(new THREE.BoxGeometry(.13,.34,.13),woodDark,.24,1.245,-.18);
-          part(new THREE.BoxGeometry(.18,.05,.17),stone,.24,1.44,-.18);
+          part(new THREE.BoxGeometry(.13,.34,.13),woodDark,.24,1.46,-.18);
+          part(new THREE.BoxGeometry(.18,.05,.17),stone,.24,1.64,-.18);
           // Tall door with a recessed panel and visible handle.
-          part(new THREE.BoxGeometry(.225,.48,.035),woodDark,.035,.405,.382);
-          part(new THREE.BoxGeometry(.19,.44,.018),wood,.035,.405,.405,false);
-          part(new THREE.SphereGeometry(.018,10,8),flowerCream,.105,.405,.421,false);
+          part(new THREE.BoxGeometry(.225,.65,.035),woodDark,.035,.51,.397);
+          part(new THREE.BoxGeometry(.19,.61,.018),wood,.035,.51,.420,false);
+          part(new THREE.SphereGeometry(.018,10,8),flowerCream,.105,.51,.436,false);
           // Upright windows, with all frame/glass parts parallel to the facade.
           for (const wx of [-.245,.275]) {
-            part(new THREE.BoxGeometry(.205,.205,.035),woodDark,wx,.535,.382,false);
-            part(new THREE.BoxGeometry(.16,.16,.018),glassMat,wx,.535,.405,false);
-            part(new THREE.BoxGeometry(.018,.16,.012),trimMat,wx,.535,.418,false);
-            part(new THREE.BoxGeometry(.16,.018,.012),trimMat,wx,.535,.418,false);
-            part(new THREE.BoxGeometry(.235,.028,.045),wood,wx,.415,.414,false);
+            part(new THREE.BoxGeometry(.205,.24,.035),woodDark,wx,.64,.397,false);
+            part(new THREE.BoxGeometry(.16,.195,.018),glassMat,wx,.64,.420,false);
+            part(new THREE.BoxGeometry(.018,.195,.012),trimMat,wx,.64,.433,false);
+            part(new THREE.BoxGeometry(.16,.018,.012),trimMat,wx,.64,.433,false);
+            part(new THREE.BoxGeometry(.235,.028,.045),wood,wx,.505,.429,false);
           }
           // Step and porch sit outside the front wall.
           part(new THREE.BoxGeometry(.30,.055,.20),stone,.035,.17,.51);
@@ -117,15 +117,15 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
           mesh(new THREE.CylinderGeometry(.11,.11,.035,12),woodDark,x,.73,z);
         }
         // Floating island: stacked tapered strata make the underside visibly three-dimensional.
-        const top = mesh(new THREE.CylinderGeometry(3.05, 2.82, 0.36, 12, 1), grass, 0, 0.02, 0); top.scale.z = 0.84;
-        const shelf = mesh(new THREE.CylinderGeometry(2.82, 2.42, 0.48, 12, 1), earthC, 0, -0.34, 0); shelf.scale.z = 0.84;
-        const middle = mesh(new THREE.CylinderGeometry(2.42, 1.62, 0.75, 10, 1), earthA, 0, -0.88, 0); middle.scale.z = 0.84;
-        const tip = mesh(new THREE.ConeGeometry(1.65, 1.45, 10, 1), earthB, 0, -1.82, 0); tip.scale.z = 0.84;
+        const top = mesh(new THREE.CylinderGeometry(3.65, 3.38, 0.36, 12, 1), grass, 0, 0.02, 0); top.scale.z = 0.84;
+        const shelf = mesh(new THREE.CylinderGeometry(3.38, 2.92, 0.48, 12, 1), earthC, 0, -0.34, 0); shelf.scale.z = 0.84;
+        const middle = mesh(new THREE.CylinderGeometry(2.92, 1.92, 0.75, 10, 1), earthA, 0, -0.88, 0); middle.scale.z = 0.84;
+        const tip = mesh(new THREE.ConeGeometry(1.95, 1.45, 10, 1), earthB, 0, -1.82, 0); tip.scale.z = 0.84;
         // Rolling lawn patches create a richer, layered terrain instead of a flat green disc.
         const turf = mat(0xb8dc93);
         const turfLight = mat(0xd0e6a9);
         const turfDark = mat(0x91c17c);
-        const lawn = mesh(new THREE.CircleGeometry(2.42, 56), grassLight, -.1,.215,.02,false); lawn.rotation.x=-Math.PI/2;
+        const lawn = mesh(new THREE.CircleGeometry(2.95, 56), grassLight, -.1,.215,.02,false); lawn.rotation.x=-Math.PI/2;
         for (const patch of [[-.9,.25,.58,.42],[.8,.55,.62,.38],[-.3,-.9,.7,.38],[1.1,-.45,.42,.32]]) {
           const meadow=mesh(new THREE.CircleGeometry(patch[2] as number,24),patch[0] as number < 0 ? turf : turfLight,patch[0] as number,.221,patch[1] as number,false);
           meadow.rotation.x=-Math.PI/2; meadow.scale.y=patch[3] as number;
@@ -165,7 +165,7 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
         // Side rails follow the same arch profile, using short posts and capstones.
         for(const side of [-1,1]){for(let i=0;i<=8;i++){const t=i/8,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise+.12;mesh(new THREE.BoxGeometry(.065,.13,.065),bridgeDark,x,y,bridgeZ+side*.145,false);}for(let i=0;i<10;i++){const t=(i+.5)/10,x=-halfSpan+2*halfSpan*t,y=deckY+Math.sin(t*Math.PI)*archRise+.21;const rail=mesh(new THREE.BoxGeometry(.15,.045,.055),bridgeTop,x,y,bridgeZ+side*.145,false);rail.rotation.z=Math.atan2(Math.cos(t*Math.PI)*archRise*Math.PI,2*halfSpan);}}
         tree(-2.38,-.82,.82); tree(-2.42,-.02,.68); tree(-1.92,-1.62,.60); tree(2.48,-1.15,.68); tree(2.55,.18,.60); tree(1.78,-1.82,.56); tree(-.55,-2.12,.52);
-        house(1.22,-.55,.78,roof); house(-1.15,.78,.62,roofLilac);
+        house(1.22,-.55,1.02,roof); house(-1.15,.78,.88,roofLilac);
         // Small garden beds, flowering borders, rocks, shrubs and lanterns fill the open spaces.
         const shrubMat=mat(0x85b77d);
         for(const p of [[-2.45,1.20],[-2.55,.82],[2.45,1.20],[2.58,.82],[-2.08,-1.30],[2.05,-1.62],[-.05,-2.02]]){
@@ -226,7 +226,7 @@ export default function Island3D({ angle, zoom, onEnter, onAngleChange, freeRota
     const view = viewRef.current;
     if (!view) return;
     const radians = (angle * Math.PI) / 180;
-    const distance = 8.4 / zoom;
+    const distance = 9.5 / zoom;
     view.camera.position.set(Math.sin(radians) * distance, 4.0, Math.cos(radians) * distance);
     view.camera.lookAt(0, -0.25, 0);
   }, [angle, zoom]);

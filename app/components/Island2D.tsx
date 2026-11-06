@@ -361,6 +361,7 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRota
         <RegionPin x={790} y={580} n={14} label="果树乐园"/>
         <RegionPin x={650} y={625} n={15} label="气球台"/>
       </g>
+      </g>
       <path d={islandOutline} fill="none" stroke="#e8d8b8" strokeWidth="5" strokeDasharray="2 13" strokeLinecap="round" opacity=".7"/>
       <path d="M500 92l5 12 12 5-12 5-5 12-5-12-12-5 12-5Z M845 375l4 9 9 4-9 4-4 9-4-9-9-4 9-4Z M170 355l4 9 9 4-9 4-4 9-4-9-9-4 9-4Z" fill="#fff0c4" opacity=".85"/>
     </g>

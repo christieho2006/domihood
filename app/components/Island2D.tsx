@@ -164,7 +164,7 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRota
     <ellipse cx="500" cy="665" rx="380" ry="43" fill="#415c58" opacity=".2" filter="url(#dh-shadow)"/>
     <g transform={`translate(500 380) scale(${safeZoom}) rotate(${angle*.1}) translate(-500 -380)`}>
       {/* Floating island strata */}
-      <path d="M500 116 C632 116 757 166 829 252 C895 334 896 453 827 544 C750 642 633 681 500 684 C363 691 234 646 151 556 C77 476 76 356 131 254 C194 143 353 111 500 116Z" fill="url(#dh-cliff)" stroke="#766879" strokeWidth="8"/>
+      <path d="M494 102 C604 95 706 137 773 190 C852 216 894 289 884 369 C914 449 866 533 805 585 C747 665 632 720 505 713 C384 733 261 687 182 625 C94 580 52 491 81 399 C48 305 96 218 168 177 C238 111 365 91 494 102Z" fill="url(#dh-cliff)" stroke="#766879" strokeWidth="8"/>
       <path d="M133 442 C236 542 343 573 499 579 C650 587 766 542 870 438 L831 542 C750 642 633 681 500 684 C363 691 234 646 151 556Z" fill="#806d72" opacity=".62"/>
       <path d={islandOutline} fill="url(#dh-grass)" stroke="#718b72" strokeWidth="7"/>
       <g clipPath="url(#dh-top)">
@@ -239,29 +239,12 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRota
           <path d="M270 300Q300 260 340 282Q370 295 382 330" fill="none" stroke="#ead9b9" strokeWidth="17" strokeLinecap="round"/>
           <g transform="translate(315 278)"><path d="M-35 12L0-17 35 12V38H-35Z" fill="#e7c99f" stroke="#765d50" strokeWidth="2"/><path d="M-42 12L0-27 42 12" fill="#a77b6b" stroke="#765d50" strokeWidth="3"/><rect x="-8" y="19" width="16" height="19" fill="#80604f"/><circle cx="-21" cy="23" r="5" fill="#a6d3d2"/><circle cx="21" cy="23" r="5" fill="#a6d3d2"/></g>
         </g>
-        {/* A compact farm terrace on the western shelf. */}
+        {/* Dream lake with a quiet reflective surface. */}\n        <ellipse cx="655" cy="335" rx="67" ry="28" transform="rotate(-23 655 335)" fill="#78b8c2" stroke="#638e91" strokeWidth="4"/><ellipse cx="655" cy="335" rx="49" ry="16" transform="rotate(-23 655 335)" fill="#b5e1d9"/><path d="M620 340q16-8 31 0t31 0" fill="none" stroke="#e4f6e9" strokeWidth="3"/>\n        {/* A compact farm terrace on the western shelf. */}
         <g transform="translate(190 475)">
           <path d="M-48 8L0-12 51 7 1 28Z" fill="#a77e5f" stroke="#745a49" strokeWidth="3"/>
           <path d="M-38 7L0-7 40 8 M-28 15L8 1 M-12 21L25 7" stroke="#e2c79a" strokeWidth="4" strokeLinecap="round"/>
           {[-22,0,22].map(dx=><g key={dx} transform={`translate(${dx} 0)`}><path d="M0 7q-7-12-3-20 M0 7q8-13 8-20" fill="none" stroke="#78956d" strokeWidth="3"/><circle cx="-3" cy="-13" r="4" fill="#d7a2b2"/><circle cx="8" cy="-13" r="4" fill="#e7d28e"/></g>)}
         </g>
-        {/* The 15 numbered discovery areas correspond to the deployment legend. */}
-        <RegionPin x={265} y={210} n={1} label="主屋"/>
-        <RegionPin x={745} y={175} n={2} label="瀑布"/>
-        <RegionPin x={330} y={286} n={3} label="花园茶屋"/>
-        <RegionPin x={500} y={395} n={4} label="中央广场"/>
-        <RegionPin x={680} y={485} n={5} label="咖啡馆"/>
-        <RegionPin x={180} y={460} n={6} label="田园农场"/>
-        <RegionPin x={445} y={445} n={7} label="观景塔"/>
-        <RegionPin x={245} y={580} n={8} label="河畔码头"/>
-        <RegionPin x={155} y={300} n={9} label="神秘森林"/>
-        <RegionPin x={755} y={515} n={10} label="温泉庭院"/>
-        <RegionPin x={840} y={430} n={11} label="隐秘洞穴"/>
-        <RegionPin x={600} y={580} n={12} label="商业街"/>
-        <RegionPin x={650} y={330} n={13} label="梦幻湖泊"/>
-        <RegionPin x={790} y={580} n={14} label="果树乐园"/>
-        <RegionPin x={650} y={625} n={15} label="气球台"/>
-
         {/* Main house, north of the central plaza */}
         <Cottage x={493} y={246} scale={1.22} roof="#b67b68" wall="#f5e4c8" width={1.12}/>
         {/* Garden and planting beds on the west */}
@@ -315,7 +298,22 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRota
 
         {/* Lanterns placed at path junctions and bridgeheads */}
         <circle cx="390" cy="344" r="36" fill="url(#dh-glow)"/><circle cx="610" cy="458" r="34" fill="url(#dh-glow)"/>
-        <Lantern x={390} y={344}/><Lantern x={610} y={458}/><Lantern x={735} y={322}/><Lantern x={280} y={520}/><Lantern x={505} y={510}/>
+        <Lantern x={390} y={344}/><Lantern x={610} y={458}/><Lantern x={735} y={322}/><Lantern x={280} y={520}/><Lantern x={505} y={510}/>\n        {/* The 15 numbered discovery areas correspond to the deployment legend. */}
+        <RegionPin x={265} y={210} n={1} label="主屋"/>
+        <RegionPin x={745} y={175} n={2} label="瀑布"/>
+        <RegionPin x={330} y={286} n={3} label="花园茶屋"/>
+        <RegionPin x={500} y={395} n={4} label="中央广场"/>
+        <RegionPin x={680} y={485} n={5} label="咖啡馆"/>
+        <RegionPin x={180} y={460} n={6} label="田园农场"/>
+        <RegionPin x={445} y={445} n={7} label="观景塔"/>
+        <RegionPin x={245} y={580} n={8} label="河畔码头"/>
+        <RegionPin x={155} y={300} n={9} label="神秘森林"/>
+        <RegionPin x={755} y={515} n={10} label="温泉庭院"/>
+        <RegionPin x={840} y={430} n={11} label="隐秘洞穴"/>
+        <RegionPin x={600} y={580} n={12} label="商业街"/>
+        <RegionPin x={650} y={330} n={13} label="梦幻湖泊"/>
+        <RegionPin x={790} y={580} n={14} label="果树乐园"/>
+        <RegionPin x={650} y={625} n={15} label="气球台"/>
       </g>
       <path d={islandOutline} fill="none" stroke="#e8d8b8" strokeWidth="5" strokeDasharray="2 13" strokeLinecap="round" opacity=".7"/>
       <path d="M500 92l5 12 12 5-12 5-5 12-5-12-12-5 12-5Z M845 375l4 9 9 4-9 4-4 9-4-9-9-4 9-4Z M170 355l4 9 9 4-9 4-4 9-4-9-9-4 9-4Z" fill="#fff0c4" opacity=".85"/>

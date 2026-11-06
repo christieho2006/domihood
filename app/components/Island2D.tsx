@@ -102,7 +102,7 @@ const regions = [
   }
 ];
 
-export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRotate = false }: Props) {
+export default function Island2D({ angle, zoom, onEnter, onAngleChange, onRegionSelect, freeRotate = false }: Props) {
   const safeZoom = Math.max(.72, Math.min(1.7, zoom));
   return (
     <svg

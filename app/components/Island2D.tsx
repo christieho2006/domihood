@@ -4,8 +4,77 @@ import { useRef } from "react";
 
 type Props = { angle: number; zoom: number; onEnter?: () => void; onAngleChange?: (angle: number) => void; freeRotate?: boolean };
 
-const islandOutline = "M500 76 C626 76 756 132 832 226 C906 318 902 444 842 535 C779 630 651 686 503 690 C354 696 218 650 139 557 C65 470 66 342 126 239 C190 130 338 76 500 76Z";
+const islandOutline = "M494 64 C602 57 692 100 757 152 C839 177 883 251 873 333 C905 417 855 510 793 562 C738 642 627 700 506 693 C391 714 271 665 194 607 C107 565 66 479 94 391 C62 301 108 214 178 164 C244 91 367 56 494 64Z";
 
+
+function Pagoda({x,y,scale=1}:{x:number;y:number;scale?:number}) {
+ return <g transform={`translate(${x} ${y}) scale(${scale})`}>
+  <ellipse cy="36" rx="42" ry="11" fill="#344d54" opacity=".25"/>
+  <path d="M-26 17H26L20 32H-20Z" fill="#8d9a91" stroke="#625e63" strokeWidth="2"/>
+  <path d="M-19 0H19V18H-19Z" fill="#d9b58c" stroke="#70594d" strokeWidth="2"/>
+  <path d="M-31 1L0-17 31 1Q0 8-31 1Z" fill="#344b58" stroke="#725b50" strokeWidth="2"/>
+  <path d="M-25-2L0-19 25-2" fill="none" stroke="#b38b67" strokeWidth="3"/>
+  <path d="M0-18V-33" stroke="#d9b46e" strokeWidth="3"/><path d="M0-36l4 7-4 7-4-7Z" fill="#ffe5a4"/>
+  <rect x="-4" y="5" width="8" height="13" rx="3" fill="#6f5147"/>
+ </g>
+}
+function Waterfall({x,y}:{x:number;y:number}) {
+ return <g transform={`translate(${x} ${y})`}>
+  <path d="M-48-4Q-31-28-13-12Q7-33 28-9Q48-4 50 13L36 26H-43Z" fill="#697c8d" stroke="#596c77" strokeWidth="3"/>
+  <path d="M-14-8Q-9 17-18 43Q-4 52 8 42Q3 17 12-8Z" fill="#a6dce0" opacity=".95"/>
+  <path d="M12-8Q22 15 16 35Q28 42 36 31Q28 12 32-8Z" fill="#d1f0e9" opacity=".9"/>
+  <ellipse cx="8" cy="48" rx="43" ry="12" fill="#77c1c7" opacity=".8"/>
+  <path d="M-24 48q12-8 22 0t22 0t22 0" fill="none" stroke="#e5f6e9" strokeWidth="3"/>
+ </g>
+}
+function Dock({x,y}:{x:number;y:number}) {
+ return <g transform={`translate(${x} ${y})`}>
+  <path d="M-48-5L20-27 50-7-19 17Z" fill="#9b765c" stroke="#6f574a" strokeWidth="3"/>
+  <path d="M-37-3L-11 11 M-13-11L13 3 M12-19L38-5" stroke="#d6b18a" strokeWidth="3"/>
+  <path d="M-33 12v12 M25-2v12" stroke="#6d5748" strokeWidth="4"/>
+ </g>
+}
+function HotSpring({x,y}:{x:number;y:number}) {
+ return <g transform={`translate(${x} ${y})`}>
+  <ellipse cy="10" rx="48" ry="19" fill="#7a9d9a" stroke="#6d8179" strokeWidth="3"/>
+  <ellipse cy="5" rx="35" ry="12" fill="#a8d8d1"/>
+  <path d="M-18-7q-10-13 0-23 M2-8q-9-15 2-27 M20-7q-8-12 2-22" fill="none" stroke="#f2eee0" strokeWidth="3" strokeLinecap="round" opacity=".85"/>
+  <path d="M-29 5q13-8 26 0t26 0" fill="none" stroke="#e6f4e8" strokeWidth="2"/>
+ </g>
+}
+function Cave({x,y}:{x:number;y:number}) {
+ return <g transform={`translate(${x} ${y})`}>
+  <path d="M-45 22Q-50-12-25-28Q-2-48 23-26Q48-9 43 22Z" fill="#77808b" stroke="#565f6b" strokeWidth="3"/>
+  <path d="M-25 22Q-29-3-10-17Q7-28 23-10Q34 3 27 22Z" fill="#344653"/>
+  <path d="M-9 20Q-5 5 6 2Q16 9 16 20" fill="#e6ba79" opacity=".7"/>
+  <circle cx="-29" cy="-14" r="5" fill="#b8c2c6"/><circle cx="30" cy="-8" r="4" fill="#b8c2c6"/>
+ </g>
+}
+function Orchard({x,y}:{x:number;y:number}) {
+ return <g transform={`translate(${x} ${y})`}>
+  {[-25,0,25].map((dx,i)=><g key={dx} transform={`translate(${dx} ${i%2?4:0})`}>
+   <path d="M0 15V-8" stroke="#89684e" strokeWidth="5"/>
+   <circle cy="-17" r="17" fill={i===1?"#91aa79":"#829d70"}/>
+   <circle cx="-7" cy="-20" r="4" fill="#d97869"/><circle cx="8" cy="-12" r="4" fill="#d97869"/>
+  </g>)}
+ </g>
+}
+function Balloon({x,y}:{x:number;y:number}) {
+ return <g transform={`translate(${x} ${y})`}>
+  <path d="M0-52C-29-52-35-23-17-7L0 5 17-7C35-23 29-52 0-52Z" fill="#d7a0b3" stroke="#795f65" strokeWidth="2"/>
+  <path d="M0-48Q-17-27 0-8Q17-27 0-48Z" fill="#f1c3c9" opacity=".75"/>
+  <path d="M-10-5L-7 12 M10-5L7 12" stroke="#80634f" strokeWidth="2"/>
+  <path d="M-9 12H9L7 23H-7Z" fill="#a77d59" stroke="#735847" strokeWidth="2"/>
+ </g>
+}
+function RegionPin({x,y,n,label}:{x:number;y:number;n:number;label:string}) {
+ return <g transform={`translate(${x} ${y})`}>
+  <circle cy="2" r="13" fill="#263c52" opacity=".2"/>
+  <circle r="12" fill="#f6e8c9" stroke="#8c765e" strokeWidth="2"/>
+  <text y="4" textAnchor="middle" fontSize="12" fontWeight="700" fill="#5e4c40">{n}</text>
+  <text x="16" y="4" fontSize="10" fontWeight="600" fill="#f8e9cf" stroke="#43556a" strokeWidth="2.5" paintOrder="stroke">{label}</text>
+ </g>
+}
 function Tree({ x, y, scale = 1, color = "sage" }: { x: number; y: number; scale?: number; color?: "sage" | "lavender" | "blossom" }) {
   const palette = color === "lavender" ? ["#7183b1", "#8798c5", "#aab4d8", "#c1c8e3"] : color === "blossom" ? ["#b97f9c", "#d095ad", "#e4b6c4", "#f0ced0"] : ["#66896f", "#7fa17a", "#9bb786", "#b9c998"];
   return <g transform={`translate(${x} ${y}) scale(${scale})`}>
@@ -156,6 +225,42 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRota
           <rect x="-31" y="-11" width="62" height="22" rx="3" fill="#e6d4b3" stroke="#a78a6e" strokeWidth="2"/>
           <path d="M-33-17H33 M-33 17H33" stroke="#85664f" strokeWidth="4" strokeLinecap="round"/>
         </g>
+
+        {/* New landmarks from the 15-part island deployment plan. */}
+        <Waterfall x={725} y={205}/>
+        <Pagoda x={445} y={455} scale={1.05}/>
+        <Dock x={245} y={580}/>
+        <HotSpring x={755} y={515}/>
+        <Cave x={840} y={430}/>
+        <Orchard x={790} y={580}/>
+        <Balloon x={650} y={625}/>
+        <g opacity=".9">
+          <path d="M270 300Q300 260 340 282Q370 295 382 330" fill="none" stroke="#c3a47e" strokeWidth="24" strokeLinecap="round"/>
+          <path d="M270 300Q300 260 340 282Q370 295 382 330" fill="none" stroke="#ead9b9" strokeWidth="17" strokeLinecap="round"/>
+          <g transform="translate(315 278)"><path d="M-35 12L0-17 35 12V38H-35Z" fill="#e7c99f" stroke="#765d50" strokeWidth="2"/><path d="M-42 12L0-27 42 12" fill="#a77b6b" stroke="#765d50" strokeWidth="3"/><rect x="-8" y="19" width="16" height="19" fill="#80604f"/><circle cx="-21" cy="23" r="5" fill="#a6d3d2"/><circle cx="21" cy="23" r="5" fill="#a6d3d2"/></g>
+        </g>
+        {/* A compact farm terrace on the western shelf. */}
+        <g transform="translate(190 475)">
+          <path d="M-48 8L0-12 51 7 1 28Z" fill="#a77e5f" stroke="#745a49" strokeWidth="3"/>
+          <path d="M-38 7L0-7 40 8 M-28 15L8 1 M-12 21L25 7" stroke="#e2c79a" strokeWidth="4" strokeLinecap="round"/>
+          {[-22,0,22].map(dx=><g key={dx} transform={`translate(${dx} 0)`}><path d="M0 7q-7-12-3-20 M0 7q8-13 8-20" fill="none" stroke="#78956d" strokeWidth="3"/><circle cx="-3" cy="-13" r="4" fill="#d7a2b2"/><circle cx="8" cy="-13" r="4" fill="#e7d28e"/></g>)}
+        </g>
+        {/* The 15 numbered discovery areas correspond to the deployment legend. */}
+        <RegionPin x={265} y={210} n={1} label="主屋"/>
+        <RegionPin x={745} y={175} n={2} label="瀑布"/>
+        <RegionPin x={330} y={286} n={3} label="花园茶屋"/>
+        <RegionPin x={500} y={395} n={4} label="中央广场"/>
+        <RegionPin x={680} y={485} n={5} label="咖啡馆"/>
+        <RegionPin x={180} y={460} n={6} label="田园农场"/>
+        <RegionPin x={445} y={445} n={7} label="观景塔"/>
+        <RegionPin x={245} y={580} n={8} label="河畔码头"/>
+        <RegionPin x={155} y={300} n={9} label="神秘森林"/>
+        <RegionPin x={755} y={515} n={10} label="温泉庭院"/>
+        <RegionPin x={840} y={430} n={11} label="隐秘洞穴"/>
+        <RegionPin x={600} y={580} n={12} label="商业街"/>
+        <RegionPin x={650} y={330} n={13} label="梦幻湖泊"/>
+        <RegionPin x={790} y={580} n={14} label="果树乐园"/>
+        <RegionPin x={650} y={625} n={15} label="气球台"/>
 
         {/* Main house, north of the central plaza */}
         <Cottage x={493} y={246} scale={1.22} roof="#b67b68" wall="#f5e4c8" width={1.12}/>

@@ -58,7 +58,6 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRota
         ))}
         <path d="M600 105C820 105 1020 205 1060 380s-35 295-160 370q-145 80-300 45Q420 820 250 720 105 620 120 435 120 255 285 165 420 95 600 105Z" fill="none" stroke="#e5d0a8" strokeWidth="5" strokeDasharray="2 15" strokeLinecap="round" opacity=".65" />
       </g>
-      <rect x="0" y="0" width="1200" height="900" fill="transparent" onClick={() => onEnter?.()} />
     </svg>
   );
 }

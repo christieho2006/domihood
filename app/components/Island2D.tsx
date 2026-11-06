@@ -72,7 +72,7 @@ function RegionPin({x,y,n,label}:{x:number;y:number;n:number;label:string}) {
   <circle cy="2" r="13" fill="#263c52" opacity=".2"/>
   <circle r="12" fill="#f6e8c9" stroke="#8c765e" strokeWidth="2"/>
   <text y="4" textAnchor="middle" fontSize="12" fontWeight="700" fill="#5e4c40">{n}</text>
-  <text x="16" y="4" fontSize="10" fontWeight="600" fill="#f8e9cf" stroke="#43556a" strokeWidth="2.5" paintOrder="stroke">{label}</text>
+
  </g>
 }
 function Tree({ x, y, scale = 1, color = "sage" }: { x: number; y: number; scale?: number; color?: "sage" | "lavender" | "blossom" }) {
@@ -288,6 +288,49 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRota
         <Tree x={390} y={610} scale={.8} color="lavender"/>
         <Tree x={575} y={590} scale={.72} color="blossom"/>
         <Tree x={720} y={590} scale={.82} color="lavender"/>
+
+        {/* Dense hand-painted woodland masses: grouped around the island rim, leaving paths and entrances readable. */}
+        <g>
+          <Tree x={115} y={360} scale={.72} color="lavender"/><Tree x={205} y={235} scale={.66} color="blossom"/>
+          <Tree x={300} y={145} scale={.62} color="lavender"/><Tree x={465} y={132} scale={.58} color="blossom"/>
+          <Tree x={725} y={150} scale={.68}/><Tree x={865} y={285} scale={.68} color="lavender"/>
+          <Tree x={865} y={465} scale={.7} color="blossom"/><Tree x={750} y={625} scale={.62} color="blossom"/>
+          <Tree x={485} y={650} scale={.62}/><Tree x={290} y={630} scale={.64} color="lavender"/>
+        </g>
+        <g>
+          {[
+            [130,420,"#7896aa"],[185,315,"#9a8ab8"],[270,205,"#8179a8"],[355,170,"#789675"],
+            [575,145,"#657f9c"],[790,240,"#9a8ab8"],[850,390,"#7896aa"],[830,555,"#789675"],
+            [690,620,"#9a8ab8"],[535,625,"#657f9c"],[365,625,"#9a8ab8"],[205,560,"#789675"]
+          ].map(([x,y,color],i)=><g key={i} transform={\`translate(\${x} \${y})\`}>
+            <ellipse cy="7" rx="34" ry="10" fill="#314c49" opacity=".2"/>
+            <path d="M-31 5q-7-15 7-23q9-17 23-6q12-18 25-4q17 1 15 18q10 17-8 20Z" fill={String(color)} stroke="#536e63" strokeWidth="2"/>
+            <circle cx="-16" cy="-11" r="13" fill={String(color)} opacity=".85"/><circle cx="4" cy="-18" r="15" fill={String(color)} opacity=".72"/><circle cx="22" cy="-8" r="12" fill={String(color)} opacity=".9"/>
+            <path d="M-19-15q8-7 14-3 M1-23q8-6 14-1 M16-11q6-5 10-2" fill="none" stroke="#d5d5c0" strokeWidth="3" strokeLinecap="round" opacity=".7"/>
+          </g>)}
+        </g>
+        {/* Small stone outcrops define the island edge and the riverbanks. */}
+        <g fill="#87939a" stroke="#5f7276" strokeWidth="2">
+          <path d="M92 490l-8-15 12-16 17 4 10 19-13 12Z"/><path d="M158 603l-7-13 11-15 18 4 8 17-15 12Z"/>
+          <path d="M327 671l-7-12 10-13 17 4 8 15-15 10Z"/><path d="M608 690l-9-14 13-17 19 5 9 17-17 12Z"/>
+          <path d="M813 625l-8-13 11-16 17 4 8 16-15 12Z"/><path d="M871 359l-7-12 9-13 15 4 7 13-13 10Z"/>
+        </g>
+        <g fill="none" stroke="#c3c9c2" strokeWidth="3" strokeLinecap="round" opacity=".85">
+          <path d="M96 475l7-8 6 2 M163 588l8-7 8 3 M333 655l8-5 6 3 M613 674l8-7 8 3 M817 609l7-6 8 3"/>
+        </g>
+        {/* Wildflower carpets, deliberately placed in open pockets between paths. */}
+        <g>
+          {[[230,365],[300,390],[390,285],[690,285],[760,395],[730,555],[520,575],[330,575]].map(([x,y],i)=><g key={i} transform={\`translate(\${x} \${y})\`}>
+            {Array.from({length:7},(_,j)=><g key={j} transform={\`translate(\${(j-3)*10} \${j%2?-5:0})\`}>
+              <path d="M0 7q-2-9 0-15" stroke="#6f956d" strokeWidth="2" fill="none"/>
+              <circle cy="-12" r="5" fill={i%3===0?"#d99eb4":i%3===1?"#92a9d2":"#9585c4"}/>
+              <circle cx="-4" cy="-9" r="4" fill={i%3===0?"#d99eb4":i%3===1?"#92a9d2":"#9585c4"}/>
+              <circle cx="4" cy="-9" r="4" fill={i%3===0?"#d99eb4":i%3===1?"#92a9d2":"#9585c4"}/>
+              <circle cy="-9" r="2" fill="#f4d99c"/>
+            </g>)}
+          </g>)}
+        </g>
+
 
         {/* Flower borders are grouped along paths and garden edges */}
         <FlowerBed x={345} y={325} tone="pink"/>

@@ -562,3 +562,25 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
   .island-stage{height:365px;min-height:0;width:100%}
   .island-scene{inset:3% 0 9%}
 }
+
+
+/* Homepage island takeover: the illustrated world is the first screen, not a card in a landing page. */
+.hero-copy,.world-layout>.side-note,.destination-section,.discovery-book,footer{display:none!important}
+.world-layout{display:block!important;max-width:none!important;min-height:0!important;margin:0!important;padding:0 18px 18px!important}
+.island-stage{height:calc(100svh - 92px)!important;min-height:520px!important;max-height:980px!important;width:100%!important;touch-action:pan-y;overflow:hidden}
+.island-scene{inset:0!important;max-width:1280px;margin:auto;filter:drop-shadow(0 28px 28px #111c3445)!important}
+.island-art{width:100%;height:100%;overflow:visible}
+.island-region-hotspot circle:nth-of-type(2){transition:transform .18s,fill .18s}
+.island-region-hotspot:hover circle:nth-of-type(2),.island-region-hotspot:focus circle:nth-of-type(2){fill:#ffe1a0;transform:scale(1.28)}
+.island-region-hotspot:focus{outline:none}
+.island-region-hotspot text{pointer-events:none}
+.stage-glow,.sun-orb,.cloud,.sparkle{display:none!important}
+.stage-hint{bottom:13px!important;color:#d6c8b3!important;text-shadow:0 1px 4px #26374b}
+.zoom-tools{bottom:12px!important;right:2%!important}
+@media(max-width:700px){
+ .world-layout{padding:0 4px 10px!important}
+ .island-stage{height:calc(100svh - 78px)!important;min-height:430px!important}
+ .island-scene{inset:1% -4% 8%!important}
+ .stage-hint{font-size:8px!important;bottom:5px!important}
+ .zoom-tools{bottom:5px!important}
+}

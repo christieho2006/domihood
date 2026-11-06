@@ -538,3 +538,12 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
 .explore-actions button:hover{background:#d4e4cd}
 .explore-actions span{font-size:12px;color:#718674;min-width:38px;text-align:center}
 @media(max-width:700px){.explore-actions{bottom:14px;gap:5px;padding:7px 8px}.explore-actions button{font-size:10px;padding:8px 9px}.explore-title small{display:none}.explore-hint{max-width:92vw;white-space:normal;text-align:center}}
+
+
+/* 2D storybook scene scale and readability pass */
+.world-layout{min-height:540px}
+.island-stage{height:520px}
+.island-scene{inset:0 0 5%}
+.island-art{filter:drop-shadow(0 20px 15px #536f6026)}
+@media(max-width:1000px){.island-stage{height:460px}.world-layout{min-height:480px}}
+@media(max-width:700px){.island-stage{height:405px}.island-scene{inset:1% 0 7%}}

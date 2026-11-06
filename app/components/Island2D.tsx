@@ -302,7 +302,7 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRota
             [130,420,"#7896aa"],[185,315,"#9a8ab8"],[270,205,"#8179a8"],[355,170,"#789675"],
             [575,145,"#657f9c"],[790,240,"#9a8ab8"],[850,390,"#7896aa"],[830,555,"#789675"],
             [690,620,"#9a8ab8"],[535,625,"#657f9c"],[365,625,"#9a8ab8"],[205,560,"#789675"]
-          ].map(([x,y,color],i)=><g key={i} transform={\`translate(\${x} \${y})\`}>
+          ].map(([x,y,color],i)=><g key={i} transform={`translate(${x} ${y})`}>
             <ellipse cy="7" rx="34" ry="10" fill="#314c49" opacity=".2"/>
             <path d="M-31 5q-7-15 7-23q9-17 23-6q12-18 25-4q17 1 15 18q10 17-8 20Z" fill={String(color)} stroke="#536e63" strokeWidth="2"/>
             <circle cx="-16" cy="-11" r="13" fill={String(color)} opacity=".85"/><circle cx="4" cy="-18" r="15" fill={String(color)} opacity=".72"/><circle cx="22" cy="-8" r="12" fill={String(color)} opacity=".9"/>
@@ -320,8 +320,8 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRota
         </g>
         {/* Wildflower carpets, deliberately placed in open pockets between paths. */}
         <g>
-          {[[230,365],[300,390],[390,285],[690,285],[760,395],[730,555],[520,575],[330,575]].map(([x,y],i)=><g key={i} transform={\`translate(\${x} \${y})\`}>
-            {Array.from({length:7},(_,j)=><g key={j} transform={\`translate(\${(j-3)*10} \${j%2?-5:0})\`}>
+          {[[230,365],[300,390],[390,285],[690,285],[760,395],[730,555],[520,575],[330,575]].map(([x,y],i)=><g key={i} transform={`translate(${x} ${y})`}>
+            {Array.from({length:7},(_,j)=><g key={j} transform={`translate(${(j-3)*10} ${j%2?-5:0})`}>
               <path d="M0 7q-2-9 0-15" stroke="#6f956d" strokeWidth="2" fill="none"/>
               <circle cy="-12" r="5" fill={i%3===0?"#d99eb4":i%3===1?"#92a9d2":"#9585c4"}/>
               <circle cx="-4" cy="-9" r="4" fill={i%3===0?"#d99eb4":i%3===1?"#92a9d2":"#9585c4"}/>

@@ -7,37 +7,44 @@ type Props = { angle: number; zoom: number; onEnter?: () => void; onAngleChange?
 const islandOutline = "M500 76 C626 76 756 132 832 226 C906 318 902 444 842 535 C779 630 651 686 503 690 C354 696 218 650 139 557 C65 470 66 342 126 239 C190 130 338 76 500 76Z";
 
 function Tree({ x, y, scale = 1, color = "sage" }: { x: number; y: number; scale?: number; color?: "sage" | "lavender" | "blossom" }) {
-  const palette = color === "lavender" ? ["#7888b4", "#91a0c9", "#b1b9d9"] : color === "blossom" ? ["#bd829e", "#d59bb1", "#e8bdc5"] : ["#6f9276", "#8eae83", "#aec28f"];
+  const palette = color === "lavender" ? ["#7183b1", "#8798c5", "#aab4d8", "#c1c8e3"] : color === "blossom" ? ["#b97f9c", "#d095ad", "#e4b6c4", "#f0ced0"] : ["#66896f", "#7fa17a", "#9bb786", "#b9c998"];
   return <g transform={`translate(${x} ${y}) scale(${scale})`}>
-    <ellipse cy="11" rx="32" ry="12" fill="#435e55" opacity=".18"/>
-    <path d="M-3 9 Q-7-11 -2-38 L7-38 Q4-12 8 9Z" fill="#8e6c55"/>
-    <path d="M0-24L-20-48 M3-28L23-51" fill="none" stroke="#8e6c55" strokeWidth="5" strokeLinecap="round"/>
-    <circle cx="-19" cy="-49" r="22" fill={palette[0]}/>
-    <circle cx="13" cy="-58" r="27" fill={palette[1]}/>
-    <circle cx="-1" cy="-77" r="23" fill={palette[2]}/>
-    <circle cx="30" cy="-45" r="14" fill={palette[0]}/>
-    <path d="M-22-57q8-8 16-2 M3-82q8-7 15-1" fill="none" stroke="#fff0dc" strokeWidth="3" strokeLinecap="round" opacity=".6"/>
+    <ellipse cy="12" rx="39" ry="13" fill="#344f45" opacity=".22"/>
+    <path d="M-5 11 Q-9-8 -4-41 L7-41 Q4-12 10 11Z" fill="#88644e"/>
+    <path d="M0-27 Q-17-42 -24-56 M3-30 Q19-46 26-58" fill="none" stroke="#88644e" strokeWidth="6" strokeLinecap="round"/>
+    <path d="M-3-7Q-15-20-24-31 M5-12Q18-25 25-37" fill="none" stroke="#a17b5d" strokeWidth="3" strokeLinecap="round"/>
+    <ellipse cx="-20" cy="-48" rx="24" ry="21" fill={palette[0]}/>
+    <ellipse cx="13" cy="-58" rx="29" ry="25" fill={palette[1]}/>
+    <ellipse cx="-3" cy="-78" rx="23" ry="22" fill={palette[2]}/>
+    <ellipse cx="31" cy="-44" rx="17" ry="18" fill={palette[0]}/>
+    <ellipse cx="-34" cy="-63" rx="13" ry="15" fill={palette[1]}/>
+    <path d="M-30-55q8-12 18-10 M-2-83q9-10 19-5 M15-48q8-8 15-5" fill="none" stroke={palette[3]} strokeWidth="5" strokeLinecap="round" opacity=".9"/>
+    <circle cx="-11" cy="-65" r="4" fill="#fff5df" opacity=".48"/><circle cx="22" cy="-69" r="5" fill="#fff5df" opacity=".4"/>
   </g>;
 }
-
 function Cottage({ x, y, scale = 1, roof = "#b77d68", wall = "#f4e2c3", width = 1 }: { x: number; y: number; scale?: number; roof?: string; wall?: string; width?: number }) {
-  return <g transform={`translate(${x} ${y}) scale(${scale})`} stroke="#775e52" strokeWidth="3" strokeLinejoin="round">
-    <ellipse cx="0" cy="54" rx={58*width} ry="16" fill="#405b51" opacity=".17" stroke="none"/>
-    <path d={`M${-42*width} 3 L0-23 ${42*width} 3 V48 H${-42*width}Z`} fill={wall}/>
-    <path d={`M${-53*width} 2 L0-48 ${53*width} 2 L0 20Z`} fill={roof}/>
-    <path d={`M0-48 L${53*width} 2 L${42*width} 3 L0-23Z`} fill="#d29b7c"/>
-    <path d={`M${-53*width} 2 L0-48 ${53*width} 2`} fill="none" stroke="#e9c49e" strokeWidth="5" strokeLinecap="round"/>
-    <path d={`M${-42*width} 3 L0-23 ${42*width} 3`} fill="none" stroke="#8a6759" strokeWidth="2" opacity=".6"/>
-    <rect x="-10" y="17" width="20" height="31" rx="7" fill="#89634f"/>
-    <circle cx="5" cy="32" r="2" fill="#f8d88e" stroke="none"/>
-    <rect x={-31*width} y="11" width="15" height="18" rx="5" fill="#a9ceca"/>
-    <rect x={16*width} y="11" width="15" height="18" rx="5" fill="#a9ceca"/>
-    <path d={`M-15 49H15`} stroke="#b28a68" strokeWidth="6"/>
-    <rect x="25" y="-45" width="9" height="23" rx="2" fill="#98735e"/>
-    <path d="M23-47h13" stroke="#ead4b6" strokeWidth="4"/>
+  return <g transform={`translate(${x} ${y}) scale(${scale})`}>
+    <ellipse cx="3" cy="55" rx={63*width} ry="18" fill="#405b51" opacity=".2"/>
+    <path d={`M${-42*width} 3 L0-23 ${42*width} 3 V48 H${-42*width}Z`} fill="#d3b997" opacity=".55" transform="translate(0 5)"/>
+    <path d={`M${-42*width} 0 L0-23 ${42*width} 0 V47 H${-42*width}Z`} fill={wall} stroke="#785e50" strokeWidth="3" strokeLinejoin="round"/>
+    <path d={`M0-23V47`} stroke="#d6c4a7" strokeWidth="2" opacity=".8"/>
+    <path d={`M${-53*width} 0 L0-50 ${53*width} 0 L0 18Z`} fill={roof} stroke="#765747" strokeWidth="3" strokeLinejoin="round"/>
+    <path d={`M0-50 L${53*width} 0 L${42*width} 0 L0-23Z`} fill="#d7a181" stroke="#765747" strokeWidth="2"/>
+    <path d={`M${-53*width} 0 L0-50 ${53*width} 0`} fill="none" stroke="#f0c9a2" strokeWidth="5" strokeLinecap="round"/>
+    <path d={`M${-42*width} 0 L0-23 ${42*width} 0`} fill="none" stroke="#9a715c" strokeWidth="2" opacity=".65"/>
+    <path d="M-36-3L-27-11" stroke="#f6d9b6" strokeWidth="3" strokeLinecap="round" opacity=".65"/>
+    <rect x="-11" y="15" width="22" height="32" rx="7" fill="#805d4b" stroke="#684b3d" strokeWidth="2"/>
+    <path d="M-7 19V43" stroke="#b48a69" strokeWidth="2" opacity=".8"/><circle cx="6" cy="31" r="2.4" fill="#f8d88e" stroke="none"/>
+    <rect x={-32*width} y="10" width="16" height="19" rx="5" fill="#a9ceca" stroke="#80675a" strokeWidth="3"/>
+    <path d={`M${-24*width} 11V28 M${-31*width} 19H${-17*width}`} stroke="#f4e6ce" strokeWidth="2"/>
+    <rect x={16*width} y="10" width="16" height="19" rx="5" fill="#a9ceca" stroke="#80675a" strokeWidth="3"/>
+    <path d={`M${24*width} 11V28 M${17*width} 19H${31*width}`} stroke="#f4e6ce" strokeWidth="2"/>
+    <path d="M-17 49H17" stroke="#b28a68" strokeWidth="6" strokeLinecap="round"/>
+    <path d="M-18 51L-27 59H27L18 51Z" fill="#b99a7b" stroke="#8c6d57" strokeWidth="2"/>
+    <rect x="25" y="-47" width="10" height="24" rx="2" fill="#98735e" stroke="#765747" strokeWidth="2"/>
+    <path d="M23-49h14" stroke="#ead4b6" strokeWidth="4" strokeLinecap="round"/>
   </g>;
 }
-
 function Lantern({ x, y }: { x: number; y: number }) {
   return <g transform={`translate(${x} ${y})`}>
     <ellipse cy="9" rx="11" ry="4" fill="#435c51" opacity=".18"/>

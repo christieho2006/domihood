@@ -123,7 +123,7 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRota
             className="island-region-hotspot"
             transform={`translate(${region.x} ${region.y})`}
             onClick={(event) => { event.stopPropagation(); onRegionSelect ? onRegionSelect(region) : onEnter?.(); }}
-            onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); onEnter?.(); } }}
+            onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); onRegionSelect ? onRegionSelect(region) : onEnter?.(); } }}
             style={{ cursor: "pointer" }}
           >
             <circle r="34" fill="#172d48" opacity="0" />

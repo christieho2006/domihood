@@ -239,7 +239,9 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRota
           <path d="M270 300Q300 260 340 282Q370 295 382 330" fill="none" stroke="#ead9b9" strokeWidth="17" strokeLinecap="round"/>
           <g transform="translate(315 278)"><path d="M-35 12L0-17 35 12V38H-35Z" fill="#e7c99f" stroke="#765d50" strokeWidth="2"/><path d="M-42 12L0-27 42 12" fill="#a77b6b" stroke="#765d50" strokeWidth="3"/><rect x="-8" y="19" width="16" height="19" fill="#80604f"/><circle cx="-21" cy="23" r="5" fill="#a6d3d2"/><circle cx="21" cy="23" r="5" fill="#a6d3d2"/></g>
         </g>
-        {/* Dream lake with a quiet reflective surface. */}\n        <ellipse cx="655" cy="335" rx="67" ry="28" transform="rotate(-23 655 335)" fill="#78b8c2" stroke="#638e91" strokeWidth="4"/><ellipse cx="655" cy="335" rx="49" ry="16" transform="rotate(-23 655 335)" fill="#b5e1d9"/><path d="M620 340q16-8 31 0t31 0" fill="none" stroke="#e4f6e9" strokeWidth="3"/>\n        {/* A compact farm terrace on the western shelf. */}
+        {/* Dream lake with a quiet reflective surface. */}
+        <ellipse cx="655" cy="335" rx="67" ry="28" transform="rotate(-23 655 335)" fill="#78b8c2" stroke="#638e91" strokeWidth="4"/><ellipse cx="655" cy="335" rx="49" ry="16" transform="rotate(-23 655 335)" fill="#b5e1d9"/><path d="M620 340q16-8 31 0t31 0" fill="none" stroke="#e4f6e9" strokeWidth="3"/>
+        {/* A compact farm terrace on the western shelf. */}
         <g transform="translate(190 475)">
           <path d="M-48 8L0-12 51 7 1 28Z" fill="#a77e5f" stroke="#745a49" strokeWidth="3"/>
           <path d="M-38 7L0-7 40 8 M-28 15L8 1 M-12 21L25 7" stroke="#e2c79a" strokeWidth="4" strokeLinecap="round"/>
@@ -298,7 +300,8 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRota
 
         {/* Lanterns placed at path junctions and bridgeheads */}
         <circle cx="390" cy="344" r="36" fill="url(#dh-glow)"/><circle cx="610" cy="458" r="34" fill="url(#dh-glow)"/>
-        <Lantern x={390} y={344}/><Lantern x={610} y={458}/><Lantern x={735} y={322}/><Lantern x={280} y={520}/><Lantern x={505} y={510}/>\n        {/* The 15 numbered discovery areas correspond to the deployment legend. */}
+        <Lantern x={390} y={344}/><Lantern x={610} y={458}/><Lantern x={735} y={322}/><Lantern x={280} y={520}/><Lantern x={505} y={510}/>
+        {/* The 15 numbered discovery areas correspond to the deployment legend. */}
         <RegionPin x={265} y={210} n={1} label="主屋"/>
         <RegionPin x={745} y={175} n={2} label="瀑布"/>
         <RegionPin x={330} y={286} n={3} label="花园茶屋"/>

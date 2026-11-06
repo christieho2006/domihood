@@ -118,6 +118,32 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRota
         <path d="M715 171 C665 229 642 278 609 326 C575 378 548 415 489 459" fill="none" stroke="#e2f4e9" strokeWidth="3" strokeLinecap="round" strokeDasharray="3 18" opacity=".75"/>
         <path d="M470 468 Q458 481 446 495 M432 510Q421 523 411 538" fill="none" stroke="#e2f4e9" strokeWidth="2.5" strokeLinecap="round" opacity=".55"/>
 
+        {/* River banks: rounded stones and reeds make the water sit inside the terrain. */}
+        <g fill="#78958b" stroke="#607f76" strokeWidth="2">
+          <ellipse cx="680" cy="201" rx="10" ry="6" transform="rotate(-34 680 201)"/>
+          <ellipse cx="653" cy="244" rx="13" ry="7" transform="rotate(-28 653 244)"/>
+          <ellipse cx="631" cy="285" rx="9" ry="6" transform="rotate(-30 631 285)"/>
+          <ellipse cx="578" cy="378" rx="12" ry="7" transform="rotate(-36 578 378)"/>
+          <ellipse cx="548" cy="413" rx="10" ry="6" transform="rotate(-35 548 413)"/>
+          <ellipse cx="470" cy="470" rx="11" ry="7" transform="rotate(-35 470 470)"/>
+          <ellipse cx="442" cy="501" rx="13" ry="7" transform="rotate(-38 442 501)"/>
+          <ellipse cx="409" cy="548" rx="10" ry="6" transform="rotate(-38 409 548)"/>
+        </g>
+        <g fill="none" stroke="#638a70" strokeWidth="3" strokeLinecap="round">
+          <path d="M700 220q-8-15-3-25 M704 220q8-14 15-17 M626 316q-10-12-8-22 M632 315q9-12 17-13"/>
+          <path d="M390 560q-10-13-8-23 M395 561q9-13 17-16 M450 535q-8-11-6-19"/>
+        </g>
+        <g fill="#d7e9d2" opacity=".7">
+          <ellipse cx="680" cy="197" rx="4" ry="2" transform="rotate(-34 680 197)"/>
+          <ellipse cx="631" cy="281" rx="4" ry="2" transform="rotate(-30 631 281)"/>
+          <ellipse cx="442" cy="497" rx="5" ry="2" transform="rotate(-38 442 497)"/>
+        </g>
+
+        {/* Subtle stone joints along the main path, kept sparse for readability. */}
+        <g fill="none" stroke="#c5b18f" strokeWidth="2" strokeLinecap="round" opacity=".72">
+          <path d="M236 359q9 7 18 5 M294 333q8 7 17 5 M361 329q8 7 16 9 M425 343q8 8 16 10 M555 370q8 7 16 7 M686 346q8 4 15 1 M291 510q8 7 17 4 M374 480q8 6 17 5 M566 490q8 7 17 8 M678 526q8 5 16 3"/>
+        </g>
+
         {/* Bridges cross the water at right angles and connect both banks */}
         <g transform="translate(594 351) rotate(-54)">
           <rect x="-44" y="-17" width="88" height="34" rx="5" fill="#8d6e5b" stroke="#72594d" strokeWidth="3"/>

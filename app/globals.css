@@ -547,3 +547,18 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
 .island-art{filter:drop-shadow(0 20px 15px #536f6026)}
 @media(max-width:1000px){.island-stage{height:460px}.world-layout{min-height:480px}}
 @media(max-width:700px){.island-stage{height:405px}.island-scene{inset:1% 0 7%}}
+
+
+/* Final-art composition pass: let the island illustration become the page's visual centerpiece. */
+@media(min-width:701px){
+  .world-layout{grid-template-columns:minmax(0,1fr);max-width:1120px;min-height:0;padding:0 2%;margin:0 auto}
+  .world-layout>.side-note{display:none}
+  .island-stage{height:min(66vw,700px);min-height:540px}
+  .island-scene{inset:0 3% 7%}
+  .stage-hint{bottom:8px}
+}
+@media(max-width:700px){
+  .world-layout{display:flex;flex-direction:column;padding:0 8px}
+  .island-stage{height:365px;min-height:0;width:100%}
+  .island-scene{inset:3% 0 9%}
+}

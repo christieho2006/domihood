@@ -58,7 +58,7 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRota
   const pointer = useRef<{ x: number; angle: number; moved: boolean } | null>(null);
   const safeZoom = Math.max(.72, Math.min(1.7, zoom));
   return <svg
-    className="island-art island-2d-scene"
+    className="island-art island-3d-canvas island-2d-scene"
     viewBox="0 0 1000 760"
     role="button"
     tabIndex={0}

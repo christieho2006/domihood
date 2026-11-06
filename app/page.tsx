@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Island3D from "./components/Island3D";
+import Island2D from "./components/Island2D";
 import IslandExplore from "./components/IslandExplore";
 import CottageStudio from "./components/CottageStudio";
 import MemoryCafe from "./components/MemoryCafe";
@@ -168,10 +168,7 @@ export default function Home() {
           <div className="cloud cloud-two"><i /><i /><i /></div>
           <div className="sparkle sparkle-one">✦</div><div className="sparkle sparkle-two">✧</div><div className="sparkle sparkle-three">·</div><div className="sparkle sparkle-four">✦</div>
           <div className="island-scene" style={{ transform: `translateY(8px) scale(${zoom}) rotateY(${angle}deg)` }}>
-            <Island3D angle={angle} zoom={zoom} onEnter={() => setIslandExploreOpen(true)} />
-            <button className="place-pin pin-square" onClick={() => visitPlace("square")}><span>✿</span><b>粉丝广场</b></button>
-            <button className="place-pin pin-cafe" onClick={() => visitPlace("cafe")}><span>☕</span><b>回忆咖啡馆</b></button>
-            <button className="place-pin pin-cottage" onClick={() => visitPlace("cottage")}><span>⌂</span><b>私人小屋</b></button>
+            <Island2D angle={0} zoom={1} onEnter={() => setIslandExploreOpen(true)} />
           </div>
           <div className="stage-hint"><span>↔</span> 拖动旋转 <i /> 滚动缩放 <i /> 点击小岛进入沉浸探索</div>
           <div className="zoom-tools"><button aria-label="缩小" onClick={() => setZoom(z => Math.max(.78,z-.1))}>−</button><span>{Math.round(zoom*100)}%</span><button aria-label="放大" onClick={() => setZoom(z => Math.min(1.22,z+.1))}>＋</button><button aria-label="重置视角" onClick={() => {setAngle(-8);setZoom(1)}}>↺</button></div>

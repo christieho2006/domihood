@@ -16,4 +16,48 @@
 <g transform="translate(945 455)"><path d="M-65 25Q-60-42 0-48 60-42 65 25Z" fill="#777b82" stroke="#424956" stroke-width="7"/><path d="M-36 25Q-36-16 0-25 37-16 37 25Z" fill="#1e3047"/></g><g transform="translate(915 540)"><ellipse cy="12" rx="55" ry="22" fill="#608b8d" stroke="#5b6b65" stroke-width="6"/><ellipse cy="5" rx="43" ry="14" fill="#a5d4d0"/><path d="M-18-6q-8-18 0-28m20 28q-8-18 2-34m17 34q-6-14 3-25" stroke="#e4eee0" stroke-width="4" fill="none"/></g>
 <g><use href="#lamp" transform="translate(430 440)"/><use href="#lamp" transform="translate(680 510)"/><use href="#lamp" transform="translate(830 385)"/><use href="#lamp" transform="translate(370 630)"/><use href="#lamp" transform="translate(610 620)"/></g>
 <g fill="#c99ab8" stroke="#63576c" stroke-width="2"><circle cx="170" cy="680" r="12"/><circle cx="205" cy="660" r="10"/><circle cx="235" cy="690" r="12"/><circle cx="1000" cy="680" r="12"/><circle cx="970" cy="660" r="10"/><circle cx="620" cy="760" r="12"/></g><path d="M600 110l8 20 20 8-20 8-8 20-8-20-20-8 20-8Z M1010 390l5 13 13 5-13 5-5 13-5-13-13-5 13-5Z" fill="#ffe5a5"/>
+
+<!-- Layered meadow and hand-drawn botanical details -->
+<g opacity=".96">
+ <path d="M135 490q22-38 48-14 18-42 43-10 28-27 46 9 30-6 36 28-55 26-117 12Z" fill="#536c59" stroke="#344b4b" stroke-width="5"/>
+ <path d="M170 487q-10-28 8-42m15 49q-1-34 18-46m7 48q12-31 34-32m-68 25q-12-22-28-23" fill="none" stroke="#8fa77c" stroke-width="5" stroke-linecap="round"/>
+ <path d="M885 720q20-44 52-17 24-42 50-6 33-18 44 18-36 36-115 26Z" fill="#4d6659" stroke="#354b49" stroke-width="5"/>
+ <path d="M900 715q-8-27 12-44m17 49q0-35 24-47m5 45q13-28 31-29" fill="none" stroke="#a0ad78" stroke-width="5" stroke-linecap="round"/>
+ <g fill="#9a83b4" stroke="#655b78" stroke-width="3">
+  <path d="M280 380q-22-30 3-48 22-24 43 2 28-6 33 24-27 34-79 22Z"/>
+  <path d="M430 230q-20-30 6-45 22-20 39 4 25-4 30 22-26 30-75 19Z"/>
+  <path d="M920 290q-25-30 2-48 25-23 44 4 28-4 33 24-28 32-79 20Z"/>
+  <path d="M790 690q-20-28 5-44 20-20 38 3 24-5 29 20-24 30-72 21Z"/>
+ </g>
+ <g fill="#d6a9c9" stroke="#806b8c" stroke-width="2">
+  <circle cx="290" cy="360" r="10"/><circle cx="310" cy="348" r="9"/><circle cx="331" cy="365" r="11"/><circle cx="350" cy="350" r="8"/>
+  <circle cx="442" cy="215" r="9"/><circle cx="463" cy="203" r="10"/><circle cx="484" cy="220" r="9"/>
+  <circle cx="928" cy="275" r="10"/><circle cx="950" cy="262" r="9"/><circle cx="974" cy="280" r="10"/>
+  <circle cx="800" cy="676" r="9"/><circle cx="820" cy="664" r="10"/><circle cx="842" cy="681" r="9"/>
+ </g>
+ <g fill="#e8c77f" stroke="#947d58" stroke-width="2">
+  <path d="M370 395q-8-18 8-22 14 3 8 19-7 13-16 3Z"/><path d="M395 405q-8-18 8-22 14 3 8 19-7 13-16 3Z"/>
+  <path d="M690 370q-8-18 8-22 14 3 8 19-7 13-16 3Z"/><path d="M710 382q-8-18 8-22 14 3 8 19-7 13-16 3Z"/>
+  <path d="M570 700q-8-18 8-22 14 3 8 19-7 13-16 3Z"/><path d="M595 710q-8-18 8-22 14 3 8 19-7 13-16 3Z"/>
+ </g>
+</g>
+<!-- Waterfall lip, cascades and mossy river stones -->
+<g>
+ <path d="M820 150q20-32 48-25 22-25 48 0 18 17 10 45l-30 55-72-4-28-31Z" fill="#657b78" stroke="#354d57" stroke-width="7"/>
+ <path d="M850 167q18-15 37 0l-7 118q-12 28-23 0Z" fill="#b9e4e3" opacity=".88"/>
+ <path d="M887 170q14-10 24 4l-1 96q-9 23-18 0Z" fill="#d8f1e8" opacity=".72"/>
+ <path d="M846 180q9 75-3 111m43-106q-8 66 3 98" fill="none" stroke="#f0fbeb" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+ <path d="M827 288q36 23 82 3m-93 12q47 25 99 4" fill="none" stroke="#d9eee0" stroke-width="5" stroke-linecap="round" opacity=".65"/>
+ <g fill="#6e8580" stroke="#425c5c" stroke-width="4"><ellipse cx="800" cy="320" rx="25" ry="12"/><ellipse cx="925" cy="320" rx="22" ry="13"/><ellipse cx="770" cy="360" rx="17" ry="10"/><ellipse cx="940" cy="380" rx="20" ry="12"/></g>
+</g>
+<!-- Winding stepping stones and tiny storybook details -->
+<g fill="#b5a28b" stroke="#6b6257" stroke-width="3">
+ <ellipse cx="600" cy="545" rx="17" ry="9" transform="rotate(-18 600 545)"/><ellipse cx="632" cy="557" rx="14" ry="8" transform="rotate(12 632 557)"/><ellipse cx="665" cy="570" rx="18" ry="9" transform="rotate(-12 665 570)"/>
+ <ellipse cx="690" cy="585" rx="14" ry="8"/><ellipse cx="705" cy="615" rx="16" ry="8"/><ellipse cx="715" cy="645" rx="18" ry="9"/>
+ <ellipse cx="420" cy="670" rx="17" ry="9"/><ellipse cx="390" cy="682" rx="14" ry="8"/><ellipse cx="360" cy="694" rx="16" ry="8"/>
+</g>
+<g fill="#f6d99b" opacity=".9">
+ <circle cx="270" cy="470" r="4"/><circle cx="285" cy="480" r="3"/><circle cx="305" cy="462" r="4"/><circle cx="1010" cy="600" r="4"/><circle cx="1028" cy="615" r="3"/><circle cx="990" cy="625" r="4"/><circle cx="545" cy="740" r="4"/><circle cx="565" cy="755" r="3"/><circle cx="585" cy="738" r="4"/>
+</g>
+
 </svg>

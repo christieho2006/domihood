@@ -5,25 +5,101 @@ type Props = {
   zoom: number;
   onEnter?: () => void;
   onAngleChange?: (angle: number) => void;
+  onRegionSelect?: (region: { n: number; name: string }) => void;
   freeRotate?: boolean;
 };
 
 const regions = [
-  { n: 1, name: "主屋", x: 515, y: 280 },
-  { n: 2, name: "山顶瀑布", x: 835, y: 230 },
-  { n: 3, name: "花园茶屋", x: 330, y: 520 },
-  { n: 4, name: "中央广场", x: 555, y: 450 },
-  { n: 5, name: "咖啡馆", x: 850, y: 620 },
-  { n: 6, name: "田园农场", x: 250, y: 580 },
-  { n: 7, name: "观景塔", x: 750, y: 300 },
-  { n: 8, name: "河畔码头", x: 730, y: 565 },
-  { n: 9, name: "神秘森林", x: 220, y: 350 },
-  { n: 10, name: "温泉庭院", x: 915, y: 540 },
-  { n: 11, name: "隐秘洞穴", x: 945, y: 455 },
-  { n: 12, name: "商业街", x: 500, y: 700 },
-  { n: 13, name: "梦幻湖泊", x: 760, y: 430 },
-  { n: 14, name: "果树乐园", x: 1000, y: 680 },
-  { n: 15, name: "气球台", x: 620, y: 760 },
+  {
+    "n": 1,
+    "name": "主屋",
+    "x": 515,
+    "y": 285
+  },
+  {
+    "n": 2,
+    "name": "山顶瀑布",
+    "x": 865,
+    "y": 210
+  },
+  {
+    "n": 3,
+    "name": "花园茶屋",
+    "x": 320,
+    "y": 530
+  },
+  {
+    "n": 4,
+    "name": "中央广场",
+    "x": 555,
+    "y": 450
+  },
+  {
+    "n": 5,
+    "name": "咖啡馆",
+    "x": 850,
+    "y": 620
+  },
+  {
+    "n": 6,
+    "name": "田园农场",
+    "x": 250,
+    "y": 580
+  },
+  {
+    "n": 7,
+    "name": "观景塔",
+    "x": 750,
+    "y": 300
+  },
+  {
+    "n": 8,
+    "name": "河畔码头",
+    "x": 735,
+    "y": 565
+  },
+  {
+    "n": 9,
+    "name": "神秘森林",
+    "x": 220,
+    "y": 350
+  },
+  {
+    "n": 10,
+    "name": "温泉庭院",
+    "x": 915,
+    "y": 540
+  },
+  {
+    "n": 11,
+    "name": "隐秘洞穴",
+    "x": 945,
+    "y": 455
+  },
+  {
+    "n": 12,
+    "name": "商业街",
+    "x": 500,
+    "y": 700
+  },
+  {
+    "n": 13,
+    "name": "梦幻湖泊",
+    "x": 760,
+    "y": 430
+  },
+  {
+    "n": 14,
+    "name": "果树乐园",
+    "x": 1000,
+    "y": 680
+  },
+  {
+    "n": 15,
+    "name": "气球台",
+    "x": 620,
+    "y": 760
+  }
 ];
 
 export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRotate = false }: Props) {
@@ -46,11 +122,11 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, freeRota
             aria-label={`进入${region.name}`}
             className="island-region-hotspot"
             transform={`translate(${region.x} ${region.y})`}
-            onClick={(event) => { event.stopPropagation(); onEnter?.(); }}
+            onClick={(event) => { event.stopPropagation(); onRegionSelect ? onRegionSelect(region) : onEnter?.(); }}
             onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); onEnter?.(); } }}
             style={{ cursor: "pointer" }}
           >
-            <circle r="24" fill="#172d48" opacity="0" />
+            <circle r="34" fill="#172d48" opacity="0" />
             <circle r="12" fill="#f5e5c7" stroke="#66534b" strokeWidth="2.5" />
             <text y="4" textAnchor="middle" fontSize="12" fontWeight="700" fill="#4f4140">{region.n}</text>
             <title>{region.name} · 点击探索</title>

@@ -584,3 +584,28 @@ button.furniture-plant,button.furniture-lamp{background:transparent}
  .stage-hint{font-size:8px!important;bottom:5px!important}
  .zoom-tools{bottom:5px!important}
 }
+
+
+/* DOMIHOOD artwork-first island landing page */
+.hero-copy,.world-layout>.side-note,.destination-section,.island-app>footer{display:none!important}
+.island-app{min-height:100svh;background:#101c35!important}
+.topbar{position:relative;z-index:20;max-width:none;height:64px;padding:0 24px;border-bottom:1px solid #ffffff24;background:#101c35e8;color:#f8edcf}
+.topbar .brand,.topbar .quiet-label{color:#f4e8c9}
+.topbar .brand small{color:#c5b99c}
+.topbar .profile-chip{background:#fff7e7;border-color:#d8c39a;color:#4c4438}
+.world-layout{display:block;width:100%;max-width:none;min-height:calc(100svh - 64px);height:calc(100svh - 64px);padding:0;margin:0}
+.island-stage{height:100%;width:100%;min-height:0;overflow:hidden;touch-action:pan-y;background:radial-gradient(ellipse at 50% 48%,#29395a 0,#101c35 72%)}
+.stage-glow,.sun-orb,.cloud,.sparkle{display:none!important}
+.island-scene{position:absolute;inset:0!important;display:flex;align-items:center;justify-content:center;filter:none!important;transform:none!important;padding:0!important}
+.island-art{display:block;width:100%;height:100%;max-width:none;max-height:none;overflow:hidden}
+.stage-hint{bottom:14px;color:#f1dfb8;background:#17233dbd;border:1px solid #d9c49a66;border-radius:24px;padding:8px 15px;z-index:5}
+.zoom-tools{bottom:12px;right:16px;z-index:6;background:#17233dbd;border:1px solid #d9c49a66;border-radius:22px;padding:4px 8px;color:#f1dfb8}
+.zoom-tools button{color:#f1dfb8}
+.island-region-hotspot:focus-visible circle:last-of-type{stroke:#ffe7a6!important;stroke-width:4!important}
+@media(max-width:700px){
+ .topbar{height:56px;padding:0 12px}
+ .topbar .quiet-label,.topbar .online-dot{display:none}
+ .world-layout{height:calc(100svh - 56px);min-height:calc(100svh - 56px)}
+ .stage-hint{left:12px;transform:none;bottom:10px;font-size:8px}
+ .zoom-tools{right:8px;bottom:8px}
+}

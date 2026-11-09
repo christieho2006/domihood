@@ -9,97 +9,24 @@ type Props = {
   freeRotate?: boolean;
 };
 
+// Coordinates are aligned to the original island artwork in WechatIMG822.png.
+// The visual itself stays a single, untouched image; these hit areas are independent.
 const regions = [
-  {
-    "n": 1,
-    "name": "主屋",
-    "x": 515,
-    "y": 285
-  },
-  {
-    "n": 2,
-    "name": "山顶瀑布",
-    "x": 865,
-    "y": 210
-  },
-  {
-    "n": 3,
-    "name": "花园茶屋",
-    "x": 320,
-    "y": 530
-  },
-  {
-    "n": 4,
-    "name": "中央广场",
-    "x": 555,
-    "y": 450
-  },
-  {
-    "n": 5,
-    "name": "咖啡馆",
-    "x": 850,
-    "y": 620
-  },
-  {
-    "n": 6,
-    "name": "田园农场",
-    "x": 250,
-    "y": 580
-  },
-  {
-    "n": 7,
-    "name": "观景塔",
-    "x": 750,
-    "y": 300
-  },
-  {
-    "n": 8,
-    "name": "河畔码头",
-    "x": 735,
-    "y": 565
-  },
-  {
-    "n": 9,
-    "name": "神秘森林",
-    "x": 220,
-    "y": 350
-  },
-  {
-    "n": 10,
-    "name": "温泉庭院",
-    "x": 915,
-    "y": 540
-  },
-  {
-    "n": 11,
-    "name": "隐秘洞穴",
-    "x": 945,
-    "y": 455
-  },
-  {
-    "n": 12,
-    "name": "商业街",
-    "x": 500,
-    "y": 700
-  },
-  {
-    "n": 13,
-    "name": "梦幻湖泊",
-    "x": 760,
-    "y": 430
-  },
-  {
-    "n": 14,
-    "name": "果树乐园",
-    "x": 1000,
-    "y": 680
-  },
-  {
-    "n": 15,
-    "name": "气球台",
-    "x": 620,
-    "y": 760
-  }
+  { n: 1, name: "主屋", x: 198, y: 192 },
+  { n: 2, name: "山顶瀑布", x: 675, y: 99 },
+  { n: 3, name: "花园茶屋", x: 327, y: 336 },
+  { n: 4, name: "中央广场", x: 477, y: 363 },
+  { n: 5, name: "咖啡馆", x: 685, y: 365 },
+  { n: 6, name: "田园农场", x: 80, y: 399 },
+  { n: 7, name: "观景塔", x: 436, y: 449 },
+  { n: 8, name: "河畔码头", x: 610, y: 433 },
+  { n: 9, name: "神秘森林", x: 309, y: 631 },
+  { n: 10, name: "温泉庭院", x: 260, y: 578 },
+  { n: 11, name: "隐秘洞穴", x: 840, y: 154 },
+  { n: 12, name: "商业街", x: 464, y: 612 },
+  { n: 13, name: "梦幻湖泊", x: 893, y: 489 },
+  { n: 14, name: "果树乐园", x: 773, y: 647 },
+  { n: 15, name: "气球台", x: 882, y: 566 },
 ];
 
 export default function Island2D({ angle, zoom, onEnter, onAngleChange, onRegionSelect, freeRotate = false }: Props) {
@@ -107,13 +34,14 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, onRegion
   return (
     <svg
       className="island-art island-3d-canvas island-2d-scene"
-      viewBox="0 0 1200 900"
+      viewBox="0 0 970 823"
       role="group"
-      aria-label="DOMIHOOD 手绘浮空小岛，包含十五个可探索区域"
+      aria-label="DOMIHOOD 完整手绘小岛，包含十五个可探索区域"
+      preserveAspectRatio="xMidYMid meet"
       style={{ overflow: "visible" }}
     >
-      <g transform={`translate(600 450) scale(${safeZoom}) rotate(${freeRotate ? angle * .12 : 0}) translate(-600 -450)`}>
-        <image href="/images/domihood-island-scene.svg" x="0" y="0" width="1200" height="900" preserveAspectRatio="xMidYMid meet" />
+      <g transform={`translate(485 411.5) scale(${safeZoom}) rotate(${freeRotate ? angle * .12 : 0}) translate(-485 -411.5)`}>
+        <image href="/images/WechatIMG822.png" x="0" y="0" width="1308" height="1202" preserveAspectRatio="none" />
         {regions.map((region) => (
           <g
             key={region.n}
@@ -126,13 +54,11 @@ export default function Island2D({ angle, zoom, onEnter, onAngleChange, onRegion
             onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); onRegionSelect ? onRegionSelect(region) : onEnter?.(); } }}
             style={{ cursor: "pointer" }}
           >
-            <circle r="34" fill="#172d48" opacity="0" />
-            <circle r="12" fill="#f5e5c7" stroke="#66534b" strokeWidth="2.5" />
-            <text y="4" textAnchor="middle" fontSize="12" fontWeight="700" fill="#4f4140">{region.n}</text>
+            <circle r="39" fill="#172d48" opacity="0" />
+            <circle r="18" fill="transparent" stroke="transparent" strokeWidth="2" />
             <title>{region.name} · 点击探索</title>
           </g>
         ))}
-        <path d="M600 105C820 105 1020 205 1060 380s-35 295-160 370q-145 80-300 45Q420 820 250 720 105 620 120 435 120 255 285 165 420 95 600 105Z" fill="none" stroke="#e5d0a8" strokeWidth="5" strokeDasharray="2 15" strokeLinecap="round" opacity=".65" />
       </g>
     </svg>
   );
